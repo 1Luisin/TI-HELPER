@@ -70,6 +70,52 @@
     -fx-background-color: #a82318;
 }
 
+.snap-popup {
+    -fx-background-color: #202020;
+    -fx-background-radius: 8;
+    -fx-border-color: #3b3b3b;
+    -fx-border-radius: 8;
+    -fx-padding: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.35), 18, 0, 0, 8);
+}
+
+.snap-title {
+    -fx-text-fill: #d8d8d8;
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+}
+
+.snap-option {
+    -fx-min-width: 82;
+    -fx-pref-width: 82;
+    -fx-background-color: transparent;
+    -fx-background-radius: 6;
+    -fx-text-fill: #dcdcdc;
+    -fx-font-size: 11px;
+    -fx-padding: 8 7 8 7;
+    -fx-cursor: hand;
+}
+
+.snap-option:hover {
+    -fx-background-color: #303030;
+}
+
+.snap-graphic {
+    -fx-padding: 0 0 4 0;
+}
+
+.snap-cell {
+    -fx-background-color: #3b3b3b;
+    -fx-background-radius: 3;
+    -fx-border-color: #595959;
+    -fx-border-radius: 3;
+}
+
+.snap-cell-active {
+    -fx-background-color: #3f7fda;
+    -fx-border-color: #75a7f2;
+}
+
 .login-page {
     -fx-background-color: #eef4f5;
 }
