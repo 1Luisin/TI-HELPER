@@ -7,8 +7,6 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
@@ -31,22 +29,26 @@
                         <Insets top="20" right="20" bottom="20" left="20"/>
                     </padding>
                     <children>
-                        <GridPane hgap="14" vgap="12">
-                            <columnConstraints>
-                                <ColumnConstraints minWidth="180"/>
-                                <ColumnConstraints hgrow="ALWAYS"/>
-                            </columnConstraints>
+                        <VBox spacing="8">
                             <children>
-                                <Label text="Script" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                                <ComboBox fx:id="scriptCombo" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-
-                                <Label text="Servidor destino" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                                <TextField fx:id="serverTargetField" promptText="Ex.: SRV-APP-01" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-
-                                <Label text="Motivo" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                                <TextArea fx:id="reasonArea" prefRowCount="4" wrapText="true" promptText="Descreva o motivo da execução simulada" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                                <Label text="Script" styleClass="field-label"/>
+                                <ComboBox fx:id="scriptCombo" maxWidth="Infinity"/>
                             </children>
-                        </GridPane>
+                        </VBox>
+
+                        <VBox spacing="8">
+                            <children>
+                                <Label text="Servidor destino" styleClass="field-label"/>
+                                <TextField fx:id="serverTargetField" promptText="Ex.: SRV-APP-01"/>
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="8">
+                            <children>
+                                <Label text="Motivo" styleClass="field-label"/>
+                                <TextArea fx:id="reasonArea" prefRowCount="4" wrapText="true" promptText="Descreva o motivo da execução simulada"/>
+                            </children>
+                        </VBox>
 
                         <HBox alignment="CENTER_RIGHT">
                             <children>

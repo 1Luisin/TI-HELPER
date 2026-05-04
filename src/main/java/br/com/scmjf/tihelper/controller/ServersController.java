@@ -5,6 +5,7 @@ import br.com.scmjf.tihelper.model.ServerInfo;
 import br.com.scmjf.tihelper.util.AlertUtil;
 import br.com.scmjf.tihelper.util.AppContext;
 import br.com.scmjf.tihelper.util.NavigationTarget;
+import br.com.scmjf.tihelper.util.TableUtil;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
@@ -38,6 +39,7 @@ public class ServersController {
         osColumn.setCellValueFactory(new PropertyValueFactory<>("operatingSystem"));
         environmentColumn.setCellValueFactory(new PropertyValueFactory<>("environment"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+        TableUtil.bindColumnWidths(serversTable, new double[]{1.2, 1.6, 1.9, 1.2, 1}, nameColumn, hostColumn, osColumn, environmentColumn, statusColumn);
         serversTable.setItems(FXCollections.observableArrayList(AppContext.mockDataService().getServers()));
     }
 

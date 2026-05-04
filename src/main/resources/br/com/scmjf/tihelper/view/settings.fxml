@@ -3,8 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.VBox?>
 
 <ScrollPane xmlns="http://javafx.com/javafx/21"
@@ -26,25 +24,37 @@
                     </padding>
                     <children>
                         <Label text="Informações do protótipo" styleClass="section-title"/>
-                        <GridPane hgap="18" vgap="14">
-                            <columnConstraints>
-                                <ColumnConstraints minWidth="180"/>
-                                <ColumnConstraints hgrow="ALWAYS"/>
-                            </columnConstraints>
+                        <VBox spacing="14">
                             <children>
-                                <Label text="Usuário logado" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                                <Label fx:id="loggedUserLabel" text="-" styleClass="value-label" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                                <VBox spacing="4">
+                                    <children>
+                                        <Label text="Usuário logado" styleClass="field-label"/>
+                                        <Label fx:id="loggedUserLabel" text="-" styleClass="value-label"/>
+                                    </children>
+                                </VBox>
 
-                                <Label text="Perfil" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                                <Label fx:id="profileLabel" text="-" styleClass="value-label" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                                <VBox spacing="4">
+                                    <children>
+                                        <Label text="Perfil" styleClass="field-label"/>
+                                        <Label fx:id="profileLabel" text="-" styleClass="value-label"/>
+                                    </children>
+                                </VBox>
 
-                                <Label text="Versão da aplicação" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                                <Label fx:id="versionLabel" text="-" styleClass="value-label" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                                <VBox spacing="4">
+                                    <children>
+                                        <Label text="Versão da aplicação" styleClass="field-label"/>
+                                        <Label fx:id="versionLabel" text="-" styleClass="value-label"/>
+                                    </children>
+                                </VBox>
 
-                                <Label text="Ambiente" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-                                <Label fx:id="environmentLabel" text="-" styleClass="value-label" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                                <VBox spacing="4">
+                                    <children>
+                                        <Label text="Ambiente" styleClass="field-label"/>
+                                        <Label fx:id="environmentLabel" text="-" styleClass="value-label"/>
+                                    </children>
+                                </VBox>
                             </children>
-                        </GridPane>
+                        </VBox>
                     </children>
                 </VBox>
             </children>

@@ -2,6 +2,7 @@ package br.com.scmjf.tihelper.controller;
 
 import br.com.scmjf.tihelper.model.ExecutionHistory;
 import br.com.scmjf.tihelper.util.AppContext;
+import br.com.scmjf.tihelper.util.TableUtil;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
@@ -43,6 +44,8 @@ public class HistoryController {
         targetColumn.setCellValueFactory(new PropertyValueFactory<>("target"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         messageColumn.setCellValueFactory(new PropertyValueFactory<>("message"));
+        TableUtil.bindColumnWidths(historyTable, new double[]{1.4, 0.9, 1.25, 1.1, 1.6, 0.9, 2.4},
+                dateColumn, userColumn, typeColumn, serverColumn, targetColumn, statusColumn, messageColumn);
         historyTable.setItems(FXCollections.observableArrayList(AppContext.historyService().getAll()));
     }
 }

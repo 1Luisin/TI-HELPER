@@ -4,6 +4,7 @@ import br.com.scmjf.tihelper.model.ActionResult;
 import br.com.scmjf.tihelper.model.ServiceInfo;
 import br.com.scmjf.tihelper.util.AlertUtil;
 import br.com.scmjf.tihelper.util.AppContext;
+import br.com.scmjf.tihelper.util.TableUtil;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
@@ -37,6 +38,7 @@ public class ServicesController {
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         lastCheckColumn.setCellValueFactory(new PropertyValueFactory<>("formattedLastVerification"));
+        TableUtil.bindColumnWidths(servicesTable, new double[]{1.1, 1.5, 2.5, 1, 1.4}, serverColumn, nameColumn, descriptionColumn, statusColumn, lastCheckColumn);
         servicesTable.setItems(FXCollections.observableArrayList(AppContext.mockDataService().getServices()));
     }
 

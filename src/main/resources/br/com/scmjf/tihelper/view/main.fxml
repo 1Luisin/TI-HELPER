@@ -11,6 +11,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
+            fx:id="rootPane"
             fx:controller="br.com.scmjf.tihelper.controller.MainController"
             styleClass="app-shell">
     <top>
@@ -19,8 +20,8 @@
                 <Insets top="16" right="24" bottom="16" left="24"/>
             </padding>
             <children>
-                <Label text="TI Helper - SCMJF" styleClass="app-title"/>
                 <Label fx:id="screenTitleLabel" text="Dashboard" styleClass="screen-title"/>
+                <Label fx:id="screenSubtitleLabel" text="Central de operações" styleClass="screen-subtitle"/>
                 <Region HBox.hgrow="ALWAYS"/>
                 <VBox alignment="CENTER_RIGHT" spacing="2">
                     <children>
@@ -33,12 +34,12 @@
     </top>
 
     <left>
-        <VBox prefWidth="238" spacing="8" styleClass="sidebar">
+        <VBox fx:id="sidebar" prefWidth="238" spacing="8" styleClass="sidebar">
             <padding>
                 <Insets top="22" right="14" bottom="18" left="14"/>
             </padding>
             <children>
-                <Label text="MENU" styleClass="sidebar-caption"/>
+                <Label fx:id="sidebarCaption" text="MENU" styleClass="sidebar-caption"/>
                 <Button fx:id="dashboardButton" text="Dashboard" maxWidth="Infinity" onAction="#showDashboard" styleClass="nav-button"/>
                 <Button fx:id="serversButton" text="Servidores" maxWidth="Infinity" onAction="#showServers" styleClass="nav-button"/>
                 <Button fx:id="servicesButton" text="Serviços" maxWidth="Infinity" onAction="#showServices" styleClass="nav-button"/>
@@ -47,7 +48,7 @@
                 <Button fx:id="historyButton" text="Histórico" maxWidth="Infinity" onAction="#showHistory" styleClass="nav-button"/>
                 <Button fx:id="settingsButton" text="Configurações" maxWidth="Infinity" onAction="#showSettings" styleClass="nav-button"/>
                 <Region VBox.vgrow="ALWAYS"/>
-                <Button text="Sair" maxWidth="Infinity" onAction="#logout" styleClass="logout-button"/>
+                <Button fx:id="logoutButton" text="Sair" maxWidth="Infinity" onAction="#logout" styleClass="logout-button"/>
             </children>
         </VBox>
     </left>

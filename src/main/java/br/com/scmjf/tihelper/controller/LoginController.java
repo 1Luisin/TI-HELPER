@@ -1,14 +1,13 @@
 package br.com.scmjf.tihelper.controller;
 
 import java.io.IOException;
-import java.util.Objects;
 
 import br.com.scmjf.tihelper.model.User;
 import br.com.scmjf.tihelper.util.AppContext;
+import br.com.scmjf.tihelper.util.SceneUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -42,12 +41,8 @@ public class LoginController {
                     .getResource("/br/com/scmjf/tihelper/view/main.fxml"));
             Parent root = loader.load();
 
-            Scene scene = new Scene(root, 1180, 760);
-            scene.getStylesheets().add(Objects.requireNonNull(getClass()
-                    .getResource("/br/com/scmjf/tihelper/styles/app.css")).toExternalForm());
-
             Stage stage = (Stage) usernameField.getScene().getWindow();
-            stage.setScene(scene);
+            stage.setScene(SceneUtil.createScene(stage, root, 1180, 760));
             stage.centerOnScreen();
         } catch (IOException exception) {
             errorLabel.setText("Não foi possível abrir a tela principal.");

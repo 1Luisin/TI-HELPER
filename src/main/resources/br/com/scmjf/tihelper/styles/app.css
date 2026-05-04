@@ -4,6 +4,56 @@
     -fx-background-color: #f4f7f9;
 }
 
+.window-frame {
+    -fx-background-color: #f4f7f9;
+    -fx-border-color: #0b2027;
+    -fx-border-width: 1;
+}
+
+.window-title-bar {
+    -fx-background-color: linear-gradient(to right, #102027, #153c45);
+    -fx-border-color: transparent transparent #0f8b8d transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.window-logo {
+    -fx-alignment: CENTER;
+    -fx-background-color: #0f8b8d;
+    -fx-background-radius: 7;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: 900;
+}
+
+.window-title {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 13px;
+    -fx-font-weight: 800;
+}
+
+.window-subtitle {
+    -fx-text-fill: #9fb6ba;
+    -fx-font-size: 11px;
+}
+
+.window-control-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 6;
+    -fx-text-fill: #d9e4e6;
+    -fx-font-size: 13px;
+    -fx-font-weight: 800;
+    -fx-padding: 0;
+}
+
+.window-control-button:hover {
+    -fx-background-color: #24464f;
+    -fx-text-fill: #ffffff;
+}
+
+.window-close-button:hover {
+    -fx-background-color: #c42b1c;
+    -fx-text-fill: #ffffff;
+}
+
 .login-page {
     -fx-background-color: #eef4f5;
 }
@@ -60,6 +110,11 @@
     -fx-font-weight: 700;
 }
 
+.screen-subtitle {
+    -fx-text-fill: #6f7d82;
+    -fx-font-weight: 700;
+}
+
 .user-name {
     -fx-text-fill: #102027;
     -fx-font-weight: 700;
@@ -103,6 +158,24 @@
 
 .logout-button {
     -fx-text-fill: #ffcf9f;
+}
+
+.compact-shell .app-header {
+    -fx-spacing: 10;
+}
+
+.compact-shell .sidebar {
+    -fx-padding: 18 8 16 8;
+}
+
+.compact-shell .nav-button,
+.compact-shell .logout-button {
+    -fx-alignment: CENTER;
+    -fx-padding: 10 6 10 6;
+}
+
+.compact-shell .content-page {
+    -fx-padding: 18 18 20 18;
 }
 
 .content-host,

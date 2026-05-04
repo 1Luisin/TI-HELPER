@@ -1,13 +1,13 @@
 package br.com.scmjf.tihelper;
 
 import java.io.IOException;
-import java.util.Objects;
 
+import br.com.scmjf.tihelper.util.SceneUtil;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class MainApp extends Application {
 
@@ -16,14 +16,11 @@ public class MainApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         Parent root = loadView("login.fxml");
-        Scene scene = new Scene(root, 1080, 720);
-        scene.getStylesheets().add(Objects.requireNonNull(getClass()
-                .getResource("/br/com/scmjf/tihelper/styles/app.css")).toExternalForm());
-
+        stage.initStyle(StageStyle.UNDECORATED);
         stage.setTitle(APP_TITLE);
-        stage.setMinWidth(980);
-        stage.setMinHeight(640);
-        stage.setScene(scene);
+        stage.setMinWidth(860);
+        stage.setMinHeight(600);
+        stage.setScene(SceneUtil.createScene(stage, root, 1080, 720));
         stage.show();
     }
 

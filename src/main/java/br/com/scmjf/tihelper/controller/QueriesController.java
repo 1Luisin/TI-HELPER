@@ -78,11 +78,16 @@ public class QueriesController {
 
     private void renderResultTable(QueryExecutionResult result) {
         resultTable.getColumns().clear();
+        double columnWidth = Math.max(120, (resultTable.getWidth() - 20) / Math.max(1, result.columns().size()));
         for (String columnName : result.columns()) {
             TableColumn<Map<String, String>, String> column = new TableColumn<>(columnName);
             column.setCellValueFactory(data -> new ReadOnlyStringWrapper(
                     data.getValue().getOrDefault(columnName, "")));
-            column.setPrefWidth(180);
+            column.setMinWidth(120);
+            column.setPrefWidth(columnWidth);
+            column.prefWidthProperty().bind(resultTable.widthProperty()
+                    .subtract(20)
+                    .divide(Math.max(1, result.columns().size())));
             resultTable.getColumns().add(column);
         }
         resultTable.setItems(FXCollections.observableArrayList(result.rows()));
