@@ -43,7 +43,7 @@ public class QueriesController {
         parameterFields.clear();
 
         String selectedQuery = queryCombo.getSelectionModel().getSelectedItem();
-        List<String> fields = fieldsFor(selectedQuery);
+        List<String> fields = AppContext.mockDataService().getQueryFields(selectedQuery);
         for (int index = 0; index < fields.size(); index++) {
             String fieldName = fields.get(index);
             Label label = new Label(fieldName);
@@ -91,16 +91,6 @@ public class QueriesController {
             resultTable.getColumns().add(column);
         }
         resultTable.setItems(FXCollections.observableArrayList(result.rows()));
-    }
-
-    private List<String> fieldsFor(String selectedQuery) {
-        return switch (selectedQuery) {
-            case "Buscar paciente por CPF" -> List.of("CPF");
-            case "Buscar atendimento por número" -> List.of("Número");
-            case "Consultar respostas de pesquisa" -> List.of("Data inicial", "Data final");
-            case "Verificar integração pendente" -> List.of("Integração");
-            default -> List.of();
-        };
     }
 
     private String promptFor(String fieldName) {

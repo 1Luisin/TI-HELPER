@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
 <ScrollPane xmlns="http://javafx.com/javafx/21"
@@ -24,7 +34,7 @@
                     </padding>
                     <children>
                         <Label text="Informações do protótipo" styleClass="section-title"/>
-                        <VBox spacing="14">
+                        <FlowPane hgap="42" vgap="14">
                             <children>
                                 <VBox spacing="4">
                                     <children>
@@ -54,7 +64,175 @@
                                     </children>
                                 </VBox>
                             </children>
-                        </VBox>
+                        </FlowPane>
+                    </children>
+                </VBox>
+
+                <Label fx:id="adminAccessLabel"
+                       text="Cadastros administrativos disponíveis apenas para usuários com perfil ADMIN."
+                       styleClass="hint-label"/>
+
+                <VBox fx:id="adminPanel" spacing="14">
+                    <children>
+                        <Label text="Cadastros administrativos" styleClass="section-title"/>
+                        <TabPane tabClosingPolicy="UNAVAILABLE" styleClass="admin-tabs">
+                            <tabs>
+                                <Tab text="Servidores">
+                                    <content>
+                                        <VBox spacing="14">
+                                            <padding>
+                                                <Insets top="16" right="0" bottom="0" left="0"/>
+                                            </padding>
+                                            <children>
+                                                <VBox spacing="10" styleClass="form-panel">
+                                                    <padding>
+                                                        <Insets top="16" right="16" bottom="16" left="16"/>
+                                                    </padding>
+                                                    <children>
+                                                        <FlowPane hgap="12" vgap="10">
+                                                            <children>
+                                                                <TextField fx:id="serverNameField" promptText="Nome" prefWidth="170"/>
+                                                                <TextField fx:id="serverHostField" promptText="IP/Host" prefWidth="180"/>
+                                                                <TextField fx:id="serverOsField" promptText="Sistema operacional" prefWidth="210"/>
+                                                                <TextField fx:id="serverEnvironmentField" promptText="Ambiente" prefWidth="150"/>
+                                                                <TextField fx:id="serverStatusField" promptText="Status" prefWidth="140"/>
+                                                            </children>
+                                                        </FlowPane>
+                                                        <HBox alignment="CENTER_RIGHT">
+                                                            <children>
+                                                                <Region HBox.hgrow="ALWAYS"/>
+                                                                <Button text="Cadastrar servidor" onAction="#addServer" styleClass="primary-button"/>
+                                                            </children>
+                                                        </HBox>
+                                                    </children>
+                                                </VBox>
+
+                                                <TableView fx:id="serversTable" prefHeight="240">
+                                                    <columns>
+                                                        <TableColumn fx:id="serverNameColumn" text="Nome"/>
+                                                        <TableColumn fx:id="serverHostColumn" text="IP/Host"/>
+                                                        <TableColumn fx:id="serverOsColumn" text="Sistema operacional"/>
+                                                        <TableColumn fx:id="serverEnvironmentColumn" text="Ambiente"/>
+                                                        <TableColumn fx:id="serverStatusColumn" text="Status"/>
+                                                    </columns>
+                                                </TableView>
+                                            </children>
+                                        </VBox>
+                                    </content>
+                                </Tab>
+
+                                <Tab text="Serviços">
+                                    <content>
+                                        <VBox spacing="14">
+                                            <padding>
+                                                <Insets top="16" right="0" bottom="0" left="0"/>
+                                            </padding>
+                                            <children>
+                                                <VBox spacing="10" styleClass="form-panel">
+                                                    <padding>
+                                                        <Insets top="16" right="16" bottom="16" left="16"/>
+                                                    </padding>
+                                                    <children>
+                                                        <FlowPane hgap="12" vgap="10">
+                                                            <children>
+                                                                <TextField fx:id="serviceServerField" promptText="Servidor" prefWidth="170"/>
+                                                                <TextField fx:id="serviceNameField" promptText="Nome do serviço" prefWidth="210"/>
+                                                                <TextField fx:id="serviceStatusField" promptText="Status" prefWidth="150"/>
+                                                            </children>
+                                                        </FlowPane>
+                                                        <TextArea fx:id="serviceDescriptionArea"
+                                                                  promptText="Descrição"
+                                                                  prefRowCount="3"
+                                                                  wrapText="true"/>
+                                                        <HBox alignment="CENTER_RIGHT">
+                                                            <children>
+                                                                <Region HBox.hgrow="ALWAYS"/>
+                                                                <Button text="Cadastrar serviço" onAction="#addService" styleClass="primary-button"/>
+                                                            </children>
+                                                        </HBox>
+                                                    </children>
+                                                </VBox>
+
+                                                <TableView fx:id="servicesTable" prefHeight="240">
+                                                    <columns>
+                                                        <TableColumn fx:id="serviceServerColumn" text="Servidor"/>
+                                                        <TableColumn fx:id="serviceNameColumn" text="Nome"/>
+                                                        <TableColumn fx:id="serviceDescriptionColumn" text="Descrição"/>
+                                                        <TableColumn fx:id="serviceStatusColumn" text="Status"/>
+                                                    </columns>
+                                                </TableView>
+                                            </children>
+                                        </VBox>
+                                    </content>
+                                </Tab>
+
+                                <Tab text="Queries">
+                                    <content>
+                                        <VBox spacing="14">
+                                            <padding>
+                                                <Insets top="16" right="0" bottom="0" left="0"/>
+                                            </padding>
+                                            <children>
+                                                <VBox spacing="10" styleClass="form-panel">
+                                                    <padding>
+                                                        <Insets top="16" right="16" bottom="16" left="16"/>
+                                                    </padding>
+                                                    <children>
+                                                        <TextField fx:id="queryNameField" promptText="Nome da query"/>
+                                                        <TextField fx:id="queryParametersField" promptText="Parâmetros separados por vírgula. Ex.: CPF, Data inicial"/>
+                                                        <HBox alignment="CENTER_RIGHT">
+                                                            <children>
+                                                                <Region HBox.hgrow="ALWAYS"/>
+                                                                <Button text="Cadastrar query" onAction="#addQuery" styleClass="primary-button"/>
+                                                            </children>
+                                                        </HBox>
+                                                    </children>
+                                                </VBox>
+
+                                                <TableView fx:id="queriesTable" prefHeight="240">
+                                                    <columns>
+                                                        <TableColumn fx:id="queryNameColumn" text="Query"/>
+                                                        <TableColumn fx:id="queryParametersColumn" text="Parâmetros"/>
+                                                    </columns>
+                                                </TableView>
+                                            </children>
+                                        </VBox>
+                                    </content>
+                                </Tab>
+
+                                <Tab text="Scripts">
+                                    <content>
+                                        <VBox spacing="14">
+                                            <padding>
+                                                <Insets top="16" right="0" bottom="0" left="0"/>
+                                            </padding>
+                                            <children>
+                                                <VBox spacing="10" styleClass="form-panel">
+                                                    <padding>
+                                                        <Insets top="16" right="16" bottom="16" left="16"/>
+                                                    </padding>
+                                                    <children>
+                                                        <TextField fx:id="scriptNameField" promptText="Nome do script aprovado"/>
+                                                        <HBox alignment="CENTER_RIGHT">
+                                                            <children>
+                                                                <Region HBox.hgrow="ALWAYS"/>
+                                                                <Button text="Cadastrar script" onAction="#addScript" styleClass="primary-button"/>
+                                                            </children>
+                                                        </HBox>
+                                                    </children>
+                                                </VBox>
+
+                                                <TableView fx:id="scriptsTable" prefHeight="240">
+                                                    <columns>
+                                                        <TableColumn fx:id="scriptNameColumn" text="Script aprovado"/>
+                                                    </columns>
+                                                </TableView>
+                                            </children>
+                                        </VBox>
+                                    </content>
+                                </Tab>
+                            </tabs>
+                        </TabPane>
                     </children>
                 </VBox>
             </children>

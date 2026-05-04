@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.scmjf.tihelper.model.QueryDefinition;
 import br.com.scmjf.tihelper.model.ServerInfo;
 import br.com.scmjf.tihelper.model.ServiceInfo;
 
@@ -11,19 +12,14 @@ public class MockDataService {
 
     private final List<ServerInfo> servers = new ArrayList<>();
     private final List<ServiceInfo> services = new ArrayList<>();
-    private final List<String> queries = List.of(
-            "Buscar paciente por CPF",
-            "Buscar atendimento por número",
-            "Consultar respostas de pesquisa",
-            "Verificar integração pendente");
-    private final List<String> scripts = List.of(
-            "Instalar VNC remoto",
-            "Limpar pasta temporária",
-            "Atualizar atalho do sistema");
+    private final List<QueryDefinition> queries = new ArrayList<>();
+    private final List<String> scripts = new ArrayList<>();
 
     public MockDataService() {
         seedServers();
         seedServices();
+        seedQueries();
+        seedScripts();
     }
 
     public List<ServerInfo> getServers() {
@@ -35,11 +31,41 @@ public class MockDataService {
     }
 
     public List<String> getQueries() {
-        return queries;
+        return queries.stream()
+                .map(QueryDefinition::getName)
+                .toList();
+    }
+
+    public List<QueryDefinition> getQueryDefinitions() {
+        return List.copyOf(queries);
+    }
+
+    public List<String> getQueryFields(String queryName) {
+        return queries.stream()
+                .filter(query -> query.getName().equals(queryName))
+                .findFirst()
+                .map(QueryDefinition::getParameters)
+                .orElse(List.of());
     }
 
     public List<String> getScripts() {
-        return scripts;
+        return List.copyOf(scripts);
+    }
+
+    public void addServer(ServerInfo server) {
+        servers.add(server);
+    }
+
+    public void addService(ServiceInfo service) {
+        services.add(service);
+    }
+
+    public void addQuery(QueryDefinition query) {
+        queries.add(query);
+    }
+
+    public void addScript(String scriptName) {
+        scripts.add(scriptName);
     }
 
     private void seedServers() {
@@ -81,5 +107,18 @@ public class MockDataService {
                 "Ambiente de homologação para validações.",
                 "Parado",
                 LocalDateTime.now().minusHours(1)));
+    }
+
+    private void seedQueries() {
+        queries.add(new QueryDefinition("Buscar paciente por CPF", List.of("CPF")));
+        queries.add(new QueryDefinition("Buscar atendimento por número", List.of("Número")));
+        queries.add(new QueryDefinition("Consultar respostas de pesquisa", List.of("Data inicial", "Data final")));
+        queries.add(new QueryDefinition("Verificar integração pendente", List.of("Integração")));
+    }
+
+    private void seedScripts() {
+        scripts.add("Instalar VNC remoto");
+        scripts.add("Limpar pasta temporária");
+        scripts.add("Atualizar atalho do sistema");
     }
 }

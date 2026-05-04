@@ -60,7 +60,7 @@ public class ActionSimulationService {
             case "Buscar atendimento por número" -> appointmentByNumber(parameters);
             case "Consultar respostas de pesquisa" -> surveyAnswers(parameters);
             case "Verificar integração pendente" -> pendingIntegration(parameters);
-            default -> new QueryExecutionResult(List.of("Mensagem"), List.of(row("Mensagem", "Consulta não reconhecida.")));
+            default -> genericRegisteredQuery(queryName, parameters);
         };
 
         historyService.addRecord(
@@ -125,6 +125,23 @@ public class ActionSimulationService {
                 List.of(
                         row("Integração", integration.isBlank() ? "Pesquisa Tablet" : integration, "Fila", "respostas_pesquisa", "Pendências", "3", "Última tentativa", "04/05/2026 13:55"),
                         row("Integração", "SCMJF Core", "Fila", "atendimentos", "Pendências", "0", "Última tentativa", "04/05/2026 14:02")));
+    }
+
+    private QueryExecutionResult genericRegisteredQuery(String queryName, Map<String, String> parameters) {
+        String parameterSummary = parameters.isEmpty()
+                ? "Sem parâmetros"
+                : parameters.entrySet().stream()
+                        .map(entry -> entry.getKey() + "=" + (entry.getValue().isBlank() ? "(vazio)" : entry.getValue()))
+                        .reduce((left, right) -> left + "; " + right)
+                        .orElse("Sem parâmetros");
+
+        return new QueryExecutionResult(
+                List.of("Query", "Parâmetros", "Resultado", "Status"),
+                List.of(row(
+                        "Query", queryName,
+                        "Parâmetros", parameterSummary,
+                        "Resultado", "Execução mockada",
+                        "Status", "SUCESSO")));
     }
 
     private Map<String, String> row(String key, String value) {

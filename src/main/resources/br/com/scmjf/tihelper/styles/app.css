@@ -274,6 +274,43 @@
     -fx-border-radius: 8;
 }
 
+.admin-tabs {
+    -fx-background-color: transparent;
+}
+
+.admin-tabs .tab-header-area {
+    -fx-padding: 0;
+}
+
+.admin-tabs .tab-header-background {
+    -fx-background-color: transparent;
+}
+
+.admin-tabs .tab {
+    -fx-background-color: #e7eef0;
+    -fx-background-radius: 7 7 0 0;
+    -fx-padding: 8 14 8 14;
+}
+
+.admin-tabs .tab:selected {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #dce5e7 #dce5e7 transparent #dce5e7;
+    -fx-border-radius: 7 7 0 0;
+}
+
+.admin-tabs .tab-label {
+    -fx-text-fill: #344b52;
+    -fx-font-weight: 800;
+}
+
+.admin-tabs .tab-content-area {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 0 8 8 8;
+    -fx-border-color: #dce5e7;
+    -fx-border-radius: 0 8 8 8;
+    -fx-padding: 0 16 16 16;
+}
+
 .metric-card,
 .warning-card {
     -fx-border-width: 1 1 1 5;
