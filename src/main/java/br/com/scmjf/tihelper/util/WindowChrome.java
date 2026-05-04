@@ -22,8 +22,10 @@ public final class WindowChrome {
 
     private static final String APP_TITLE = "TI Helper - SCMJF";
     private static final double RESIZE_MARGIN = 7;
-    private static final String MAXIMIZE_TEXT = "□";
-    private static final String RESTORE_TEXT = "❐";
+    private static final String MINIMIZE_TEXT = "\ue921";
+    private static final String MAXIMIZE_TEXT = "\ue922";
+    private static final String RESTORE_TEXT = "\ue923";
+    private static final String CLOSE_TEXT = "\ue8bb";
 
     private WindowChrome() {
     }
@@ -58,7 +60,7 @@ public final class WindowChrome {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        Button minimizeButton = windowButton("-");
+        Button minimizeButton = windowButton(MINIMIZE_TEXT);
         minimizeButton.setOnAction(event -> {
             stage.setIconified(true);
             event.consume();
@@ -70,7 +72,7 @@ public final class WindowChrome {
             event.consume();
         });
 
-        Button closeButton = windowButton("X");
+        Button closeButton = windowButton(CLOSE_TEXT);
         closeButton.getStyleClass().add("window-close-button");
         closeButton.setOnAction(event -> {
             stage.close();

@@ -43,22 +43,31 @@
 .window-control-button {
     -fx-background-color: transparent;
     -fx-background-radius: 0;
-    -fx-text-fill: #d9e4e6;
-    -fx-font-family: "Segoe UI Symbol", "Segoe UI", "Arial";
-    -fx-font-size: 12px;
-    -fx-font-weight: 800;
+    -fx-text-fill: #edf5f6;
+    -fx-font-family: "Segoe MDL2 Assets";
+    -fx-font-size: 10px;
+    -fx-font-weight: normal;
     -fx-padding: 0;
     -fx-border-width: 0;
+    -fx-cursor: default;
 }
 
 .window-control-button:hover {
-    -fx-background-color: #24464f;
+    -fx-background-color: #214852;
     -fx-text-fill: #ffffff;
+}
+
+.window-control-button:pressed {
+    -fx-background-color: #17343d;
 }
 
 .window-close-button:hover {
     -fx-background-color: #c42b1c;
     -fx-text-fill: #ffffff;
+}
+
+.window-close-button:pressed {
+    -fx-background-color: #a82318;
 }
 
 .login-page {
