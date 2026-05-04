@@ -2,6 +2,7 @@ package br.com.scmjf.tihelper.util;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -14,26 +15,30 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public final class WindowChrome {
 
     private static final String APP_TITLE = "TI Helper - SCMJF";
     private static final double RESIZE_MARGIN = 7;
+    private static final String MAXIMIZE_TEXT = "□";
+    private static final String RESTORE_TEXT = "❐";
 
     private WindowChrome() {
     }
 
     public static Parent wrap(Stage stage, Parent content) {
+        WindowState windowState = new WindowState();
         BorderPane frame = new BorderPane();
         frame.getStyleClass().add("window-frame");
-        frame.setTop(createTitleBar(stage));
+        frame.setTop(createTitleBar(stage, windowState));
         frame.setCenter(content);
-        addResizeSupport(stage, frame);
+        addResizeSupport(stage, frame, windowState);
         return frame;
     }
 
-    private static HBox createTitleBar(Stage stage) {
+    private static HBox createTitleBar(Stage stage, WindowState windowState) {
         Label logo = new Label("TI");
         logo.getStyleClass().add("window-logo");
         logo.setMinSize(30, 30);
@@ -53,36 +58,49 @@ public final class WindowChrome {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        Button minimizeButton = windowButton("−");
-        minimizeButton.setOnAction(event -> stage.setIconified(true));
+        Button minimizeButton = windowButton("-");
+        minimizeButton.setOnAction(event -> {
+            stage.setIconified(true);
+            event.consume();
+        });
 
-        Button maximizeButton = windowButton("□");
-        maximizeButton.setOnAction(event -> stage.setMaximized(!stage.isMaximized()));
-        stage.maximizedProperty().addListener((observable, oldValue, maximized) ->
-                maximizeButton.setText(maximized ? "❐" : "□"));
+        Button maximizeButton = windowButton(MAXIMIZE_TEXT);
+        maximizeButton.setOnAction(event -> {
+            toggleMaximize(stage, windowState, maximizeButton);
+            event.consume();
+        });
 
-        Button closeButton = windowButton("×");
+        Button closeButton = windowButton("X");
         closeButton.getStyleClass().add("window-close-button");
-        closeButton.setOnAction(event -> stage.close());
+        closeButton.setOnAction(event -> {
+            stage.close();
+            event.consume();
+        });
 
-        HBox titleBar = new HBox(10, logo, titleGroup, spacer, minimizeButton, maximizeButton, closeButton);
+        HBox controls = new HBox(minimizeButton, maximizeButton, closeButton);
+        controls.getStyleClass().add("window-controls");
+
+        HBox titleBar = new HBox(10, logo, titleGroup, spacer, controls);
         titleBar.getStyleClass().add("window-title-bar");
         titleBar.setAlignment(Pos.CENTER_LEFT);
-        titleBar.setPadding(new Insets(8, 10, 8, 12));
-        addDragSupport(stage, titleBar);
+        titleBar.setMinHeight(50);
+        titleBar.setPrefHeight(50);
+        titleBar.setPadding(new Insets(0, 0, 0, 12));
+        addDragSupport(stage, titleBar, windowState, maximizeButton);
         return titleBar;
     }
 
     private static Button windowButton(String text) {
         Button button = new Button(text);
         button.getStyleClass().addAll("window-control-button");
-        button.setMinSize(36, 28);
-        button.setPrefSize(36, 28);
-        button.setMaxSize(36, 28);
+        button.setFocusTraversable(false);
+        button.setMinSize(46, 50);
+        button.setPrefSize(46, 50);
+        button.setMaxSize(46, 50);
         return button;
     }
 
-    private static void addDragSupport(Stage stage, HBox titleBar) {
+    private static void addDragSupport(Stage stage, HBox titleBar, WindowState windowState, Button maximizeButton) {
         DragState state = new DragState();
 
         titleBar.setOnMousePressed(event -> {
@@ -92,6 +110,7 @@ public final class WindowChrome {
 
             state.sceneX = event.getSceneX();
             state.sceneY = event.getSceneY();
+            event.consume();
         });
 
         titleBar.setOnMouseDragged(event -> {
@@ -99,22 +118,69 @@ public final class WindowChrome {
                 return;
             }
 
-            if (stage.isMaximized()) {
-                stage.setMaximized(false);
-                state.sceneX = Math.min(stage.getWidth() / 2, state.sceneX);
+            if (windowState.maximized) {
+                double mouseRatio = event.getSceneX() / Math.max(stage.getWidth(), 1);
+                restore(stage, windowState, maximizeButton);
+                state.sceneX = Math.max(30, Math.min(stage.getWidth() - 30, stage.getWidth() * mouseRatio));
+                state.sceneY = Math.min(state.sceneY, 26);
             }
 
             stage.setX(event.getScreenX() - state.sceneX);
             stage.setY(event.getScreenY() - state.sceneY);
+            event.consume();
         });
 
         titleBar.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY
                     && event.getClickCount() == 2
                     && !isWindowButtonTarget(event.getTarget())) {
-                stage.setMaximized(!stage.isMaximized());
+                toggleMaximize(stage, windowState, maximizeButton);
+                event.consume();
             }
         });
+    }
+
+    private static void toggleMaximize(Stage stage, WindowState windowState, Button maximizeButton) {
+        if (windowState.maximized) {
+            restore(stage, windowState, maximizeButton);
+        } else {
+            maximize(stage, windowState, maximizeButton);
+        }
+    }
+
+    private static void maximize(Stage stage, WindowState windowState, Button maximizeButton) {
+        if (!windowState.maximized) {
+            windowState.restoreX = stage.getX();
+            windowState.restoreY = stage.getY();
+            windowState.restoreWidth = stage.getWidth();
+            windowState.restoreHeight = stage.getHeight();
+        }
+
+        Rectangle2D bounds = currentScreen(stage).getVisualBounds();
+        stage.setX(bounds.getMinX());
+        stage.setY(bounds.getMinY());
+        stage.setWidth(bounds.getWidth());
+        stage.setHeight(bounds.getHeight());
+
+        windowState.maximized = true;
+        maximizeButton.setText(RESTORE_TEXT);
+    }
+
+    private static void restore(Stage stage, WindowState windowState, Button maximizeButton) {
+        stage.setX(windowState.restoreX);
+        stage.setY(windowState.restoreY);
+        stage.setWidth(Math.max(stage.getMinWidth(), windowState.restoreWidth));
+        stage.setHeight(Math.max(stage.getMinHeight(), windowState.restoreHeight));
+
+        windowState.maximized = false;
+        maximizeButton.setText(MAXIMIZE_TEXT);
+    }
+
+    private static Screen currentScreen(Stage stage) {
+        return Screen.getScreensForRectangle(stage.getX(), stage.getY(), stage.getWidth(), stage.getHeight())
+                .stream()
+                .findFirst()
+                .orElse(Screen.getPrimary());
     }
 
     private static boolean isWindowButtonTarget(Object target) {
@@ -132,18 +198,24 @@ public final class WindowChrome {
         return false;
     }
 
-    private static void addResizeSupport(Stage stage, BorderPane frame) {
+    private static void addResizeSupport(Stage stage, BorderPane frame, WindowState windowState) {
         ResizeState state = new ResizeState();
 
         frame.addEventHandler(MouseEvent.MOUSE_MOVED, event -> {
-            if (!stage.isMaximized()) {
-                frame.setCursor(resolveCursor(frame, event));
+            if (windowState.maximized || isWindowButtonTarget(event.getTarget())) {
+                frame.setCursor(Cursor.DEFAULT);
+                return;
             }
+            frame.setCursor(resolveCursor(frame, event));
         });
 
         frame.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+            if (event.getButton() != MouseButton.PRIMARY || windowState.maximized || isWindowButtonTarget(event.getTarget())) {
+                return;
+            }
+
             Cursor cursor = resolveCursor(frame, event);
-            if (cursor == Cursor.DEFAULT || stage.isMaximized()) {
+            if (cursor == Cursor.DEFAULT) {
                 return;
             }
 
@@ -158,7 +230,7 @@ public final class WindowChrome {
         });
 
         frame.addEventHandler(MouseEvent.MOUSE_DRAGGED, event -> {
-            if (state.cursor == Cursor.DEFAULT || stage.isMaximized()) {
+            if (state.cursor == Cursor.DEFAULT || windowState.maximized || isWindowButtonTarget(event.getTarget())) {
                 return;
             }
 
@@ -253,6 +325,14 @@ public final class WindowChrome {
     private static final class DragState {
         private double sceneX;
         private double sceneY;
+    }
+
+    private static final class WindowState {
+        private boolean maximized;
+        private double restoreX;
+        private double restoreY;
+        private double restoreWidth;
+        private double restoreHeight;
     }
 
     private static final class ResizeState {
