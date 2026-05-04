@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="br.com.scmjf.tihelper.controller.HistoryController"
+            fitToWidth="true"
+            styleClass="content-scroll">
+    <content>
+        <VBox spacing="16" styleClass="content-page">
+            <padding>
+                <Insets top="24" right="26" bottom="26" left="26"/>
+            </padding>
+            <children>
+                <Label text="Histórico" styleClass="page-title"/>
+
+                <TableView fx:id="historyTable" prefHeight="540">
+                    <columns>
+                        <TableColumn fx:id="dateColumn" text="Data/Hora" prefWidth="160"/>
+                        <TableColumn fx:id="userColumn" text="Usuário" prefWidth="100"/>
+                        <TableColumn fx:id="typeColumn" text="Tipo da ação" prefWidth="150"/>
+                        <TableColumn fx:id="serverColumn" text="Servidor" prefWidth="130"/>
+                        <TableColumn fx:id="targetColumn" text="Alvo" prefWidth="190"/>
+                        <TableColumn fx:id="statusColumn" text="Status" prefWidth="100"/>
+                        <TableColumn fx:id="messageColumn" text="Mensagem" prefWidth="320"/>
+                    </columns>
+                </TableView>
+            </children>
+        </VBox>
+    </content>
+</ScrollPane>

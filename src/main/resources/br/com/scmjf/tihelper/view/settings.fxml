@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="br.com.scmjf.tihelper.controller.SettingsController"
+            fitToWidth="true"
+            styleClass="content-scroll">
+    <content>
+        <VBox spacing="16" styleClass="content-page">
+            <padding>
+                <Insets top="24" right="26" bottom="26" left="26"/>
+            </padding>
+            <children>
+                <Label text="Configurações" styleClass="page-title"/>
+
+                <VBox spacing="16" styleClass="form-panel">
+                    <padding>
+                        <Insets top="22" right="22" bottom="22" left="22"/>
+                    </padding>
+                    <children>
+                        <Label text="Informações do protótipo" styleClass="section-title"/>
+                        <GridPane hgap="18" vgap="14">
+                            <columnConstraints>
+                                <ColumnConstraints minWidth="180"/>
+                                <ColumnConstraints hgrow="ALWAYS"/>
+                            </columnConstraints>
+                            <children>
+                                <Label text="Usuário logado" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                <Label fx:id="loggedUserLabel" text="-" styleClass="value-label" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                                <Label text="Perfil" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                <Label fx:id="profileLabel" text="-" styleClass="value-label" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                                <Label text="Versão da aplicação" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                                <Label fx:id="versionLabel" text="-" styleClass="value-label" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                                <Label text="Ambiente" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                                <Label fx:id="environmentLabel" text="-" styleClass="value-label" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                            </children>
+                        </GridPane>
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+    </content>
+</ScrollPane>
