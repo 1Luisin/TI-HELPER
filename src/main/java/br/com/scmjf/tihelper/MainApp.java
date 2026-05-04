@@ -3,7 +3,9 @@ package br.com.scmjf.tihelper;
 import java.io.IOException;
 
 import br.com.scmjf.tihelper.util.SceneUtil;
+import br.com.scmjf.tihelper.util.TrayService;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
@@ -21,7 +23,21 @@ public class MainApp extends Application {
         stage.setMinWidth(860);
         stage.setMinHeight(600);
         stage.setScene(SceneUtil.createScene(stage, root, 1080, 720));
+
+        if (TrayService.install(stage)) {
+            Platform.setImplicitExit(false);
+            stage.setOnCloseRequest(event -> {
+                event.consume();
+                TrayService.hideToTray(stage);
+            });
+        }
+
         stage.show();
+    }
+
+    @Override
+    public void stop() {
+        TrayService.shutdown();
     }
 
     private Parent loadView(String viewName) throws IOException {

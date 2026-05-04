@@ -1,4 +1,5 @@
 module br.com.scmjf.tihelper {
+    requires java.desktop;
     requires javafx.controls;
     requires javafx.fxml;
 
