@@ -80,6 +80,9 @@ public class MainController {
     private Button serversButton;
 
     @FXML
+    private Button panelsButton;
+
+    @FXML
     private Button servicesButton;
 
     @FXML
@@ -116,6 +119,7 @@ public class MainController {
 
         navigationButtons.put(NavigationTarget.DASHBOARD, dashboardButton);
         navigationButtons.put(NavigationTarget.SERVERS, serversButton);
+        navigationButtons.put(NavigationTarget.PANELS, panelsButton);
         navigationButtons.put(NavigationTarget.SERVICES, servicesButton);
         navigationButtons.put(NavigationTarget.QUERIES, queriesButton);
         navigationButtons.put(NavigationTarget.SCRIPTS, scriptsButton);
@@ -124,6 +128,7 @@ public class MainController {
 
         compactLabels.put(NavigationTarget.DASHBOARD, "Dash");
         compactLabels.put(NavigationTarget.SERVERS, "Serv.");
+        compactLabels.put(NavigationTarget.PANELS, "Pain.");
         compactLabels.put(NavigationTarget.SERVICES, "Svc.");
         compactLabels.put(NavigationTarget.QUERIES, "SQL");
         compactLabels.put(NavigationTarget.SCRIPTS, "Run");
@@ -158,6 +163,11 @@ public class MainController {
     @FXML
     private void showServers() {
         showScreen(NavigationTarget.SERVERS);
+    }
+
+    @FXML
+    private void showPanels() {
+        showScreen(NavigationTarget.PANELS);
     }
 
     @FXML

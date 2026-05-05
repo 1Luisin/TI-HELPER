@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+import br.com.scmjf.tihelper.model.PanelInfo;
 import br.com.scmjf.tihelper.model.QueryDefinition;
 import br.com.scmjf.tihelper.model.ScriptDefinition;
 import br.com.scmjf.tihelper.model.ServerInfo;
@@ -22,6 +23,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -118,6 +120,33 @@ public class SettingsController {
     private TableColumn<ServiceInfo, String> serviceStatusColumn;
 
     @FXML
+    private TextField panelNameField;
+
+    @FXML
+    private TextField panelIpField;
+
+    @FXML
+    private TextField panelLocationField;
+
+    @FXML
+    private ComboBox<String> panelStatusCombo;
+
+    @FXML
+    private TableView<PanelInfo> panelsTable;
+
+    @FXML
+    private TableColumn<PanelInfo, String> panelNameColumn;
+
+    @FXML
+    private TableColumn<PanelInfo, String> panelIpColumn;
+
+    @FXML
+    private TableColumn<PanelInfo, String> panelLocationColumn;
+
+    @FXML
+    private TableColumn<PanelInfo, String> panelStatusColumn;
+
+    @FXML
     private TextField queryNameField;
 
     @FXML
@@ -180,6 +209,7 @@ public class SettingsController {
         versionLabel.setText(APP_VERSION);
         environmentLabel.setText("Protótipo");
 
+        configurePanelStatusOptions();
         configureSqlEditor();
         configureQueryParameterToggle();
         configureTables();
@@ -223,6 +253,25 @@ public class SettingsController {
         serviceDescriptionArea.clear();
         refreshAdministrativeTables();
         AlertUtil.info("Cadastrar serviço", "Serviço registrado no mock em memória.");
+    }
+
+    @FXML
+    private void addPanel() {
+        if (hasBlank(panelNameField, panelIpField, panelLocationField)
+                || panelStatusCombo.getSelectionModel().getSelectedItem() == null) {
+            AlertUtil.warning("Cadastrar painel", "Preencha todos os campos do painel.");
+            return;
+        }
+
+        AppContext.mockDataService().addPanel(new PanelInfo(
+                panelNameField.getText().trim(),
+                panelIpField.getText().trim(),
+                panelLocationField.getText().trim(),
+                panelStatusCombo.getSelectionModel().getSelectedItem()));
+        clear(panelNameField, panelIpField, panelLocationField);
+        panelStatusCombo.getSelectionModel().select("Ligado");
+        refreshAdministrativeTables();
+        AlertUtil.info("Cadastrar painel", "Painel registrado no mock em memória.");
     }
 
     @FXML
@@ -328,6 +377,13 @@ public class SettingsController {
         TableUtil.bindColumnWidths(servicesTable, new double[]{1.1, 1.4, 2.4, 1},
                 serviceServerColumn, serviceNameColumn, serviceDescriptionColumn, serviceStatusColumn);
 
+        panelNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        panelIpColumn.setCellValueFactory(new PropertyValueFactory<>("ipAddress"));
+        panelLocationColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
+        panelStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+        TableUtil.bindColumnWidths(panelsTable, new double[]{1.4, 1.2, 1.4, 1},
+                panelNameColumn, panelIpColumn, panelLocationColumn, panelStatusColumn);
+
         queryNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         queryTextColumn.setCellValueFactory(new PropertyValueFactory<>("queryPreview"));
         TableUtil.bindColumnWidths(queriesTable, new double[]{1.4, 3}, queryNameColumn, queryTextColumn);
@@ -337,6 +393,11 @@ public class SettingsController {
         scriptSummaryColumn.setCellValueFactory(new PropertyValueFactory<>("sourceSummary"));
         TableUtil.bindColumnWidths(scriptsTable, new double[]{1.4, 0.8, 2.6},
                 scriptNameColumn, scriptSourceColumn, scriptSummaryColumn);
+    }
+
+    private void configurePanelStatusOptions() {
+        panelStatusCombo.setItems(FXCollections.observableArrayList("Ligado", "Desligado"));
+        panelStatusCombo.getSelectionModel().select("Ligado");
     }
 
     private void configureSqlEditor() {
@@ -376,6 +437,7 @@ public class SettingsController {
     private void refreshAdministrativeTables() {
         serversTable.setItems(FXCollections.observableArrayList(AppContext.mockDataService().getServers()));
         servicesTable.setItems(FXCollections.observableArrayList(AppContext.mockDataService().getServices()));
+        panelsTable.setItems(FXCollections.observableArrayList(AppContext.mockDataService().getPanels()));
         queriesTable.setItems(FXCollections.observableArrayList(AppContext.mockDataService().getQueryDefinitions()));
         scriptsTable.setItems(FXCollections.observableArrayList(AppContext.mockDataService().getScriptDefinitions()));
     }

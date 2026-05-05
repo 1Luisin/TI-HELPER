@@ -3,6 +3,7 @@ package br.com.scmjf.tihelper.util;
 public enum NavigationTarget {
     DASHBOARD("Dashboard", "dashboard.fxml"),
     SERVERS("Servidores", "servers.fxml"),
+    PANELS("Painéis", "panels.fxml"),
     SERVICES("Serviços", "services.fxml"),
     QUERIES("Queries", "queries.fxml"),
     SCRIPTS("Scripts", "scripts.fxml"),

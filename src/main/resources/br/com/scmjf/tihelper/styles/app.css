@@ -656,6 +656,23 @@
     -fx-text-fill: #102027;
 }
 
+.status-pill {
+    -fx-background-radius: 999;
+    -fx-padding: 4 10 4 10;
+    -fx-font-size: 12px;
+    -fx-font-weight: 900;
+}
+
+.status-on {
+    -fx-background-color: #e3f6ef;
+    -fx-text-fill: #0b6b4a;
+}
+
+.status-off {
+    -fx-background-color: #fdecea;
+    -fx-text-fill: #a13a2a;
+}
+
 .action-bar {
     -fx-padding: 2 0 4 0;
 }

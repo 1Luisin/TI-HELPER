@@ -54,6 +54,7 @@
                 <Label fx:id="sidebarCaption" text="MENU" styleClass="sidebar-caption"/>
                 <Button fx:id="dashboardButton" text="Dashboard" maxWidth="Infinity" onAction="#showDashboard" styleClass="nav-button"/>
                 <Button fx:id="serversButton" text="Servidores" maxWidth="Infinity" onAction="#showServers" styleClass="nav-button"/>
+                <Button fx:id="panelsButton" text="Painéis" maxWidth="Infinity" onAction="#showPanels" styleClass="nav-button"/>
                 <Button fx:id="servicesButton" text="Serviços" maxWidth="Infinity" onAction="#showServices" styleClass="nav-button"/>
                 <Button fx:id="queriesButton" text="Queries" maxWidth="Infinity" onAction="#showQueries" styleClass="nav-button"/>
                 <Button fx:id="scriptsButton" text="Scripts" maxWidth="Infinity" onAction="#showScripts" styleClass="nav-button"/>

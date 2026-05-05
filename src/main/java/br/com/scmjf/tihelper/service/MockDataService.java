@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.scmjf.tihelper.model.PanelInfo;
 import br.com.scmjf.tihelper.model.QueryDefinition;
 import br.com.scmjf.tihelper.model.ScriptDefinition;
 import br.com.scmjf.tihelper.model.ServerInfo;
@@ -15,12 +16,14 @@ public class MockDataService {
     private final List<ServiceInfo> services = new ArrayList<>();
     private final List<QueryDefinition> queries = new ArrayList<>();
     private final List<ScriptDefinition> scripts = new ArrayList<>();
+    private final List<PanelInfo> panels = new ArrayList<>();
 
     public MockDataService() {
         seedServers();
         seedServices();
         seedQueries();
         seedScripts();
+        seedPanels();
     }
 
     public List<ServerInfo> getServers() {
@@ -59,6 +62,10 @@ public class MockDataService {
         return List.copyOf(scripts);
     }
 
+    public List<PanelInfo> getPanels() {
+        return List.copyOf(panels);
+    }
+
     public void addServer(ServerInfo server) {
         servers.add(server);
     }
@@ -77,6 +84,10 @@ public class MockDataService {
 
     public void addScript(ScriptDefinition script) {
         scripts.add(script);
+    }
+
+    public void addPanel(PanelInfo panel) {
+        panels.add(panel);
     }
 
     private void seedServers() {
@@ -131,5 +142,11 @@ public class MockDataService {
         addScript("Instalar VNC remoto");
         addScript("Limpar pasta temporária");
         addScript("Atualizar atalho do sistema");
+    }
+
+    private void seedPanels() {
+        panels.add(new PanelInfo("Painel Recepcao", "172.18.10.21", "Recepcao", "Ligado"));
+        panels.add(new PanelInfo("Painel PA", "172.18.10.22", "Pronto atendimento", "Ligado"));
+        panels.add(new PanelInfo("Painel Internacao", "172.18.10.23", "Internacao", "Desligado"));
     }
 }
