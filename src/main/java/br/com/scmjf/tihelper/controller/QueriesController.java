@@ -5,11 +5,14 @@ import java.util.List;
 import java.util.Map;
 
 import br.com.scmjf.tihelper.model.QueryExecutionResult;
+import br.com.scmjf.tihelper.model.TipoAcao;
 import br.com.scmjf.tihelper.util.AlertUtil;
 import br.com.scmjf.tihelper.util.AppContext;
+import br.com.scmjf.tihelper.util.PermissionUtil;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -20,7 +23,16 @@ import javafx.scene.layout.GridPane;
 public class QueriesController {
 
     @FXML
+    private TextField searchField;
+
+    @FXML
     private ComboBox<String> queryCombo;
+
+    @FXML
+    private Button executeButton;
+
+    @FXML
+    private Label feedbackLabel;
 
     @FXML
     private GridPane parametersPane;
@@ -29,11 +41,16 @@ public class QueriesController {
     private TableView<Map<String, String>> resultTable;
 
     private final Map<String, TextField> parameterFields = new LinkedHashMap<>();
+    private List<String> allQueries;
 
     @FXML
     private void initialize() {
-        queryCombo.setItems(FXCollections.observableArrayList(AppContext.mockDataService().getQueries()));
+        allQueries = AppContext.queryService().listarNomes();
+        queryCombo.setItems(FXCollections.observableArrayList(allQueries));
         queryCombo.getSelectionModel().selectFirst();
+        resultTable.setPlaceholder(new Label("Execute uma query para visualizar o resultado simulado."));
+        searchField.textProperty().addListener((observable, oldValue, value) -> filterQueries(value));
+        executeButton.setDisable(!PermissionUtil.canRunAction(AppContext.getCurrentUser(), TipoAcao.EXECUTAR_QUERY));
         renderParameters();
     }
 
@@ -43,7 +60,7 @@ public class QueriesController {
         parameterFields.clear();
 
         String selectedQuery = queryCombo.getSelectionModel().getSelectedItem();
-        List<String> fields = AppContext.mockDataService().getQueryFields(selectedQuery);
+        List<String> fields = AppContext.queryService().listarParametros(selectedQuery);
         for (int index = 0; index < fields.size(); index++) {
             String fieldName = fields.get(index);
             Label label = new Label(fieldName);
@@ -61,6 +78,11 @@ public class QueriesController {
 
     @FXML
     private void executeQuery() {
+        if (!PermissionUtil.canRunAction(AppContext.getCurrentUser(), TipoAcao.EXECUTAR_QUERY)) {
+            AppContext.denyAction(TipoAcao.EXECUTAR_QUERY, "Queries", "Seu perfil não pode executar queries.");
+            return;
+        }
+
         String selectedQuery = queryCombo.getSelectionModel().getSelectedItem();
         if (selectedQuery == null) {
             AlertUtil.warning("Executar query", "Selecione uma consulta.");
@@ -70,21 +92,30 @@ public class QueriesController {
         Map<String, String> parameters = new LinkedHashMap<>();
         parameterFields.forEach((name, field) -> parameters.put(name, field.getText().trim()));
 
-        QueryExecutionResult result = AppContext.actionSimulationService()
-                .executeQuery(selectedQuery, parameters, AppContext.getCurrentUser());
+        QueryExecutionResult result = AppContext.queryService()
+                .executar(selectedQuery, parameters, AppContext.getCurrentUser());
         renderResultTable(result);
+        feedbackLabel.setText("Consulta simulada executada e registrada.");
         AlertUtil.info("Executar query", "Consulta simulada executada e registrada no histórico.");
+    }
+
+    private void filterQueries(String text) {
+        String filter = text == null ? "" : text.trim().toLowerCase();
+        List<String> filtered = allQueries.stream()
+                .filter(query -> filter.isBlank() || query.toLowerCase().contains(filter))
+                .toList();
+        queryCombo.setItems(FXCollections.observableArrayList(filtered));
+        queryCombo.getSelectionModel().selectFirst();
+        renderParameters();
     }
 
     private void renderResultTable(QueryExecutionResult result) {
         resultTable.getColumns().clear();
-        double columnWidth = Math.max(120, (resultTable.getWidth() - 20) / Math.max(1, result.columns().size()));
         for (String columnName : result.columns()) {
             TableColumn<Map<String, String>, String> column = new TableColumn<>(columnName);
             column.setCellValueFactory(data -> new ReadOnlyStringWrapper(
                     data.getValue().getOrDefault(columnName, "")));
             column.setMinWidth(120);
-            column.setPrefWidth(columnWidth);
             column.prefWidthProperty().bind(resultTable.widthProperty()
                     .subtract(20)
                     .divide(Math.max(1, result.columns().size())));

@@ -3,11 +3,14 @@ package br.com.scmjf.tihelper.controller;
 import java.util.List;
 
 import br.com.scmjf.tihelper.model.ExecutionHistory;
+import br.com.scmjf.tihelper.model.TipoAcao;
 import br.com.scmjf.tihelper.util.AppContext;
 import br.com.scmjf.tihelper.util.NavigationTarget;
+import br.com.scmjf.tihelper.util.PermissionUtil;
 import br.com.scmjf.tihelper.util.TableUtil;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -59,6 +62,15 @@ public class DashboardController {
     private Label failuresTodayLabel;
 
     @FXML
+    private Button quickRestartButton;
+
+    @FXML
+    private Button quickQueryButton;
+
+    @FXML
+    private Button quickScriptButton;
+
+    @FXML
     private TableView<ExecutionHistory> latestTable;
 
     @FXML
@@ -78,12 +90,12 @@ public class DashboardController {
 
     @FXML
     private void initialize() {
-        serversCountLabel.setText(String.valueOf(AppContext.mockDataService().getServers().size()));
-        servicesCountLabel.setText(String.valueOf(AppContext.mockDataService().getServices().size()));
-        queriesCountLabel.setText(String.valueOf(AppContext.mockDataService().getQueries().size()));
-        scriptsCountLabel.setText(String.valueOf(AppContext.mockDataService().getScripts().size()));
-        executionsTodayLabel.setText(String.valueOf(AppContext.historyService().countToday()));
-        failuresTodayLabel.setText(String.valueOf(AppContext.historyService().countFailuresToday()));
+        serversCountLabel.setText(String.valueOf(AppContext.servidorService().listar().size()));
+        servicesCountLabel.setText(String.valueOf(AppContext.servicoServidorService().listar().size()));
+        queriesCountLabel.setText(String.valueOf(AppContext.queryService().listarNomes().size()));
+        scriptsCountLabel.setText(String.valueOf(AppContext.scriptService().listarNomes().size()));
+        executionsTodayLabel.setText(String.valueOf(AppContext.historicoService().contarHoje()));
+        failuresTodayLabel.setText(String.valueOf(AppContext.historicoService().contarFalhasHoje()));
 
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("formattedDateTime"));
         userColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
@@ -91,22 +103,36 @@ public class DashboardController {
         targetColumn.setCellValueFactory(new PropertyValueFactory<>("target"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         TableUtil.bindColumnWidths(latestTable, new double[]{1.5, 1, 1.4, 2, 1}, dateColumn, userColumn, typeColumn, targetColumn, statusColumn);
-        latestTable.setItems(FXCollections.observableArrayList(AppContext.historyService().getLatest(8)));
+        latestTable.setPlaceholder(new Label("Nenhuma execução registrada."));
+        latestTable.setItems(FXCollections.observableArrayList(AppContext.historicoService().listarUltimos(8)));
+        configureActionPermissions();
         configureResponsiveMetrics();
     }
 
     @FXML
     private void quickRestartService() {
+        if (!PermissionUtil.canRunAction(AppContext.getCurrentUser(), TipoAcao.REINICIAR_SERVICO)) {
+            AppContext.denyAction(TipoAcao.REINICIAR_SERVICO, "Dashboard", "Seu perfil não pode reiniciar serviços.");
+            return;
+        }
         AppContext.navigateTo(NavigationTarget.SERVICES);
     }
 
     @FXML
     private void quickExecuteQuery() {
+        if (!PermissionUtil.canRunAction(AppContext.getCurrentUser(), TipoAcao.EXECUTAR_QUERY)) {
+            AppContext.denyAction(TipoAcao.EXECUTAR_QUERY, "Dashboard", "Seu perfil não pode executar queries.");
+            return;
+        }
         AppContext.navigateTo(NavigationTarget.QUERIES);
     }
 
     @FXML
     private void quickInstallVnc() {
+        if (!PermissionUtil.canRunAction(AppContext.getCurrentUser(), TipoAcao.EXECUTAR_SCRIPT)) {
+            AppContext.denyAction(TipoAcao.EXECUTAR_SCRIPT, "Dashboard", "Seu perfil não pode executar scripts.");
+            return;
+        }
         AppContext.navigateTo(NavigationTarget.SCRIPTS);
     }
 
@@ -132,6 +158,12 @@ public class DashboardController {
         metricsGrid.widthProperty().addListener((observable, oldWidth, newWidth) ->
                 layoutMetrics(cards, newWidth.doubleValue()));
         layoutMetrics(cards, 900);
+    }
+
+    private void configureActionPermissions() {
+        quickRestartButton.setDisable(!PermissionUtil.canRunAction(AppContext.getCurrentUser(), TipoAcao.REINICIAR_SERVICO));
+        quickQueryButton.setDisable(!PermissionUtil.canRunAction(AppContext.getCurrentUser(), TipoAcao.EXECUTAR_QUERY));
+        quickScriptButton.setDisable(!PermissionUtil.canRunAction(AppContext.getCurrentUser(), TipoAcao.EXECUTAR_SCRIPT));
     }
 
     private void layoutMetrics(List<VBox> cards, double width) {

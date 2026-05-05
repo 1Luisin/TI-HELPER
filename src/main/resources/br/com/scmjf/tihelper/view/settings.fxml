@@ -94,7 +94,7 @@
                                                         <FlowPane hgap="12" vgap="10">
                                                             <children>
                                                                 <TextField fx:id="serverNameField" promptText="Nome" prefWidth="170"/>
-                                                                <TextField fx:id="serverHostField" promptText="IP/Host" prefWidth="180"/>
+                                                                <TextField fx:id="serverHostField" promptText="IP IPv4" prefWidth="180"/>
                                                                 <TextField fx:id="serverOsField" promptText="Sistema operacional" prefWidth="210"/>
                                                                 <TextField fx:id="serverEnvironmentField" promptText="Ambiente" prefWidth="150"/>
                                                                 <TextField fx:id="serverStatusField" promptText="Status" prefWidth="140"/>

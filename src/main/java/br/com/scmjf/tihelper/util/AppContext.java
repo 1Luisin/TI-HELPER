@@ -1,22 +1,43 @@
 package br.com.scmjf.tihelper.util;
 
+import java.time.LocalDateTime;
 import java.util.function.Consumer;
 
+import br.com.scmjf.tihelper.model.AppSession;
+import br.com.scmjf.tihelper.model.StatusExecucao;
+import br.com.scmjf.tihelper.model.TipoAcao;
 import br.com.scmjf.tihelper.model.User;
-import br.com.scmjf.tihelper.service.ActionSimulationService;
+import br.com.scmjf.tihelper.service.AuthMockService;
 import br.com.scmjf.tihelper.service.AuthService;
-import br.com.scmjf.tihelper.service.HistoryService;
-import br.com.scmjf.tihelper.service.MockDataService;
+import br.com.scmjf.tihelper.service.HistoricoMockService;
+import br.com.scmjf.tihelper.service.HistoricoService;
+import br.com.scmjf.tihelper.service.MockDataStore;
+import br.com.scmjf.tihelper.service.PainelMockService;
+import br.com.scmjf.tihelper.service.PainelService;
+import br.com.scmjf.tihelper.service.QueryMockService;
+import br.com.scmjf.tihelper.service.QueryService;
+import br.com.scmjf.tihelper.service.ScriptMockService;
+import br.com.scmjf.tihelper.service.ScriptService;
+import br.com.scmjf.tihelper.service.ServicoServidorMockService;
+import br.com.scmjf.tihelper.service.ServicoServidorService;
+import br.com.scmjf.tihelper.service.ServidorMockService;
+import br.com.scmjf.tihelper.service.ServidorService;
+import br.com.scmjf.tihelper.service.UsuarioMockService;
+import br.com.scmjf.tihelper.service.UsuarioService;
 
 public final class AppContext {
 
-    private static final AuthService AUTH_SERVICE = new AuthService();
-    private static final HistoryService HISTORY_SERVICE = new HistoryService();
-    private static final MockDataService MOCK_DATA_SERVICE = new MockDataService();
-    private static final ActionSimulationService ACTION_SIMULATION_SERVICE =
-            new ActionSimulationService(HISTORY_SERVICE);
+    private static final MockDataStore STORE = new MockDataStore();
+    private static final HistoricoService HISTORICO_SERVICE = new HistoricoMockService(STORE);
+    private static final AuthService AUTH_SERVICE = new AuthMockService(STORE, HISTORICO_SERVICE);
+    private static final UsuarioService USUARIO_SERVICE = new UsuarioMockService(STORE, HISTORICO_SERVICE);
+    private static final ServidorService SERVIDOR_SERVICE = new ServidorMockService(STORE, HISTORICO_SERVICE);
+    private static final ServicoServidorService SERVICO_SERVIDOR_SERVICE = new ServicoServidorMockService(STORE, HISTORICO_SERVICE);
+    private static final PainelService PAINEL_SERVICE = new PainelMockService(STORE, HISTORICO_SERVICE);
+    private static final QueryService QUERY_SERVICE = new QueryMockService(STORE, HISTORICO_SERVICE);
+    private static final ScriptService SCRIPT_SERVICE = new ScriptMockService(STORE, HISTORICO_SERVICE);
 
-    private static User currentUser;
+    private static AppSession session;
     private static Consumer<NavigationTarget> navigationHandler;
 
     private AppContext() {
@@ -26,24 +47,44 @@ public final class AppContext {
         return AUTH_SERVICE;
     }
 
-    public static HistoryService historyService() {
-        return HISTORY_SERVICE;
+    public static UsuarioService usuarioService() {
+        return USUARIO_SERVICE;
     }
 
-    public static MockDataService mockDataService() {
-        return MOCK_DATA_SERVICE;
+    public static ServidorService servidorService() {
+        return SERVIDOR_SERVICE;
     }
 
-    public static ActionSimulationService actionSimulationService() {
-        return ACTION_SIMULATION_SERVICE;
+    public static ServicoServidorService servicoServidorService() {
+        return SERVICO_SERVIDOR_SERVICE;
+    }
+
+    public static PainelService painelService() {
+        return PAINEL_SERVICE;
+    }
+
+    public static QueryService queryService() {
+        return QUERY_SERVICE;
+    }
+
+    public static ScriptService scriptService() {
+        return SCRIPT_SERVICE;
+    }
+
+    public static HistoricoService historicoService() {
+        return HISTORICO_SERVICE;
+    }
+
+    public static AppSession getSession() {
+        return session;
     }
 
     public static User getCurrentUser() {
-        return currentUser;
+        return session == null ? null : session.getUser();
     }
 
-    public static void setCurrentUser(User currentUser) {
-        AppContext.currentUser = currentUser;
+    public static void startSession(User user) {
+        session = new AppSession(user, LocalDateTime.now());
     }
 
     public static void setNavigationHandler(Consumer<NavigationTarget> navigationHandler) {
@@ -56,8 +97,17 @@ public final class AppContext {
         }
     }
 
+    public static boolean denyAction(TipoAcao tipoAcao, String target, String message) {
+        HISTORICO_SERVICE.registrar(getCurrentUser(), tipoAcao, "-", target, StatusExecucao.NEGADO, "-", message);
+        AlertUtil.warning("Permissão negada", message);
+        return false;
+    }
+
     public static void clearSession() {
-        currentUser = null;
+        if (session != null) {
+            HISTORICO_SERVICE.registrar(session.getUser(), TipoAcao.LOGOUT, "-", "Sessão", StatusExecucao.SUCESSO, "-", "Logout efetuado.");
+        }
+        session = null;
         navigationHandler = null;
     }
 }

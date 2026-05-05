@@ -6,6 +6,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
@@ -62,6 +63,8 @@
                         </VBox>
                     </children>
                 </FlowPane>
+
+                <TextField fx:id="searchField" promptText="Buscar por painel, IP, local ou status"/>
 
                 <TableView fx:id="panelsTable" prefHeight="460">
                     <columns>

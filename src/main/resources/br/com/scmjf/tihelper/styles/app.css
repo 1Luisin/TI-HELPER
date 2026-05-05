@@ -717,6 +717,11 @@
     -fx-font-weight: 700;
 }
 
+.action-feedback {
+    -fx-text-fill: #0f6f71;
+    -fx-font-weight: 800;
+}
+
 .text-field,
 .password-field,
 .text-area,

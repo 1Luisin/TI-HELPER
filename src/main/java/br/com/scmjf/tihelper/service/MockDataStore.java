@@ -1,0 +1,128 @@
+package br.com.scmjf.tihelper.service;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import br.com.scmjf.tihelper.model.ExecutionHistory;
+import br.com.scmjf.tihelper.model.PanelInfo;
+import br.com.scmjf.tihelper.model.QueryDefinition;
+import br.com.scmjf.tihelper.model.ScriptDefinition;
+import br.com.scmjf.tihelper.model.ServerInfo;
+import br.com.scmjf.tihelper.model.ServiceInfo;
+import br.com.scmjf.tihelper.model.StatusExecucao;
+import br.com.scmjf.tihelper.model.TipoAcao;
+import br.com.scmjf.tihelper.model.UserAccount;
+import br.com.scmjf.tihelper.model.UserProfile;
+
+public class MockDataStore {
+
+    private final Map<String, UserAccount> users = new LinkedHashMap<>();
+    private final List<ServerInfo> servers = new ArrayList<>();
+    private final List<ServiceInfo> services = new ArrayList<>();
+    private final List<PanelInfo> panels = new ArrayList<>();
+    private final List<QueryDefinition> queries = new ArrayList<>();
+    private final List<ScriptDefinition> scripts = new ArrayList<>();
+    private final List<ExecutionHistory> history = new ArrayList<>();
+    private long historySequence = 1L;
+
+    public MockDataStore() {
+        seedUsers();
+        seedServers();
+        seedServices();
+        seedPanels();
+        seedQueries();
+        seedScripts();
+        seedHistory();
+    }
+
+    Map<String, UserAccount> users() {
+        return users;
+    }
+
+    List<ServerInfo> servers() {
+        return servers;
+    }
+
+    List<ServiceInfo> services() {
+        return services;
+    }
+
+    List<PanelInfo> panels() {
+        return panels;
+    }
+
+    List<QueryDefinition> queries() {
+        return queries;
+    }
+
+    List<ScriptDefinition> scripts() {
+        return scripts;
+    }
+
+    List<ExecutionHistory> history() {
+        return history;
+    }
+
+    long nextHistoryId() {
+        return historySequence++;
+    }
+
+    private void seedUsers() {
+        users.put("admin", new UserAccount("admin", "admin", UserProfile.ADMIN, null));
+        users.put("ti", new UserAccount("ti", "ti", UserProfile.OPERADOR_TI, null));
+        users.put("consulta", new UserAccount("consulta", "consulta", UserProfile.CONSULTA, null));
+    }
+
+    private void seedServers() {
+        servers.add(new ServerInfo("SRV-APP-01", "10.10.1.11", "Windows Server 2019", "Produção", "Online"));
+        servers.add(new ServerInfo("SRV-BD-01", "10.10.1.20", "Oracle Linux 8", "Produção", "Online"));
+        servers.add(new ServerInfo("SRV-HML-01", "hml-scmjf.local", "Windows Server 2022", "Homologação", "Manutenção"));
+        servers.add(new ServerInfo("SRV-ARQ-01", "files.scmjf.local", "Windows Server 2016", "Produção", "Online"));
+        servers.add(new ServerInfo("SRV-INT-01", "int.scmjf.local", "Ubuntu Server 22.04", "Integração", "Instável"));
+    }
+
+    private void seedServices() {
+        services.add(new ServiceInfo("SRV-APP-01", "SCMJF Web", "Aplicação principal do sistema.", "Em execução", LocalDateTime.now().minusMinutes(5)));
+        services.add(new ServiceInfo("SRV-APP-01", "Pesquisa Tablet", "Serviço de coleta de respostas da pesquisa.", "Em execução", LocalDateTime.now().minusMinutes(8)));
+        services.add(new ServiceInfo("SRV-BD-01", "Oracle Listener", "Canal de escuta para conexões Oracle.", "Em execução", LocalDateTime.now().minusMinutes(11)));
+        services.add(new ServiceInfo("SRV-INT-01", "IntegradorSCMJF", "Fila de integração entre sistemas internos.", "Atenção", LocalDateTime.now().minusMinutes(22)));
+        services.add(new ServiceInfo("SRV-HML-01", "SCMJF Homolog", "Ambiente de homologação para validações.", "Parado", LocalDateTime.now().minusHours(1)));
+    }
+
+    private void seedPanels() {
+        panels.add(new PanelInfo("Painel Recepção", "172.18.10.21", "Recepção", "Ligado"));
+        panels.add(new PanelInfo("Painel PA", "172.18.10.22", "Pronto atendimento", "Ligado"));
+        panels.add(new PanelInfo("Painel Internação", "172.18.10.23", "Internação", "Desligado"));
+    }
+
+    private void seedQueries() {
+        queries.add(new QueryDefinition("Buscar paciente por CPF", List.of("CPF")));
+        queries.add(new QueryDefinition("Buscar atendimento por número", List.of("Número")));
+        queries.add(new QueryDefinition("Consultar respostas de pesquisa", List.of("Data inicial", "Data final")));
+        queries.add(new QueryDefinition("Verificar integração pendente", List.of("Integração")));
+    }
+
+    private void seedScripts() {
+        scripts.add(new ScriptDefinition("Instalar VNC remoto", "Mock", "", ""));
+        scripts.add(new ScriptDefinition("Limpar pasta temporária", "Mock", "", ""));
+        scripts.add(new ScriptDefinition("Atualizar atalho do sistema", "Mock", "", ""));
+    }
+
+    private void seedHistory() {
+        history.add(new ExecutionHistory(nextHistoryId(), LocalDateTime.now().minusMinutes(18), "ti", UserProfile.OPERADOR_TI,
+                TipoAcao.EXECUTAR_QUERY, "-", "Buscar paciente por CPF", StatusExecucao.SIMULADO, "-",
+                "Consulta simulada retornou 1 registro."));
+        history.add(new ExecutionHistory(nextHistoryId(), LocalDateTime.now().minusHours(1), "admin", UserProfile.ADMIN,
+                TipoAcao.EXECUTAR_SCRIPT, "SRV-APP-01", "Limpar pasta temporária", StatusExecucao.SIMULADO, "Manutenção preventiva",
+                "Execução mockada concluída."));
+        history.add(new ExecutionHistory(nextHistoryId(), LocalDateTime.now().minusHours(2), "ti", UserProfile.OPERADOR_TI,
+                TipoAcao.REINICIAR_SERVICO, "SRV-INT-01", "IntegradorSCMJF", StatusExecucao.ERRO, "Teste operacional",
+                "Serviço indisponível na simulação."));
+        history.add(new ExecutionHistory(nextHistoryId(), LocalDateTime.now().minusDays(1), "consulta", UserProfile.CONSULTA,
+                TipoAcao.EXECUTAR_QUERY, "-", "Consultar respostas de pesquisa", StatusExecucao.SIMULADO, "-",
+                "Consulta simulada retornou 12 registros."));
+    }
+}

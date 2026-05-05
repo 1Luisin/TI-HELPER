@@ -2,16 +2,33 @@ package br.com.scmjf.tihelper.controller;
 
 import br.com.scmjf.tihelper.model.ActionResult;
 import br.com.scmjf.tihelper.model.ServiceInfo;
+import br.com.scmjf.tihelper.model.TipoAcao;
 import br.com.scmjf.tihelper.util.AlertUtil;
 import br.com.scmjf.tihelper.util.AppContext;
+import br.com.scmjf.tihelper.util.PermissionUtil;
 import br.com.scmjf.tihelper.util.TableUtil;
+import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Duration;
 
 public class ServicesController {
+
+    @FXML
+    private TextField searchField;
+
+    @FXML
+    private Button restartButton;
+
+    @FXML
+    private Label feedbackLabel;
 
     @FXML
     private TableView<ServiceInfo> servicesTable;
@@ -31,6 +48,8 @@ public class ServicesController {
     @FXML
     private TableColumn<ServiceInfo, String> lastCheckColumn;
 
+    private FilteredList<ServiceInfo> filteredServices;
+
     @FXML
     private void initialize() {
         serverColumn.setCellValueFactory(new PropertyValueFactory<>("server"));
@@ -39,7 +58,13 @@ public class ServicesController {
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         lastCheckColumn.setCellValueFactory(new PropertyValueFactory<>("formattedLastVerification"));
         TableUtil.bindColumnWidths(servicesTable, new double[]{1.1, 1.5, 2.5, 1, 1.4}, serverColumn, nameColumn, descriptionColumn, statusColumn, lastCheckColumn);
-        servicesTable.setItems(FXCollections.observableArrayList(AppContext.mockDataService().getServices()));
+        servicesTable.setPlaceholder(new Label("Nenhum serviço cadastrado."));
+
+        filteredServices = new FilteredList<>(FXCollections.observableArrayList(AppContext.servicoServidorService().listar()), service -> true);
+        servicesTable.setItems(filteredServices);
+        searchField.textProperty().addListener((observable, oldValue, value) -> applyFilter(value));
+
+        restartButton.setDisable(!PermissionUtil.canRunAction(AppContext.getCurrentUser(), TipoAcao.REINICIAR_SERVICO));
     }
 
     @FXML
@@ -58,6 +83,11 @@ public class ServicesController {
 
     @FXML
     private void restartService() {
+        if (!PermissionUtil.canRunAction(AppContext.getCurrentUser(), TipoAcao.REINICIAR_SERVICO)) {
+            AppContext.denyAction(TipoAcao.REINICIAR_SERVICO, "Serviços", "Seu perfil não pode reiniciar serviços.");
+            return;
+        }
+
         ServiceInfo selected = servicesTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
             AlertUtil.warning("Reiniciar serviço", "Selecione um serviço para reiniciar.");
@@ -65,11 +95,41 @@ public class ServicesController {
         }
 
         AlertUtil.askReason("Reiniciar serviço", "Confirme o reinício de " + selected.getName())
-                .ifPresentOrElse(reason -> {
-                    ActionResult result = AppContext.actionSimulationService()
-                            .restartService(selected, reason, AppContext.getCurrentUser());
-                    servicesTable.refresh();
-                    AlertUtil.info("Reiniciar serviço", result.message());
-                }, () -> AlertUtil.warning("Reiniciar serviço", "Informe um motivo para registrar a ação."));
+                .ifPresentOrElse(reason -> startRestartSimulation(selected, reason),
+                        () -> AppContext.historicoService().registrar(AppContext.getCurrentUser(), TipoAcao.REINICIAR_SERVICO,
+                                selected.getServer(), selected.getName(), br.com.scmjf.tihelper.model.StatusExecucao.CANCELADO, "-",
+                                "Reinício cancelado pelo usuário."));
+    }
+
+    private void startRestartSimulation(ServiceInfo selected, String reason) {
+        selected.setStatus("Reiniciando");
+        servicesTable.refresh();
+        feedbackLabel.setText("Reiniciando serviço de forma simulada...");
+        restartButton.setDisable(true);
+
+        PauseTransition delay = new PauseTransition(Duration.millis(1200));
+        delay.setOnFinished(event -> {
+            ActionResult result = AppContext.servicoServidorService()
+                    .finalizarReinicio(selected, reason, AppContext.getCurrentUser());
+            servicesTable.refresh();
+            feedbackLabel.setText("Serviço simulado em execução.");
+            restartButton.setDisable(false);
+            AlertUtil.info("Reiniciar serviço", result.message());
+        });
+        delay.play();
+    }
+
+    private void applyFilter(String text) {
+        String filter = text == null ? "" : text.trim().toLowerCase();
+        filteredServices.setPredicate(service -> filter.isBlank()
+                || contains(service.getServer(), filter)
+                || contains(service.getName(), filter)
+                || contains(service.getDescription(), filter)
+                || contains(service.getStatus(), filter)
+                || contains(service.getFormattedLastVerification(), filter));
+    }
+
+    private boolean contains(String value, String filter) {
+        return value != null && value.toLowerCase().contains(filter);
     }
 }

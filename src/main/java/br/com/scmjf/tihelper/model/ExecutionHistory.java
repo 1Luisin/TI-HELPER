@@ -7,32 +7,49 @@ public class ExecutionHistory {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
+    private final long id;
     private final LocalDateTime dateTime;
     private final String username;
-    private final String actionType;
+    private final UserProfile profile;
+    private final TipoAcao tipoAcao;
     private final String server;
     private final String target;
-    private final String status;
+    private final StatusExecucao status;
+    private final String reason;
     private final String message;
 
     public ExecutionHistory(
+            long id,
             LocalDateTime dateTime,
             String username,
-            String actionType,
+            UserProfile profile,
+            TipoAcao tipoAcao,
             String server,
             String target,
-            String status,
+            StatusExecucao status,
+            String reason,
             String message) {
+        this.id = id;
         this.dateTime = dateTime;
-        this.username = username;
-        this.actionType = actionType;
-        this.server = server;
-        this.target = target;
+        this.username = normalize(username, "sistema");
+        this.profile = profile;
+        this.tipoAcao = tipoAcao;
+        this.server = normalize(server, "-");
+        this.target = normalize(target, "-");
         this.status = status;
-        this.message = message;
+        this.reason = normalize(reason, "-");
+        this.message = normalize(message, "-");
+    }
+
+    public long getId() {
+        return id;
     }
 
     public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
+    public LocalDateTime getDataHora() {
         return dateTime;
     }
 
@@ -44,8 +61,20 @@ public class ExecutionHistory {
         return username;
     }
 
+    public String getPerfil() {
+        return profile == null ? "-" : profile.getDisplayName();
+    }
+
+    public UserProfile getProfile() {
+        return profile;
+    }
+
+    public TipoAcao getTipoAcao() {
+        return tipoAcao;
+    }
+
     public String getActionType() {
-        return actionType;
+        return tipoAcao == null ? "-" : tipoAcao.getDisplayName();
     }
 
     public String getServer() {
@@ -56,11 +85,26 @@ public class ExecutionHistory {
         return target;
     }
 
-    public String getStatus() {
+    public StatusExecucao getStatusExecucao() {
         return status;
+    }
+
+    public String getStatus() {
+        return status == null ? "-" : status.getDisplayName();
+    }
+
+    public String getReason() {
+        return reason;
     }
 
     public String getMessage() {
         return message;
+    }
+
+    private String normalize(String value, String fallback) {
+        if (value == null || value.isBlank()) {
+            return fallback;
+        }
+        return value.trim();
     }
 }

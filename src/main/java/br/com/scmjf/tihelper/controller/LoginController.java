@@ -35,7 +35,7 @@ public class LoginController {
 
     private void openMainWindow(User user) {
         try {
-            AppContext.setCurrentUser(user);
+            AppContext.startSession(user);
 
             FXMLLoader loader = new FXMLLoader(getClass()
                     .getResource("/br/com/scmjf/tihelper/view/main.fxml"));

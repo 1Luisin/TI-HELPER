@@ -7,9 +7,11 @@ import java.util.Map;
 
 import br.com.scmjf.tihelper.model.User;
 import br.com.scmjf.tihelper.model.UserProfile;
+import br.com.scmjf.tihelper.model.TipoAcao;
 import br.com.scmjf.tihelper.util.AlertUtil;
 import br.com.scmjf.tihelper.util.AppContext;
 import br.com.scmjf.tihelper.util.NavigationTarget;
+import br.com.scmjf.tihelper.util.PermissionUtil;
 import br.com.scmjf.tihelper.util.SceneUtil;
 import javafx.collections.FXCollections;
 import javafx.geometry.Bounds;
@@ -137,6 +139,7 @@ public class MainController {
 
         navigationButtons.forEach((target, button) -> button.setTooltip(new Tooltip(target.getTitle())));
         logoutButton.setTooltip(new Tooltip("Sair"));
+        configureMenuPermissions();
         configureResponsiveShell();
 
         AppContext.setNavigationHandler(this::showScreen);
@@ -212,6 +215,11 @@ public class MainController {
     }
 
     private void showScreen(NavigationTarget target) {
+        if (!PermissionUtil.canAccess(AppContext.getCurrentUser(), target)) {
+            AppContext.denyAction(deniedActionFor(target), target.getTitle(), "Seu perfil não pode acessar " + target.getTitle() + ".");
+            return;
+        }
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass()
                     .getResource("/br/com/scmjf/tihelper/view/" + target.getFxml()));
@@ -269,7 +277,7 @@ public class MainController {
         tabs.getTabs().add(createProfileTab());
 
         User user = AppContext.getCurrentUser();
-        if (user != null && user.getProfile() == UserProfile.ADMIN) {
+        if (PermissionUtil.canAdmin(user)) {
             tabs.getTabs().add(createUsersTab());
         }
 
@@ -308,6 +316,7 @@ public class MainController {
         Button settingsButton = new Button("Abrir configurações");
         settingsButton.getStyleClass().add("secondary-button");
         settingsButton.setMaxWidth(Double.MAX_VALUE);
+        settingsButton.setDisable(!PermissionUtil.canAccess(user, NavigationTarget.SETTINGS));
         settingsButton.setOnAction(event -> {
             if (profilePopup != null) {
                 profilePopup.hide();
@@ -356,12 +365,12 @@ public class MainController {
         refreshUsersList(usersList);
 
         registerButton.setOnAction(event -> {
-            boolean registered = AppContext.authService().registerUser(
+            boolean registered = AppContext.usuarioService().registerUser(
                     usernameField.getText(),
                     passwordField.getText(),
                     profileCombo.getSelectionModel().getSelectedItem());
             if (!registered) {
-                AlertUtil.warning("Cadastrar usuário", "Informe usuário/senha válidos ou use um usuário ainda não cadastrado.");
+                AlertUtil.warning("Cadastrar usuário", "Informe usuário, senha e perfil válidos. O login também deve ser único.");
                 return;
             }
 
@@ -403,7 +412,7 @@ public class MainController {
 
         String photoUri = selected.toURI().toString();
         user.setProfilePhotoUri(photoUri);
-        AppContext.authService().updateProfilePhoto(user.getUsername(), photoUri);
+        AppContext.usuarioService().updateProfilePhoto(user.getUsername(), photoUri);
         refreshProfileHeader();
         if (profilePopup != null) {
             profilePopup.hide();
@@ -439,7 +448,7 @@ public class MainController {
     }
 
     private void refreshUsersList(ListView<String> usersList) {
-        usersList.setItems(FXCollections.observableArrayList(AppContext.authService().getUsers().stream()
+        usersList.setItems(FXCollections.observableArrayList(AppContext.usuarioService().getUsers().stream()
                 .map(user -> user.getUsername() + "  |  " + user.getProfileName())
                 .toList()));
     }
@@ -467,5 +476,20 @@ public class MainController {
         if (activeButton != null && !activeButton.getStyleClass().contains("active")) {
             activeButton.getStyleClass().add("active");
         }
+    }
+
+    private void configureMenuPermissions() {
+        User user = AppContext.getCurrentUser();
+        navigationButtons.forEach((target, button) -> button.setDisable(!PermissionUtil.canAccess(user, target)));
+    }
+
+    private TipoAcao deniedActionFor(NavigationTarget target) {
+        return switch (target) {
+            case SERVICES -> TipoAcao.REINICIAR_SERVICO;
+            case QUERIES -> TipoAcao.EXECUTAR_QUERY;
+            case SCRIPTS -> TipoAcao.EXECUTAR_SCRIPT;
+            case SETTINGS -> TipoAcao.ALTERAR_USUARIO;
+            default -> TipoAcao.LOGIN;
+        };
     }
 }

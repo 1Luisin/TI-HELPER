@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 <ScrollPane xmlns="http://javafx.com/javafx/21"
@@ -20,14 +22,24 @@
             <children>
                 <Label text="Histórico" styleClass="page-title"/>
 
+                <HBox spacing="10">
+                    <children>
+                        <ComboBox fx:id="typeFilterCombo" promptText="Tipo de ação" prefWidth="220"/>
+                        <ComboBox fx:id="statusFilterCombo" promptText="Status" prefWidth="180"/>
+                    </children>
+                </HBox>
+
                 <TableView fx:id="historyTable" prefHeight="540">
                     <columns>
+                        <TableColumn fx:id="idColumn" text="ID" prefWidth="70"/>
                         <TableColumn fx:id="dateColumn" text="Data/Hora" prefWidth="160"/>
                         <TableColumn fx:id="userColumn" text="Usuário" prefWidth="100"/>
+                        <TableColumn fx:id="profileColumn" text="Perfil" prefWidth="110"/>
                         <TableColumn fx:id="typeColumn" text="Tipo da ação" prefWidth="150"/>
                         <TableColumn fx:id="serverColumn" text="Servidor" prefWidth="130"/>
                         <TableColumn fx:id="targetColumn" text="Alvo" prefWidth="190"/>
                         <TableColumn fx:id="statusColumn" text="Status" prefWidth="100"/>
+                        <TableColumn fx:id="reasonColumn" text="Motivo" prefWidth="180"/>
                         <TableColumn fx:id="messageColumn" text="Mensagem" prefWidth="320"/>
                     </columns>
                 </TableView>

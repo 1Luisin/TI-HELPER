@@ -32,6 +32,7 @@
                         <VBox spacing="8">
                             <children>
                                 <Label text="Script" styleClass="field-label"/>
+                                <TextField fx:id="searchField" promptText="Buscar script aprovado"/>
                                 <ComboBox fx:id="scriptCombo" maxWidth="Infinity"/>
                             </children>
                         </VBox>
@@ -52,8 +53,9 @@
 
                         <HBox alignment="CENTER_RIGHT">
                             <children>
+                                <Label fx:id="feedbackLabel" text="" styleClass="action-feedback"/>
                                 <Region HBox.hgrow="ALWAYS"/>
-                                <Button text="Executar script" onAction="#executeScript" styleClass="primary-button"/>
+                                <Button fx:id="executeButton" text="Executar script" onAction="#executeScript" styleClass="primary-button"/>
                             </children>
                         </HBox>
                     </children>

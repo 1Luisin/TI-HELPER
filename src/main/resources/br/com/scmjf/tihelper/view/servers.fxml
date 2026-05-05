@@ -6,6 +6,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
@@ -25,9 +26,16 @@
                     <children>
                         <Label text="Servidores" styleClass="page-title"/>
                         <Region HBox.hgrow="ALWAYS"/>
-                        <Button text="Testar conexão" onAction="#testConnection" styleClass="primary-button"/>
+                        <Button fx:id="testConnectionButton" text="Testar conexão" onAction="#testConnection" styleClass="primary-button"/>
                         <Button text="Ver serviços" onAction="#viewServices" styleClass="secondary-button"/>
                         <Button text="Ver busy's produção" onAction="#openProductionBusy" styleClass="secondary-button"/>
+                    </children>
+                </HBox>
+
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <children>
+                        <TextField fx:id="searchField" promptText="Buscar por nome, IP, sistema, ambiente ou status" HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="feedbackLabel" text="" styleClass="action-feedback"/>
                     </children>
                 </HBox>
 

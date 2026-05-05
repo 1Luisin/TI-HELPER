@@ -1,60 +1,65 @@
 package br.com.scmjf.tihelper.service;
 
-import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import br.com.scmjf.tihelper.model.ActionResult;
+import br.com.scmjf.tihelper.model.QueryDefinition;
 import br.com.scmjf.tihelper.model.QueryExecutionResult;
-import br.com.scmjf.tihelper.model.ServerInfo;
-import br.com.scmjf.tihelper.model.ServiceInfo;
+import br.com.scmjf.tihelper.model.StatusExecucao;
+import br.com.scmjf.tihelper.model.TipoAcao;
 import br.com.scmjf.tihelper.model.User;
+import br.com.scmjf.tihelper.util.ValidationUtil;
 
-public class ActionSimulationService {
+public class QueryMockService implements QueryService {
 
-    private final HistoryService historyService;
-    private final Random random = new Random();
+    private final MockDataStore store;
+    private final HistoricoService historicoService;
 
-    public ActionSimulationService(HistoryService historyService) {
-        this.historyService = historyService;
+    public QueryMockService(MockDataStore store, HistoricoService historicoService) {
+        this.store = store;
+        this.historicoService = historicoService;
     }
 
-    public ActionResult testConnection(ServerInfo server) {
-        if (server == null) {
-            return new ActionResult(false, "Selecione um servidor para testar a conexão.");
-        }
-
-        boolean success = "Online".equalsIgnoreCase(server.getStatus())
-                || ("Instável".equalsIgnoreCase(server.getStatus()) && random.nextBoolean());
-
-        if (success) {
-            return new ActionResult(true, "Conexão simulada com " + server.getName() + " concluída com sucesso.");
-        }
-
-        return new ActionResult(false, "Falha simulada ao conectar em " + server.getName() + ".");
+    @Override
+    public List<String> listarNomes() {
+        return store.queries().stream()
+                .map(QueryDefinition::getName)
+                .toList();
     }
 
-    public ActionResult restartService(ServiceInfo service, String reason, User user) {
-        if (service == null) {
-            return new ActionResult(false, "Selecione um serviço para reiniciar.");
-        }
-
-        service.setStatus("Em execução");
-        service.setLastVerification(LocalDateTime.now());
-        historyService.addRecord(
-                user,
-                "REINICIO_SERVICO",
-                service.getServer(),
-                service.getName(),
-                "SUCESSO",
-                "Reinício simulado. Motivo: " + reason);
-
-        return new ActionResult(true, "Serviço " + service.getName() + " reiniciado com sucesso na simulação.");
+    @Override
+    public List<QueryDefinition> listarDefinicoes() {
+        return List.copyOf(store.queries());
     }
 
-    public QueryExecutionResult executeQuery(String queryName, Map<String, String> parameters, User user) {
+    @Override
+    public List<String> listarParametros(String queryName) {
+        return store.queries().stream()
+                .filter(query -> query.getName().equals(queryName))
+                .findFirst()
+                .map(QueryDefinition::getParameters)
+                .orElse(List.of());
+    }
+
+    @Override
+    public ActionResult cadastrar(QueryDefinition query, User user) {
+        if (query == null || ValidationUtil.isBlank(query.getName())) {
+            return new ActionResult(false, "Informe o nome da query.");
+        }
+        if (ValidationUtil.isBlank(query.getQueryText())) {
+            return new ActionResult(false, "Informe o SQL da query.");
+        }
+
+        store.queries().add(query);
+        historicoService.registrar(user, TipoAcao.CADASTRAR_QUERY, "-", query.getName(),
+                StatusExecucao.SUCESSO, "-", "Query registrada no mock em memória.");
+        return new ActionResult(true, "Query registrada no mock em memória.");
+    }
+
+    @Override
+    public QueryExecutionResult executar(String queryName, Map<String, String> parameters, User user) {
         QueryExecutionResult result = switch (queryName) {
             case "Buscar paciente por CPF" -> patientByCpf(parameters);
             case "Buscar atendimento por número" -> appointmentByNumber(parameters);
@@ -63,27 +68,9 @@ public class ActionSimulationService {
             default -> genericRegisteredQuery(queryName, parameters);
         };
 
-        historyService.addRecord(
-                user,
-                "QUERY",
-                "-",
-                queryName,
-                "SUCESSO",
+        historicoService.registrar(user, TipoAcao.EXECUTAR_QUERY, "-", queryName, StatusExecucao.SIMULADO, "-",
                 "Consulta simulada executada com " + result.rows().size() + " registro(s).");
-
         return result;
-    }
-
-    public ActionResult executeScript(String scriptName, String server, String reason, User user) {
-        historyService.addRecord(
-                user,
-                "SCRIPT",
-                server,
-                scriptName,
-                "SUCESSO",
-                "Script simulado executado. Motivo: " + reason);
-
-        return new ActionResult(true, "Script " + scriptName + " executado com sucesso na simulação.");
     }
 
     private QueryExecutionResult patientByCpf(Map<String, String> parameters) {
@@ -141,7 +128,7 @@ public class ActionSimulationService {
                         "Query", queryName,
                         "Parâmetros", parameterSummary,
                         "Resultado", "Execução mockada",
-                        "Status", "SUCESSO")));
+                        "Status", "SIMULADO")));
     }
 
     private Map<String, String> row(String key, String value) {

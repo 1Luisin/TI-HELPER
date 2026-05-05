@@ -8,15 +8,16 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+import br.com.scmjf.tihelper.model.ActionResult;
 import br.com.scmjf.tihelper.model.PanelInfo;
 import br.com.scmjf.tihelper.model.QueryDefinition;
 import br.com.scmjf.tihelper.model.ScriptDefinition;
 import br.com.scmjf.tihelper.model.ServerInfo;
 import br.com.scmjf.tihelper.model.ServiceInfo;
 import br.com.scmjf.tihelper.model.User;
-import br.com.scmjf.tihelper.model.UserProfile;
 import br.com.scmjf.tihelper.util.AlertUtil;
 import br.com.scmjf.tihelper.util.AppContext;
+import br.com.scmjf.tihelper.util.PermissionUtil;
 import br.com.scmjf.tihelper.util.SqlSyntaxHighlighter;
 import br.com.scmjf.tihelper.util.TableUtil;
 import javafx.collections.FXCollections;
@@ -224,15 +225,19 @@ public class SettingsController {
             return;
         }
 
-        AppContext.mockDataService().addServer(new ServerInfo(
+        ActionResult result = AppContext.servidorService().cadastrar(new ServerInfo(
                 serverNameField.getText().trim(),
                 serverHostField.getText().trim(),
                 serverOsField.getText().trim(),
                 serverEnvironmentField.getText().trim(),
-                serverStatusField.getText().trim()));
+                serverStatusField.getText().trim()), AppContext.getCurrentUser());
+        if (!result.success()) {
+            AlertUtil.warning("Cadastrar servidor", result.message());
+            return;
+        }
         clear(serverNameField, serverHostField, serverOsField, serverEnvironmentField, serverStatusField);
         refreshAdministrativeTables();
-        AlertUtil.info("Cadastrar servidor", "Servidor registrado no mock em memória.");
+        AlertUtil.info("Cadastrar servidor", result.message());
     }
 
     @FXML
@@ -243,16 +248,20 @@ public class SettingsController {
             return;
         }
 
-        AppContext.mockDataService().addService(new ServiceInfo(
+        ActionResult result = AppContext.servicoServidorService().cadastrar(new ServiceInfo(
                 serviceServerField.getText().trim(),
                 serviceNameField.getText().trim(),
                 serviceDescriptionArea.getText().trim(),
                 serviceStatusField.getText().trim(),
-                LocalDateTime.now()));
+                LocalDateTime.now()), AppContext.getCurrentUser());
+        if (!result.success()) {
+            AlertUtil.warning("Cadastrar serviço", result.message());
+            return;
+        }
         clear(serviceServerField, serviceNameField, serviceStatusField);
         serviceDescriptionArea.clear();
         refreshAdministrativeTables();
-        AlertUtil.info("Cadastrar serviço", "Serviço registrado no mock em memória.");
+        AlertUtil.info("Cadastrar serviço", result.message());
     }
 
     @FXML
@@ -263,15 +272,19 @@ public class SettingsController {
             return;
         }
 
-        AppContext.mockDataService().addPanel(new PanelInfo(
+        ActionResult result = AppContext.painelService().cadastrar(new PanelInfo(
                 panelNameField.getText().trim(),
                 panelIpField.getText().trim(),
                 panelLocationField.getText().trim(),
-                panelStatusCombo.getSelectionModel().getSelectedItem()));
+                panelStatusCombo.getSelectionModel().getSelectedItem()), AppContext.getCurrentUser());
+        if (!result.success()) {
+            AlertUtil.warning("Cadastrar painel", result.message());
+            return;
+        }
         clear(panelNameField, panelIpField, panelLocationField);
         panelStatusCombo.getSelectionModel().select("Ligado");
         refreshAdministrativeTables();
-        AlertUtil.info("Cadastrar painel", "Painel registrado no mock em memória.");
+        AlertUtil.info("Cadastrar painel", result.message());
     }
 
     @FXML
@@ -289,15 +302,19 @@ public class SettingsController {
                 ? parseCommaSeparatedParameters(queryParametersField.getText())
                 : List.of();
 
-        AppContext.mockDataService().addQuery(new QueryDefinition(
+        ActionResult result = AppContext.queryService().cadastrar(new QueryDefinition(
                 queryNameField.getText().trim(),
                 queryCodeArea.getText().trim(),
-                parameters));
+                parameters), AppContext.getCurrentUser());
+        if (!result.success()) {
+            AlertUtil.warning("Cadastrar query", result.message());
+            return;
+        }
         clear(queryNameField, queryParametersField);
         queryCodeArea.clear();
         queryHasParametersCheckBox.setSelected(false);
         refreshAdministrativeTables();
-        AlertUtil.info("Cadastrar query", "Query registrada no mock em memória.");
+        AlertUtil.info("Cadastrar query", result.message());
     }
 
     @FXML
@@ -326,16 +343,20 @@ public class SettingsController {
             return;
         }
 
-        AppContext.mockDataService().addScript(new ScriptDefinition(
+        ActionResult result = AppContext.scriptService().cadastrar(new ScriptDefinition(
                 scriptNameField.getText().trim(),
                 useBody ? "Corpo" : "Arquivo",
                 scriptBody,
-                useBody ? "" : selectedScriptFile.getName()));
+                useBody ? "" : selectedScriptFile.getName()), AppContext.getCurrentUser());
+        if (!result.success()) {
+            AlertUtil.warning("Cadastrar script", result.message());
+            return;
+        }
         clear(scriptNameField);
         scriptBodyArea.clear();
         clearSelectedScriptFile();
         refreshAdministrativeTables();
-        AlertUtil.info("Cadastrar script", "Script registrado no mock em memória.");
+        AlertUtil.info("Cadastrar script", result.message());
     }
 
     @FXML
@@ -369,6 +390,7 @@ public class SettingsController {
         serverStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         TableUtil.bindColumnWidths(serversTable, new double[]{1.1, 1.4, 1.8, 1.2, 1},
                 serverNameColumn, serverHostColumn, serverOsColumn, serverEnvironmentColumn, serverStatusColumn);
+        serversTable.setPlaceholder(new Label("Nenhum servidor cadastrado."));
 
         serviceServerColumn.setCellValueFactory(new PropertyValueFactory<>("server"));
         serviceNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -376,6 +398,7 @@ public class SettingsController {
         serviceStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         TableUtil.bindColumnWidths(servicesTable, new double[]{1.1, 1.4, 2.4, 1},
                 serviceServerColumn, serviceNameColumn, serviceDescriptionColumn, serviceStatusColumn);
+        servicesTable.setPlaceholder(new Label("Nenhum serviço cadastrado."));
 
         panelNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         panelIpColumn.setCellValueFactory(new PropertyValueFactory<>("ipAddress"));
@@ -383,16 +406,19 @@ public class SettingsController {
         panelStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         TableUtil.bindColumnWidths(panelsTable, new double[]{1.4, 1.2, 1.4, 1},
                 panelNameColumn, panelIpColumn, panelLocationColumn, panelStatusColumn);
+        panelsTable.setPlaceholder(new Label("Nenhum painel cadastrado."));
 
         queryNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         queryTextColumn.setCellValueFactory(new PropertyValueFactory<>("queryPreview"));
         TableUtil.bindColumnWidths(queriesTable, new double[]{1.4, 3}, queryNameColumn, queryTextColumn);
+        queriesTable.setPlaceholder(new Label("Nenhuma query cadastrada."));
 
         scriptNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         scriptSourceColumn.setCellValueFactory(new PropertyValueFactory<>("sourceType"));
         scriptSummaryColumn.setCellValueFactory(new PropertyValueFactory<>("sourceSummary"));
         TableUtil.bindColumnWidths(scriptsTable, new double[]{1.4, 0.8, 2.6},
                 scriptNameColumn, scriptSourceColumn, scriptSummaryColumn);
+        scriptsTable.setPlaceholder(new Label("Nenhum script cadastrado."));
     }
 
     private void configurePanelStatusOptions() {
@@ -427,7 +453,7 @@ public class SettingsController {
     }
 
     private void configureAdminAccess(User user) {
-        boolean admin = user != null && user.getProfile() == UserProfile.ADMIN;
+        boolean admin = PermissionUtil.canAdmin(user);
         adminPanel.setVisible(admin);
         adminPanel.setManaged(admin);
         adminAccessLabel.setVisible(!admin);
@@ -435,11 +461,11 @@ public class SettingsController {
     }
 
     private void refreshAdministrativeTables() {
-        serversTable.setItems(FXCollections.observableArrayList(AppContext.mockDataService().getServers()));
-        servicesTable.setItems(FXCollections.observableArrayList(AppContext.mockDataService().getServices()));
-        panelsTable.setItems(FXCollections.observableArrayList(AppContext.mockDataService().getPanels()));
-        queriesTable.setItems(FXCollections.observableArrayList(AppContext.mockDataService().getQueryDefinitions()));
-        scriptsTable.setItems(FXCollections.observableArrayList(AppContext.mockDataService().getScriptDefinitions()));
+        serversTable.setItems(FXCollections.observableArrayList(AppContext.servidorService().listar()));
+        servicesTable.setItems(FXCollections.observableArrayList(AppContext.servicoServidorService().listar()));
+        panelsTable.setItems(FXCollections.observableArrayList(AppContext.painelService().listar()));
+        queriesTable.setItems(FXCollections.observableArrayList(AppContext.queryService().listarDefinicoes()));
+        scriptsTable.setItems(FXCollections.observableArrayList(AppContext.scriptService().listarDefinicoes()));
     }
 
     private boolean hasBlank(TextField... fields) {

@@ -78,9 +78,9 @@
 
                 <FlowPane hgap="10" vgap="10" styleClass="action-bar">
                     <children>
-                        <Button text="Reiniciar serviço" onAction="#quickRestartService" styleClass="secondary-button"/>
-                        <Button text="Executar query" onAction="#quickExecuteQuery" styleClass="secondary-button"/>
-                        <Button text="Instalar VNC" onAction="#quickInstallVnc" styleClass="secondary-button"/>
+                        <Button fx:id="quickRestartButton" text="Reiniciar serviço" onAction="#quickRestartService" styleClass="secondary-button"/>
+                        <Button fx:id="quickQueryButton" text="Executar query" onAction="#quickExecuteQuery" styleClass="secondary-button"/>
+                        <Button fx:id="quickScriptButton" text="Instalar VNC" onAction="#quickInstallVnc" styleClass="secondary-button"/>
                         <Button text="Ver histórico" onAction="#quickViewHistory" styleClass="secondary-button"/>
                     </children>
                 </FlowPane>
