@@ -1,10 +1,15 @@
 package br.com.scmjf.tihelper.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
 import br.com.scmjf.tihelper.model.QueryDefinition;
+import br.com.scmjf.tihelper.model.ScriptDefinition;
 import br.com.scmjf.tihelper.model.ServerInfo;
 import br.com.scmjf.tihelper.model.ServiceInfo;
 import br.com.scmjf.tihelper.model.User;
@@ -13,18 +18,20 @@ import br.com.scmjf.tihelper.util.AlertUtil;
 import br.com.scmjf.tihelper.util.AppContext;
 import br.com.scmjf.tihelper.util.SqlSyntaxHighlighter;
 import br.com.scmjf.tihelper.util.TableUtil;
-import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 
@@ -140,10 +147,30 @@ public class SettingsController {
     private TextField scriptNameField;
 
     @FXML
-    private TableView<String> scriptsTable;
+    private TabPane scriptSourceTabs;
 
     @FXML
-    private TableColumn<String, String> scriptNameColumn;
+    private Tab scriptBodyTab;
+
+    @FXML
+    private TextArea scriptBodyArea;
+
+    @FXML
+    private Label scriptFileLabel;
+
+    @FXML
+    private TableView<ScriptDefinition> scriptsTable;
+
+    @FXML
+    private TableColumn<ScriptDefinition, String> scriptNameColumn;
+
+    @FXML
+    private TableColumn<ScriptDefinition, String> scriptSourceColumn;
+
+    @FXML
+    private TableColumn<ScriptDefinition, String> scriptSummaryColumn;
+
+    private File selectedScriptFile;
 
     @FXML
     private void initialize() {
@@ -231,10 +258,58 @@ public class SettingsController {
             return;
         }
 
-        AppContext.mockDataService().addScript(scriptNameField.getText().trim());
+        boolean useBody = scriptSourceTabs.getSelectionModel().getSelectedItem() == scriptBodyTab;
+        if (useBody && scriptBodyArea.getText().trim().isBlank()) {
+            AlertUtil.warning("Cadastrar script", "Informe o corpo do script.");
+            return;
+        }
+        if (!useBody && selectedScriptFile == null) {
+            AlertUtil.warning("Cadastrar script", "Selecione um arquivo de script.");
+            return;
+        }
+
+        String scriptBody = useBody ? scriptBodyArea.getText().trim() : readSelectedScriptFile();
+        if (scriptBody == null) {
+            return;
+        }
+        if (scriptBody.isBlank()) {
+            AlertUtil.warning("Cadastrar script", "O script informado esta vazio.");
+            return;
+        }
+
+        AppContext.mockDataService().addScript(new ScriptDefinition(
+                scriptNameField.getText().trim(),
+                useBody ? "Corpo" : "Arquivo",
+                scriptBody,
+                useBody ? "" : selectedScriptFile.getName()));
         clear(scriptNameField);
+        scriptBodyArea.clear();
+        clearSelectedScriptFile();
         refreshAdministrativeTables();
         AlertUtil.info("Cadastrar script", "Script registrado no mock em memória.");
+    }
+
+    @FXML
+    private void chooseScriptFile() {
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Selecionar arquivo de script");
+        chooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Scripts", "*.bat", "*.cmd", "*.ps1", "*.txt"),
+                new FileChooser.ExtensionFilter("Todos os arquivos", "*.*"));
+
+        File file = chooser.showOpenDialog(scriptNameField.getScene().getWindow());
+        if (file == null) {
+            return;
+        }
+
+        selectedScriptFile = file;
+        scriptFileLabel.setText(file.getName());
+    }
+
+    @FXML
+    private void clearSelectedScriptFile() {
+        selectedScriptFile = null;
+        scriptFileLabel.setText("Nenhum arquivo selecionado");
     }
 
     private void configureTables() {
@@ -257,8 +332,11 @@ public class SettingsController {
         queryTextColumn.setCellValueFactory(new PropertyValueFactory<>("queryPreview"));
         TableUtil.bindColumnWidths(queriesTable, new double[]{1.4, 3}, queryNameColumn, queryTextColumn);
 
-        scriptNameColumn.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue()));
-        TableUtil.bindColumnWidths(scriptsTable, new double[]{1}, scriptNameColumn);
+        scriptNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        scriptSourceColumn.setCellValueFactory(new PropertyValueFactory<>("sourceType"));
+        scriptSummaryColumn.setCellValueFactory(new PropertyValueFactory<>("sourceSummary"));
+        TableUtil.bindColumnWidths(scriptsTable, new double[]{1.4, 0.8, 2.6},
+                scriptNameColumn, scriptSourceColumn, scriptSummaryColumn);
     }
 
     private void configureSqlEditor() {
@@ -299,7 +377,7 @@ public class SettingsController {
         serversTable.setItems(FXCollections.observableArrayList(AppContext.mockDataService().getServers()));
         servicesTable.setItems(FXCollections.observableArrayList(AppContext.mockDataService().getServices()));
         queriesTable.setItems(FXCollections.observableArrayList(AppContext.mockDataService().getQueryDefinitions()));
-        scriptsTable.setItems(FXCollections.observableArrayList(AppContext.mockDataService().getScripts()));
+        scriptsTable.setItems(FXCollections.observableArrayList(AppContext.mockDataService().getScriptDefinitions()));
     }
 
     private boolean hasBlank(TextField... fields) {
@@ -316,5 +394,14 @@ public class SettingsController {
                 .filter(parameter -> !parameter.isBlank())
                 .distinct()
                 .toList();
+    }
+
+    private String readSelectedScriptFile() {
+        try {
+            return Files.readString(selectedScriptFile.toPath(), Charset.defaultCharset()).trim();
+        } catch (IOException exception) {
+            AlertUtil.error("Cadastrar script", "Nao foi possivel ler o arquivo selecionado.");
+            return null;
+        }
     }
 }

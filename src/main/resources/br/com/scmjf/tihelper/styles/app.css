@@ -512,6 +512,47 @@
     -fx-padding: 0 16 16 16;
 }
 
+.script-source-tabs {
+    -fx-background-color: transparent;
+}
+
+.script-source-tabs .tab-header-area {
+    -fx-padding: 0;
+}
+
+.script-source-tabs .tab-header-background {
+    -fx-background-color: transparent;
+}
+
+.script-source-tabs .tab {
+    -fx-background-color: #edf3f4;
+    -fx-background-radius: 7 7 0 0;
+    -fx-padding: 7 12 7 12;
+}
+
+.script-source-tabs .tab:selected {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cbd8dc #cbd8dc transparent #cbd8dc;
+    -fx-border-radius: 7 7 0 0;
+}
+
+.script-source-tabs .tab-label {
+    -fx-text-fill: #344b52;
+    -fx-font-weight: 800;
+}
+
+.script-source-tabs .tab-content-area {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cbd8dc;
+    -fx-border-radius: 0 8 8 8;
+    -fx-padding: 12;
+}
+
+.script-file-label {
+    -fx-text-fill: #344b52;
+    -fx-font-weight: 700;
+}
+
 .sql-editor-host {
     -fx-background-color: #101820;
     -fx-background-radius: 8;

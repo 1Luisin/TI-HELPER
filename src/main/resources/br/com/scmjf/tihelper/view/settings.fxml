@@ -228,6 +228,49 @@
                                                     </padding>
                                                     <children>
                                                         <TextField fx:id="scriptNameField" promptText="Nome do script aprovado"/>
+                                                        <TabPane fx:id="scriptSourceTabs"
+                                                                 tabClosingPolicy="UNAVAILABLE"
+                                                                 styleClass="script-source-tabs">
+                                                            <tabs>
+                                                                <Tab fx:id="scriptBodyTab" text="Corpo do script">
+                                                                    <content>
+                                                                        <VBox spacing="8">
+                                                                            <children>
+                                                                                <Label text="Corpo do script" styleClass="field-label"/>
+                                                                                <TextArea fx:id="scriptBodyArea"
+                                                                                          promptText="Cole aqui o corpo do script aprovado (.bat, .cmd ou .ps1)"
+                                                                                          prefRowCount="7"
+                                                                                          wrapText="false"/>
+                                                                            </children>
+                                                                        </VBox>
+                                                                    </content>
+                                                                </Tab>
+                                                                <Tab text="Arquivo">
+                                                                    <content>
+                                                                        <VBox spacing="8">
+                                                                            <children>
+                                                                                <Label text="Arquivo do script" styleClass="field-label"/>
+                                                                                <HBox alignment="CENTER_LEFT" spacing="10">
+                                                                                    <children>
+                                                                                        <Button text="Selecionar arquivo"
+                                                                                                onAction="#chooseScriptFile"
+                                                                                                styleClass="secondary-button"/>
+                                                                                        <Button text="Limpar"
+                                                                                                onAction="#clearSelectedScriptFile"
+                                                                                                styleClass="secondary-button"/>
+                                                                                        <Label fx:id="scriptFileLabel"
+                                                                                               text="Nenhum arquivo selecionado"
+                                                                                               styleClass="script-file-label"/>
+                                                                                    </children>
+                                                                                </HBox>
+                                                                                <Label text="O arquivo sera apenas lido e salvo no mock em memoria."
+                                                                                       styleClass="hint-label"/>
+                                                                            </children>
+                                                                        </VBox>
+                                                                    </content>
+                                                                </Tab>
+                                                            </tabs>
+                                                        </TabPane>
                                                         <HBox alignment="CENTER_RIGHT">
                                                             <children>
                                                                 <Region HBox.hgrow="ALWAYS"/>
@@ -239,7 +282,9 @@
 
                                                 <TableView fx:id="scriptsTable" prefHeight="240">
                                                     <columns>
-                                                        <TableColumn fx:id="scriptNameColumn" text="Script aprovado"/>
+                                                        <TableColumn fx:id="scriptNameColumn" text="Nome"/>
+                                                        <TableColumn fx:id="scriptSourceColumn" text="Origem"/>
+                                                        <TableColumn fx:id="scriptSummaryColumn" text="Conteudo / arquivo"/>
                                                     </columns>
                                                 </TableView>
                                             </children>

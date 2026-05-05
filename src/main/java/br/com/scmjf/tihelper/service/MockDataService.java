@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.scmjf.tihelper.model.QueryDefinition;
+import br.com.scmjf.tihelper.model.ScriptDefinition;
 import br.com.scmjf.tihelper.model.ServerInfo;
 import br.com.scmjf.tihelper.model.ServiceInfo;
 
@@ -13,7 +14,7 @@ public class MockDataService {
     private final List<ServerInfo> servers = new ArrayList<>();
     private final List<ServiceInfo> services = new ArrayList<>();
     private final List<QueryDefinition> queries = new ArrayList<>();
-    private final List<String> scripts = new ArrayList<>();
+    private final List<ScriptDefinition> scripts = new ArrayList<>();
 
     public MockDataService() {
         seedServers();
@@ -49,6 +50,12 @@ public class MockDataService {
     }
 
     public List<String> getScripts() {
+        return scripts.stream()
+                .map(ScriptDefinition::getName)
+                .toList();
+    }
+
+    public List<ScriptDefinition> getScriptDefinitions() {
         return List.copyOf(scripts);
     }
 
@@ -65,7 +72,11 @@ public class MockDataService {
     }
 
     public void addScript(String scriptName) {
-        scripts.add(scriptName);
+        scripts.add(new ScriptDefinition(scriptName, "Mock", "", ""));
+    }
+
+    public void addScript(ScriptDefinition script) {
+        scripts.add(script);
     }
 
     private void seedServers() {
@@ -117,8 +128,8 @@ public class MockDataService {
     }
 
     private void seedScripts() {
-        scripts.add("Instalar VNC remoto");
-        scripts.add("Limpar pasta temporária");
-        scripts.add("Atualizar atalho do sistema");
+        addScript("Instalar VNC remoto");
+        addScript("Limpar pasta temporária");
+        addScript("Atualizar atalho do sistema");
     }
 }
