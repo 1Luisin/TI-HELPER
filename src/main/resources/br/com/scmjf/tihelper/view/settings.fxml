@@ -179,10 +179,11 @@
                                                     </padding>
                                                     <children>
                                                         <TextField fx:id="queryNameField" promptText="Nome da query"/>
-                                                        <TextArea fx:id="queryTextArea"
-                                                                  promptText="Digite a query. Use parâmetros com dois pontos. Ex.: SELECT * FROM paciente WHERE cpf = :CPF"
-                                                                  prefRowCount="6"
-                                                                  wrapText="false"/>
+                                                        <Label text="Query SQL" styleClass="field-label"/>
+                                                        <VBox fx:id="queryEditorHost"
+                                                              minHeight="170"
+                                                              prefHeight="190"
+                                                              styleClass="sql-editor-host"/>
                                                         <HBox alignment="CENTER_RIGHT">
                                                             <children>
                                                                 <Region HBox.hgrow="ALWAYS"/>

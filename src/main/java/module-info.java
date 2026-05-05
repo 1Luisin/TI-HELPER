@@ -2,6 +2,7 @@ module br.com.scmjf.tihelper {
     requires java.desktop;
     requires javafx.controls;
     requires javafx.fxml;
+    requires org.fxmisc.richtext;
 
     opens br.com.scmjf.tihelper.controller to javafx.fxml;
     opens br.com.scmjf.tihelper.model to javafx.base;

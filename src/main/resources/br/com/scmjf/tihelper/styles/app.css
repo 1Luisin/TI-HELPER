@@ -391,6 +391,67 @@
     -fx-padding: 0 16 16 16;
 }
 
+.sql-editor-host {
+    -fx-background-color: #101820;
+    -fx-background-radius: 8;
+    -fx-border-color: #0f8b8d;
+    -fx-border-radius: 8;
+    -fx-padding: 1;
+}
+
+.sql-code-area {
+    -fx-background-color: #101820;
+    -fx-font-family: "Consolas", "Cascadia Mono", monospace;
+    -fx-font-size: 13px;
+}
+
+.sql-code-area .content {
+    -fx-background-color: #101820;
+    -fx-background-radius: 8;
+}
+
+.sql-code-area .text {
+    -fx-fill: #d7e4ea;
+}
+
+.sql-code-area .caret {
+    -fx-stroke: #ffffff;
+}
+
+.sql-code-area .paragraph-box {
+    -fx-background-color: #101820;
+}
+
+.sql-code-area .lineno {
+    -fx-background-color: #0b141a;
+    -fx-text-fill: #70818a;
+    -fx-font-family: "Consolas", "Cascadia Mono", monospace;
+    -fx-padding: 0 8 0 8;
+}
+
+.sql-keyword {
+    -fx-fill: #57a6ff;
+    -fx-font-weight: 800;
+}
+
+.sql-string {
+    -fx-fill: #7ec699;
+}
+
+.sql-number {
+    -fx-fill: #f7c46c;
+}
+
+.sql-comment {
+    -fx-fill: #7d8c94;
+    -fx-font-style: italic;
+}
+
+.sql-parameter {
+    -fx-fill: #e88fd8;
+    -fx-font-weight: 800;
+}
+
 .metric-card,
 .warning-card {
     -fx-border-width: 1 1 1 5;

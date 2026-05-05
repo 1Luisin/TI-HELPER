@@ -13,10 +13,12 @@ import br.com.scmjf.tihelper.model.User;
 import br.com.scmjf.tihelper.model.UserProfile;
 import br.com.scmjf.tihelper.util.AlertUtil;
 import br.com.scmjf.tihelper.util.AppContext;
+import br.com.scmjf.tihelper.util.SqlSyntaxHighlighter;
 import br.com.scmjf.tihelper.util.TableUtil;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.input.KeyCode;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -24,6 +26,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
+import org.fxmisc.richtext.CodeArea;
+import org.fxmisc.richtext.LineNumberFactory;
 
 public class SettingsController {
 
@@ -112,7 +116,9 @@ public class SettingsController {
     private TextField queryNameField;
 
     @FXML
-    private TextArea queryTextArea;
+    private VBox queryEditorHost;
+
+    private CodeArea queryCodeArea;
 
     @FXML
     private TableView<QueryDefinition> queriesTable;
@@ -140,6 +146,7 @@ public class SettingsController {
         versionLabel.setText(APP_VERSION);
         environmentLabel.setText("Protótipo");
 
+        configureSqlEditor();
         configureTables();
         configureAdminAccess(user);
         refreshAdministrativeTables();
@@ -189,19 +196,19 @@ public class SettingsController {
             AlertUtil.warning("Cadastrar query", "Informe o nome da query.");
             return;
         }
-        if (queryTextArea.getText().trim().isBlank()) {
+        if (queryCodeArea.getText().trim().isBlank()) {
             AlertUtil.warning("Cadastrar query", "Informe o texto da query.");
             return;
         }
 
-        List<String> parameters = extractQueryParameters(queryTextArea.getText());
+        List<String> parameters = extractQueryParameters(queryCodeArea.getText());
 
         AppContext.mockDataService().addQuery(new QueryDefinition(
                 queryNameField.getText().trim(),
-                queryTextArea.getText().trim(),
+                queryCodeArea.getText().trim(),
                 parameters));
         clear(queryNameField);
-        queryTextArea.clear();
+        queryCodeArea.clear();
         refreshAdministrativeTables();
         AlertUtil.info("Cadastrar query", "Query registrada no mock em memória.");
     }
@@ -241,6 +248,27 @@ public class SettingsController {
 
         scriptNameColumn.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue()));
         TableUtil.bindColumnWidths(scriptsTable, new double[]{1}, scriptNameColumn);
+    }
+
+    private void configureSqlEditor() {
+        queryCodeArea = new CodeArea();
+        queryCodeArea.getStyleClass().add("sql-code-area");
+        queryCodeArea.setParagraphGraphicFactory(LineNumberFactory.get(queryCodeArea));
+        queryCodeArea.setWrapText(false);
+        queryCodeArea.setStyleSpans(0, SqlSyntaxHighlighter.computeHighlighting(queryCodeArea.getText()));
+        queryCodeArea.textProperty().addListener((observable, oldText, newText) ->
+                queryCodeArea.setStyleSpans(0, SqlSyntaxHighlighter.computeHighlighting(newText)));
+        queryCodeArea.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.TAB) {
+                queryCodeArea.insertText(queryCodeArea.getCaretPosition(), "    ");
+                event.consume();
+            }
+        });
+        queryCodeArea.setPrefHeight(180);
+        queryCodeArea.setMinHeight(150);
+        queryCodeArea.setMaxWidth(Double.MAX_VALUE);
+
+        queryEditorHost.getChildren().setAll(queryCodeArea);
     }
 
     private void configureAdminAccess(User user) {
