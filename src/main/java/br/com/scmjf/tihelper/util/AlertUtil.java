@@ -152,7 +152,19 @@ public final class AlertUtil {
         });
 
         dialog.setScene(scene);
+        dialog.setOnShown(event -> centerDialog(dialog));
         dialog.showAndWait();
+    }
+
+    private static void centerDialog(Stage dialog) {
+        Window owner = dialog.getOwner();
+        if (owner != null) {
+            dialog.setX(owner.getX() + (owner.getWidth() - dialog.getWidth()) / 2);
+            dialog.setY(owner.getY() + (owner.getHeight() - dialog.getHeight()) / 2);
+            return;
+        }
+
+        dialog.centerOnScreen();
     }
 
     private static HBox createActions(Button... buttons) {
