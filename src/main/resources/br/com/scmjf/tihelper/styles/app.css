@@ -116,6 +116,86 @@
     -fx-border-color: #75a7f2;
 }
 
+.dialog-card {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 10;
+    -fx-border-color: #d7e2e5;
+    -fx-border-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(16, 32, 39, 0.24), 28, 0, 0, 12);
+}
+
+.dialog-title {
+    -fx-text-fill: #102027;
+    -fx-font-size: 17px;
+    -fx-font-weight: 900;
+}
+
+.dialog-message {
+    -fx-text-fill: #344b52;
+    -fx-line-spacing: 2;
+}
+
+.dialog-validation {
+    -fx-text-fill: #b3261e;
+    -fx-font-weight: 700;
+}
+
+.dialog-icon {
+    -fx-alignment: CENTER;
+    -fx-background-radius: 999;
+    -fx-font-size: 22px;
+    -fx-font-weight: 900;
+}
+
+.dialog-icon-info {
+    -fx-background-color: #e4f4f4;
+    -fx-text-fill: #0f8b8d;
+    -fx-border-color: #b8dfe0;
+    -fx-border-radius: 999;
+}
+
+.dialog-icon-warning {
+    -fx-background-color: #fff3df;
+    -fx-text-fill: #b86814;
+    -fx-border-color: #f0c37e;
+    -fx-border-radius: 999;
+}
+
+.dialog-icon-error {
+    -fx-background-color: #fde8e7;
+    -fx-text-fill: #b3261e;
+    -fx-border-color: #f0b7b3;
+    -fx-border-radius: 999;
+}
+
+.dialog-primary-button {
+    -fx-background-color: #0f8b8d;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: 800;
+    -fx-background-radius: 7;
+    -fx-padding: 9 18 9 18;
+    -fx-min-width: 86;
+}
+
+.dialog-primary-button:hover {
+    -fx-background-color: #0c7678;
+}
+
+.dialog-secondary-button {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #344b52;
+    -fx-border-color: #c8d5d8;
+    -fx-border-radius: 7;
+    -fx-background-radius: 7;
+    -fx-font-weight: 800;
+    -fx-padding: 8 16 8 16;
+    -fx-min-width: 86;
+}
+
+.dialog-secondary-button:hover {
+    -fx-background-color: #eef4f5;
+}
+
 .login-page {
     -fx-background-color: #eef4f5;
 }
