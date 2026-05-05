@@ -429,25 +429,25 @@
     -fx-padding: 0 8 0 8;
 }
 
-.sql-keyword {
+.sql-code-area .text.sql-keyword {
     -fx-fill: #57a6ff;
     -fx-font-weight: 800;
 }
 
-.sql-string {
+.sql-code-area .text.sql-string {
     -fx-fill: #7ec699;
 }
 
-.sql-number {
+.sql-code-area .text.sql-number {
     -fx-fill: #f7c46c;
 }
 
-.sql-comment {
+.sql-code-area .text.sql-comment {
     -fx-fill: #7d8c94;
     -fx-font-style: italic;
 }
 
-.sql-parameter {
+.sql-code-area .text.sql-parameter {
     -fx-fill: #e88fd8;
     -fx-font-weight: 800;
 }
