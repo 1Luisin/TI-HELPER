@@ -1,5 +1,9 @@
 package br.com.scmjf.tihelper.controller;
 
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+
 import br.com.scmjf.tihelper.model.ActionResult;
 import br.com.scmjf.tihelper.model.ServerInfo;
 import br.com.scmjf.tihelper.util.AlertUtil;
@@ -13,6 +17,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class ServersController {
+
+    private static final URI PRODUCTION_BUSY_URI = URI.create("http://172.18.2.6");
 
     @FXML
     private TableView<ServerInfo> serversTable;
@@ -58,5 +64,19 @@ public class ServersController {
     @FXML
     private void viewServices() {
         AppContext.navigateTo(NavigationTarget.SERVICES);
+    }
+
+    @FXML
+    private void openProductionBusy() {
+        if (!Desktop.isDesktopSupported() || !Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+            AlertUtil.warning("Busy produção", "Este ambiente não permite abrir links automaticamente.");
+            return;
+        }
+
+        try {
+            Desktop.getDesktop().browse(PRODUCTION_BUSY_URI);
+        } catch (IOException | SecurityException exception) {
+            AlertUtil.error("Busy produção", "Não foi possível abrir http://172.18.2.6.");
+        }
     }
 }
