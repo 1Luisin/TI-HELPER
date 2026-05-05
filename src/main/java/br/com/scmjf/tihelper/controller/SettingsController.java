@@ -3,6 +3,8 @@ package br.com.scmjf.tihelper.controller;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import br.com.scmjf.tihelper.model.QueryDefinition;
 import br.com.scmjf.tihelper.model.ServerInfo;
@@ -26,6 +28,7 @@ import javafx.scene.layout.VBox;
 public class SettingsController {
 
     private static final String APP_VERSION = "0.1.0-SNAPSHOT";
+    private static final Pattern QUERY_PARAMETER_PATTERN = Pattern.compile(":([A-Za-z][A-Za-z0-9_]*)");
 
     @FXML
     private Label loggedUserLabel;
@@ -109,7 +112,7 @@ public class SettingsController {
     private TextField queryNameField;
 
     @FXML
-    private TextField queryParametersField;
+    private TextArea queryTextArea;
 
     @FXML
     private TableView<QueryDefinition> queriesTable;
@@ -118,7 +121,7 @@ public class SettingsController {
     private TableColumn<QueryDefinition, String> queryNameColumn;
 
     @FXML
-    private TableColumn<QueryDefinition, String> queryParametersColumn;
+    private TableColumn<QueryDefinition, String> queryTextColumn;
 
     @FXML
     private TextField scriptNameField;
@@ -186,14 +189,19 @@ public class SettingsController {
             AlertUtil.warning("Cadastrar query", "Informe o nome da query.");
             return;
         }
+        if (queryTextArea.getText().trim().isBlank()) {
+            AlertUtil.warning("Cadastrar query", "Informe o texto da query.");
+            return;
+        }
 
-        List<String> parameters = Arrays.stream(queryParametersField.getText().split(","))
-                .map(String::trim)
-                .filter(parameter -> !parameter.isBlank())
-                .toList();
+        List<String> parameters = extractQueryParameters(queryTextArea.getText());
 
-        AppContext.mockDataService().addQuery(new QueryDefinition(queryNameField.getText().trim(), parameters));
-        clear(queryNameField, queryParametersField);
+        AppContext.mockDataService().addQuery(new QueryDefinition(
+                queryNameField.getText().trim(),
+                queryTextArea.getText().trim(),
+                parameters));
+        clear(queryNameField);
+        queryTextArea.clear();
         refreshAdministrativeTables();
         AlertUtil.info("Cadastrar query", "Query registrada no mock em memória.");
     }
@@ -228,8 +236,8 @@ public class SettingsController {
                 serviceServerColumn, serviceNameColumn, serviceDescriptionColumn, serviceStatusColumn);
 
         queryNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        queryParametersColumn.setCellValueFactory(new PropertyValueFactory<>("parameterSummary"));
-        TableUtil.bindColumnWidths(queriesTable, new double[]{1.5, 2.5}, queryNameColumn, queryParametersColumn);
+        queryTextColumn.setCellValueFactory(new PropertyValueFactory<>("queryPreview"));
+        TableUtil.bindColumnWidths(queriesTable, new double[]{1.4, 3}, queryNameColumn, queryTextColumn);
 
         scriptNameColumn.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue()));
         TableUtil.bindColumnWidths(scriptsTable, new double[]{1}, scriptNameColumn);
@@ -256,5 +264,13 @@ public class SettingsController {
 
     private void clear(TextField... fields) {
         Arrays.stream(fields).forEach(TextField::clear);
+    }
+
+    private List<String> extractQueryParameters(String queryText) {
+        Matcher matcher = QUERY_PARAMETER_PATTERN.matcher(queryText);
+        return matcher.results()
+                .map(result -> result.group(1))
+                .distinct()
+                .toList();
     }
 }

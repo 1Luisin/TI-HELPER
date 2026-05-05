@@ -179,7 +179,10 @@
                                                     </padding>
                                                     <children>
                                                         <TextField fx:id="queryNameField" promptText="Nome da query"/>
-                                                        <TextField fx:id="queryParametersField" promptText="Parâmetros separados por vírgula. Ex.: CPF, Data inicial"/>
+                                                        <TextArea fx:id="queryTextArea"
+                                                                  promptText="Digite a query. Use parâmetros com dois pontos. Ex.: SELECT * FROM paciente WHERE cpf = :CPF"
+                                                                  prefRowCount="6"
+                                                                  wrapText="false"/>
                                                         <HBox alignment="CENTER_RIGHT">
                                                             <children>
                                                                 <Region HBox.hgrow="ALWAYS"/>
@@ -191,8 +194,8 @@
 
                                                 <TableView fx:id="queriesTable" prefHeight="240">
                                                     <columns>
-                                                        <TableColumn fx:id="queryNameColumn" text="Query"/>
-                                                        <TableColumn fx:id="queryParametersColumn" text="Parâmetros"/>
+                                                        <TableColumn fx:id="queryNameColumn" text="Nome"/>
+                                                        <TableColumn fx:id="queryTextColumn" text="Query"/>
                                                     </columns>
                                                 </TableView>
                                             </children>
