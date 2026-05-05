@@ -18,7 +18,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 public class ServersController {
 
-    private static final URI PRODUCTION_BUSY_URI = URI.create("http://172.18.2.6");
+    private static final URI PRODUCTION_BUSY_URI = URI.create("http://172.18.2.6:5000");
 
     @FXML
     private TableView<ServerInfo> serversTable;
@@ -76,7 +76,7 @@ public class ServersController {
         try {
             Desktop.getDesktop().browse(PRODUCTION_BUSY_URI);
         } catch (IOException | SecurityException exception) {
-            AlertUtil.error("Busy produção", "Não foi possível abrir http://172.18.2.6.");
+            AlertUtil.error("Busy produção", "Não foi possível abrir http://172.18.2.6:5000.");
         }
     }
 }
