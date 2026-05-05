@@ -3,8 +3,6 @@ package br.com.scmjf.tihelper.controller;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import br.com.scmjf.tihelper.model.QueryDefinition;
 import br.com.scmjf.tihelper.model.ServerInfo;
@@ -19,6 +17,7 @@ import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -32,7 +31,6 @@ import org.fxmisc.richtext.LineNumberFactory;
 public class SettingsController {
 
     private static final String APP_VERSION = "0.1.0-SNAPSHOT";
-    private static final Pattern QUERY_PARAMETER_PATTERN = Pattern.compile(":([A-Za-z][A-Za-z0-9_]*)");
 
     @FXML
     private Label loggedUserLabel;
@@ -118,6 +116,15 @@ public class SettingsController {
     @FXML
     private VBox queryEditorHost;
 
+    @FXML
+    private CheckBox queryHasParametersCheckBox;
+
+    @FXML
+    private VBox queryParametersBox;
+
+    @FXML
+    private TextField queryParametersField;
+
     private CodeArea queryCodeArea;
 
     @FXML
@@ -147,6 +154,7 @@ public class SettingsController {
         environmentLabel.setText("Protótipo");
 
         configureSqlEditor();
+        configureQueryParameterToggle();
         configureTables();
         configureAdminAccess(user);
         refreshAdministrativeTables();
@@ -201,14 +209,17 @@ public class SettingsController {
             return;
         }
 
-        List<String> parameters = extractQueryParameters(queryCodeArea.getText());
+        List<String> parameters = queryHasParametersCheckBox.isSelected()
+                ? parseCommaSeparatedParameters(queryParametersField.getText())
+                : List.of();
 
         AppContext.mockDataService().addQuery(new QueryDefinition(
                 queryNameField.getText().trim(),
                 queryCodeArea.getText().trim(),
                 parameters));
-        clear(queryNameField);
+        clear(queryNameField, queryParametersField);
         queryCodeArea.clear();
+        queryHasParametersCheckBox.setSelected(false);
         refreshAdministrativeTables();
         AlertUtil.info("Cadastrar query", "Query registrada no mock em memória.");
     }
@@ -271,6 +282,11 @@ public class SettingsController {
         queryEditorHost.getChildren().setAll(queryCodeArea);
     }
 
+    private void configureQueryParameterToggle() {
+        queryParametersBox.visibleProperty().bind(queryHasParametersCheckBox.selectedProperty());
+        queryParametersBox.managedProperty().bind(queryHasParametersCheckBox.selectedProperty());
+    }
+
     private void configureAdminAccess(User user) {
         boolean admin = user != null && user.getProfile() == UserProfile.ADMIN;
         adminPanel.setVisible(admin);
@@ -294,10 +310,10 @@ public class SettingsController {
         Arrays.stream(fields).forEach(TextField::clear);
     }
 
-    private List<String> extractQueryParameters(String queryText) {
-        Matcher matcher = QUERY_PARAMETER_PATTERN.matcher(queryText);
-        return matcher.results()
-                .map(result -> result.group(1))
+    private List<String> parseCommaSeparatedParameters(String parametersText) {
+        return Arrays.stream(parametersText.split(","))
+                .map(String::trim)
+                .filter(parameter -> !parameter.isBlank())
                 .distinct()
                 .toList();
     }

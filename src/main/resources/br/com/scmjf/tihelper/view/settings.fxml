@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
@@ -184,6 +185,16 @@
                                                               minHeight="170"
                                                               prefHeight="190"
                                                               styleClass="sql-editor-host"/>
+                                                        <CheckBox fx:id="queryHasParametersCheckBox"
+                                                                  text="Query com parâmetros"
+                                                                  styleClass="query-parameters-check"/>
+                                                        <VBox fx:id="queryParametersBox" spacing="8">
+                                                            <children>
+                                                                <Label text="Parâmetros" styleClass="field-label"/>
+                                                                <TextField fx:id="queryParametersField"
+                                                                           promptText="Parâmetros separados por vírgula. Ex.: CPF, Data inicial"/>
+                                                            </children>
+                                                        </VBox>
                                                         <HBox alignment="CENTER_RIGHT">
                                                             <children>
                                                                 <Region HBox.hgrow="ALWAYS"/>
