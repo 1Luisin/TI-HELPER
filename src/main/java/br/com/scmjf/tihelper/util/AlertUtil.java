@@ -3,6 +3,7 @@ package br.com.scmjf.tihelper.util;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
+import br.com.scmjf.tihelper.model.CloseBehavior;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -119,6 +120,49 @@ public final class AlertUtil {
         });
 
         HBox actions = createActions(cancelButton, confirmButton);
+        VBox textContent = new VBox(10, titleLabel, messageLabel, actions);
+        textContent.setAlignment(Pos.CENTER_LEFT);
+        textContent.setMaxWidth(Double.MAX_VALUE);
+
+        HBox content = new HBox(16, icon, textContent);
+        content.setAlignment(Pos.TOP_LEFT);
+        showDialog(dialog, content);
+        return result.get();
+    }
+
+    public static Optional<CloseBehavior> askCloseBehavior() {
+        Stage dialog = createDialog("Fechar aplicacao");
+        AtomicReference<Optional<CloseBehavior>> result = new AtomicReference<>(Optional.empty());
+
+        Label icon = createIcon(MessageType.INFO);
+        Label titleLabel = new Label("Como deseja fechar o TI Helper?");
+        titleLabel.getStyleClass().add("dialog-title");
+
+        Label messageLabel = new Label("Escolha se o programa deve continuar em segundo plano na bandeja ou se deve encerrar totalmente. A resposta sera salva localmente para o proximo fechamento.");
+        messageLabel.getStyleClass().add("dialog-message");
+        messageLabel.setWrapText(true);
+
+        Button minimizeButton = new Button("Segundo plano");
+        minimizeButton.getStyleClass().add("dialog-primary-button");
+        minimizeButton.setDefaultButton(true);
+        minimizeButton.setOnAction(event -> {
+            result.set(Optional.of(CloseBehavior.MINIMIZE_TO_TRAY));
+            dialog.close();
+        });
+
+        Button exitButton = new Button("Fechar totalmente");
+        exitButton.getStyleClass().add("dialog-danger-button");
+        exitButton.setOnAction(event -> {
+            result.set(Optional.of(CloseBehavior.EXIT_APPLICATION));
+            dialog.close();
+        });
+
+        Button cancelButton = new Button("Cancelar");
+        cancelButton.getStyleClass().add("dialog-secondary-button");
+        cancelButton.setCancelButton(true);
+        cancelButton.setOnAction(event -> dialog.close());
+
+        HBox actions = createActions(cancelButton, exitButton, minimizeButton);
         VBox textContent = new VBox(10, titleLabel, messageLabel, actions);
         textContent.setAlignment(Pos.CENTER_LEFT);
         textContent.setMaxWidth(Double.MAX_VALUE);

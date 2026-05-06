@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.function.Consumer;
 
 import br.com.scmjf.tihelper.model.AppSession;
+import br.com.scmjf.tihelper.model.CloseBehavior;
 import br.com.scmjf.tihelper.model.StatusExecucao;
 import br.com.scmjf.tihelper.model.TipoAcao;
 import br.com.scmjf.tihelper.model.User;
@@ -78,6 +79,14 @@ public final class AppContext {
 
     public static Path dataDirectory() {
         return STORE.getDataDirectory();
+    }
+
+    public static CloseBehavior getCloseBehavior() {
+        return STORE.getCloseBehavior();
+    }
+
+    public static void saveCloseBehavior(CloseBehavior closeBehavior) {
+        STORE.saveCloseBehavior(closeBehavior);
     }
 
     public static void restoreDefaultMockData() {

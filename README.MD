@@ -8,12 +8,13 @@ Prototipo visual desktop em Java 21, Maven e JavaFX/FXML.
 - Navegacao visual por Dashboard, Servidores, Paineis, Servicos, Queries, Scripts, Historico, Configuracoes e Sobre.
 - Dados mockados com persistencia local JSON.
 - Logs locais para inicializacao, login, logout, erros e fechamento.
+- Preferencia local para fechar na bandeja ou encerrar totalmente.
 - Historico compartilhado entre acoes simuladas de servicos, queries, scripts e cadastros.
 - Sem Oracle, PowerShell, BAT, CMD, PS1, servidores reais ou integracoes externas.
 
 ## Dados locais
 
-A versao `0.2.2-SNAPSHOT` salva dados mockados em:
+A versao `0.2.3-SNAPSHOT` salva dados mockados em:
 
 ```text
 %LOCALAPPDATA%\TI Helper - SCMJF\data

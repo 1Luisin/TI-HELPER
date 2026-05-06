@@ -48,7 +48,7 @@ public class MainApp extends Application {
             Platform.setImplicitExit(false);
             stage.setOnCloseRequest(event -> {
                 event.consume();
-                TrayService.hideToTray(stage);
+                TrayService.requestClose(stage);
             });
         }
 

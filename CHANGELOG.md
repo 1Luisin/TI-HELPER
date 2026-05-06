@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.3-SNAPSHOT
+
+- Adiciona preferencia local para decidir se o X deixa o app na bandeja ou encerra totalmente.
+- Adiciona pergunta inicial sobre comportamento de fechamento e salva a resposta em `config.json`.
+- Substitui o menu nativo da bandeja por um pop-up JavaFX estilizado com mais opcoes.
+
 ## 0.2.2-SNAPSHOT
 
 - Oculta menus e botoes indisponiveis para o perfil logado em vez de exibi-los desabilitados.

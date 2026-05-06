@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.nio.file.Path;
 
+import br.com.scmjf.tihelper.model.CloseBehavior;
 import br.com.scmjf.tihelper.model.ExecutionHistory;
 import br.com.scmjf.tihelper.model.PanelInfo;
 import br.com.scmjf.tihelper.model.QueryDefinition;
@@ -39,6 +40,15 @@ public class MockDataStore {
 
     public Path getDataDirectory() {
         return persistenceService.getDataDirectory();
+    }
+
+    public CloseBehavior getCloseBehavior() {
+        return persistenceService.loadConfig().closeBehavior();
+    }
+
+    public void saveCloseBehavior(CloseBehavior closeBehavior) {
+        persistenceService.saveCloseBehavior(closeBehavior);
+        AppLogger.info("Preferencia de fechamento salva: " + closeBehavior);
     }
 
     public void restoreDefaults() {

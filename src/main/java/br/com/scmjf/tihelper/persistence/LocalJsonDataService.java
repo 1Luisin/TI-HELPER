@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import br.com.scmjf.tihelper.model.CloseBehavior;
 import br.com.scmjf.tihelper.model.ExecutionHistory;
 import br.com.scmjf.tihelper.model.PanelInfo;
 import br.com.scmjf.tihelper.model.QueryDefinition;
@@ -108,6 +109,20 @@ public class LocalJsonDataService {
         }
     }
 
+    public AppConfigDto loadConfig() {
+        Path file = dataDirectory.resolve(CONFIG_FILE);
+        if (!Files.exists(file)) {
+            return defaultConfig(CloseBehavior.ASK);
+        }
+
+        try {
+            return normalizeConfig(mapper.readValue(file.toFile(), AppConfigDto.class));
+        } catch (IOException | RuntimeException exception) {
+            AppLogger.error("Erro ao carregar configuracao JSON local.", exception);
+            return defaultConfig(CloseBehavior.ASK);
+        }
+    }
+
     public void saveAll(
             Map<String, UserAccount> users,
             List<ServerInfo> servers,
@@ -171,7 +186,11 @@ public class LocalJsonDataService {
     }
 
     public void saveConfig() {
-        write(CONFIG_FILE, new AppConfigDto(1, AppInfo.VERSION, AppInfo.ENVIRONMENT, LocalDateTime.now()));
+        saveConfig(loadConfig().closeBehavior());
+    }
+
+    public void saveCloseBehavior(CloseBehavior closeBehavior) {
+        saveConfig(closeBehavior);
     }
 
     public void exportBackup(Path destination, LoadedData data) throws IOException {
@@ -182,7 +201,7 @@ public class LocalJsonDataService {
         }
 
         BackupDto backup = new BackupDto(
-                new AppConfigDto(1, AppInfo.VERSION, AppInfo.ENVIRONMENT, LocalDateTime.now()),
+                defaultConfig(loadConfig().closeBehavior()),
                 data.users().values().stream()
                         .map(user -> new UserAccountDto(user.getUsername(), user.getPassword(), user.getProfile(), user.getProfilePhotoUri()))
                         .toList(),
@@ -211,6 +230,7 @@ public class LocalJsonDataService {
 
     public LoadedData importBackup(Path source) throws IOException {
         BackupDto backup = mapper.readValue(source.toFile(), BackupDto.class);
+        saveConfig(normalizeConfig(backup.config()).closeBehavior());
         Map<String, UserAccount> users = new LinkedHashMap<>();
         for (UserAccountDto user : nullToEmpty(backup.users())) {
             users.put(user.username(), new UserAccount(user.username(), user.password(), user.profile(), user.profilePhotoUri()));
@@ -270,6 +290,28 @@ public class LocalJsonDataService {
         Files.createDirectories(dataDirectory);
     }
 
+    private void saveConfig(CloseBehavior closeBehavior) {
+        write(CONFIG_FILE, defaultConfig(closeBehavior));
+    }
+
+    private AppConfigDto defaultConfig(CloseBehavior closeBehavior) {
+        return new AppConfigDto(1, AppInfo.VERSION, AppInfo.ENVIRONMENT, LocalDateTime.now(),
+                closeBehavior == null ? CloseBehavior.ASK : closeBehavior);
+    }
+
+    private AppConfigDto normalizeConfig(AppConfigDto config) {
+        if (config == null) {
+            return defaultConfig(CloseBehavior.ASK);
+        }
+
+        return new AppConfigDto(
+                config.schemaVersion() <= 0 ? 1 : config.schemaVersion(),
+                AppInfo.VERSION,
+                AppInfo.ENVIRONMENT,
+                config.savedAt() == null ? LocalDateTime.now() : config.savedAt(),
+                config.closeBehavior() == null ? CloseBehavior.ASK : config.closeBehavior());
+    }
+
     private static <T> List<T> nullToEmpty(List<T> values) {
         return values == null ? List.of() : values;
     }
@@ -284,7 +326,8 @@ public class LocalJsonDataService {
             List<ExecutionHistory> history) {
     }
 
-    public record AppConfigDto(int schemaVersion, String appVersion, String environment, LocalDateTime savedAt) {
+    public record AppConfigDto(int schemaVersion, String appVersion, String environment, LocalDateTime savedAt,
+            CloseBehavior closeBehavior) {
     }
 
     private record BackupDto(
