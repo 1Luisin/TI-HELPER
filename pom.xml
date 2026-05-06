@@ -6,7 +6,7 @@
 
     <groupId>br.com.scmjf</groupId>
     <artifactId>ti-helper-scmjf</artifactId>
-    <version>0.2.4-SNAPSHOT</version>
+    <version>0.2.5-SNAPSHOT</version>
     <name>TI Helper - SCMJF</name>
     <description>Prototipo desktop JavaFX para fluxos visuais do TI Helper - SCMJF.</description>
 

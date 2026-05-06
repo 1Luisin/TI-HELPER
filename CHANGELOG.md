@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.5-SNAPSHOT
+
+- Corrige o botao X da barra customizada para abrir diretamente a pergunta de fechamento.
+- Registra o handler de fechamento mesmo quando a bandeja do sistema nao puder ser instalada.
+- Evita ocultar a janela quando a opcao de bandeja for escolhida sem bandeja disponivel.
+
 ## 0.2.4-SNAPSHOT
 
 - Faz o clique no X sempre abrir a pergunta de fechamento como dialogo central da aplicacao.

@@ -44,13 +44,12 @@ public class MainApp extends Application {
         stage.setMinHeight(600);
         stage.setScene(SceneUtil.createScene(stage, root, 1080, 720));
 
-        if (TrayService.install(stage)) {
-            Platform.setImplicitExit(false);
-            stage.setOnCloseRequest(event -> {
-                event.consume();
-                TrayService.requestClose(stage);
-            });
-        }
+        TrayService.install(stage);
+        Platform.setImplicitExit(false);
+        stage.setOnCloseRequest(event -> {
+            event.consume();
+            TrayService.requestClose(stage);
+        });
 
         stage.show();
     }

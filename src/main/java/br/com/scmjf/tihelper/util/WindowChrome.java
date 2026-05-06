@@ -84,7 +84,7 @@ public final class WindowChrome {
         Button closeButton = windowButton(CLOSE_TEXT);
         closeButton.getStyleClass().add("window-close-button");
         closeButton.setOnAction(event -> {
-            stage.close();
+            TrayService.requestClose(stage);
             event.consume();
         });
 

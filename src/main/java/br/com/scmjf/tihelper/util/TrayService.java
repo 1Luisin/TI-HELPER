@@ -50,6 +50,11 @@ public final class TrayService {
         AlertUtil.askCloseBehavior().ifPresent(choice -> {
             AppContext.saveCloseBehavior(choice);
             if (choice == CloseBehavior.MINIMIZE_TO_TRAY) {
+                if (trayIcon == null) {
+                    AlertUtil.warning("Bandeja do sistema", "A bandeja do sistema não está disponível. O aplicativo continuará aberto.");
+                    return;
+                }
+
                 hideToTray(stage);
                 return;
             }
