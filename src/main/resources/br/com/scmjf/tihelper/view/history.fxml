@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
 <ScrollPane xmlns="http://javafx.com/javafx/21"
@@ -20,22 +26,39 @@
                 <Insets top="24" right="26" bottom="26" left="26"/>
             </padding>
             <children>
-                <Label text="Histórico" styleClass="page-title"/>
+                <Label text="Historico" styleClass="page-title"/>
 
-                <HBox spacing="10">
+                <VBox spacing="10" styleClass="form-panel">
+                    <padding>
+                        <Insets top="14" right="14" bottom="14" left="14"/>
+                    </padding>
                     <children>
-                        <ComboBox fx:id="typeFilterCombo" promptText="Tipo de ação" prefWidth="220"/>
-                        <ComboBox fx:id="statusFilterCombo" promptText="Status" prefWidth="180"/>
+                        <FlowPane hgap="10" vgap="10">
+                            <children>
+                                <ComboBox fx:id="typeFilterCombo" promptText="Tipo de acao" prefWidth="220"/>
+                                <ComboBox fx:id="statusFilterCombo" promptText="Status" prefWidth="180"/>
+                                <ComboBox fx:id="userFilterCombo" promptText="Usuario" prefWidth="180"/>
+                                <DatePicker fx:id="initialDatePicker" promptText="Data inicial" prefWidth="160"/>
+                                <DatePicker fx:id="finalDatePicker" promptText="Data final" prefWidth="160"/>
+                            </children>
+                        </FlowPane>
+                        <HBox spacing="8" alignment="CENTER_RIGHT">
+                            <children>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Button text="Limpar filtros" onAction="#clearFilters" styleClass="secondary-button"/>
+                                <Button text="Exportar CSV" onAction="#exportCsv" styleClass="primary-button"/>
+                            </children>
+                        </HBox>
                     </children>
-                </HBox>
+                </VBox>
 
-                <TableView fx:id="historyTable" prefHeight="540">
+                <TableView fx:id="historyTable" prefHeight="420">
                     <columns>
                         <TableColumn fx:id="idColumn" text="ID" prefWidth="70"/>
                         <TableColumn fx:id="dateColumn" text="Data/Hora" prefWidth="160"/>
-                        <TableColumn fx:id="userColumn" text="Usuário" prefWidth="100"/>
+                        <TableColumn fx:id="userColumn" text="Usuario" prefWidth="100"/>
                         <TableColumn fx:id="profileColumn" text="Perfil" prefWidth="110"/>
-                        <TableColumn fx:id="typeColumn" text="Tipo da ação" prefWidth="150"/>
+                        <TableColumn fx:id="typeColumn" text="Tipo da acao" prefWidth="150"/>
                         <TableColumn fx:id="serverColumn" text="Servidor" prefWidth="130"/>
                         <TableColumn fx:id="targetColumn" text="Alvo" prefWidth="190"/>
                         <TableColumn fx:id="statusColumn" text="Status" prefWidth="100"/>
@@ -43,6 +66,20 @@
                         <TableColumn fx:id="messageColumn" text="Mensagem" prefWidth="320"/>
                     </columns>
                 </TableView>
+
+                <VBox spacing="8" styleClass="form-panel">
+                    <padding>
+                        <Insets top="14" right="14" bottom="14" left="14"/>
+                    </padding>
+                    <children>
+                        <Label text="Detalhes da execucao" styleClass="section-title"/>
+                        <TextArea fx:id="detailsArea"
+                                  editable="false"
+                                  wrapText="true"
+                                  prefRowCount="8"
+                                  VBox.vgrow="ALWAYS"/>
+                    </children>
+                </VBox>
             </children>
         </VBox>
     </content>

@@ -9,6 +9,10 @@ public interface UsuarioService {
 
     boolean registerUser(String username, String password, UserProfile profile);
 
+    boolean updateUser(String originalUsername, String username, String password, UserProfile profile);
+
+    boolean deleteUser(String username);
+
     List<User> getUsers();
 
     void updateProfilePhoto(String username, String profilePhotoUri);

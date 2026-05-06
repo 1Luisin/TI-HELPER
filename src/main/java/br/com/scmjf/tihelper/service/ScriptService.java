@@ -14,5 +14,9 @@ public interface ScriptService {
 
     ActionResult cadastrar(ScriptDefinition script, User user);
 
+    ActionResult alterar(String originalName, ScriptDefinition script, User user);
+
+    ActionResult excluir(ScriptDefinition script, User user);
+
     ActionResult executar(String scriptName, String server, String reason, User user);
 }

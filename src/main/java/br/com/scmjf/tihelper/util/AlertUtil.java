@@ -93,6 +93,42 @@ public final class AlertUtil {
         return result.get();
     }
 
+    public static boolean confirm(String title, String message) {
+        Stage dialog = createDialog(title);
+        AtomicReference<Boolean> result = new AtomicReference<>(false);
+
+        Label icon = createIcon(MessageType.WARNING);
+        Label titleLabel = new Label(title);
+        titleLabel.getStyleClass().add("dialog-title");
+
+        Label messageLabel = new Label(message);
+        messageLabel.getStyleClass().add("dialog-message");
+        messageLabel.setWrapText(true);
+
+        Button cancelButton = new Button("Cancelar");
+        cancelButton.getStyleClass().add("dialog-secondary-button");
+        cancelButton.setCancelButton(true);
+        cancelButton.setOnAction(event -> dialog.close());
+
+        Button confirmButton = new Button("Confirmar");
+        confirmButton.getStyleClass().add("dialog-primary-button");
+        confirmButton.setDefaultButton(true);
+        confirmButton.setOnAction(event -> {
+            result.set(true);
+            dialog.close();
+        });
+
+        HBox actions = createActions(cancelButton, confirmButton);
+        VBox textContent = new VBox(10, titleLabel, messageLabel, actions);
+        textContent.setAlignment(Pos.CENTER_LEFT);
+        textContent.setMaxWidth(Double.MAX_VALUE);
+
+        HBox content = new HBox(16, icon, textContent);
+        content.setAlignment(Pos.TOP_LEFT);
+        showDialog(dialog, content);
+        return result.get();
+    }
+
     private static void show(MessageType type, String title, String message) {
         Stage dialog = createDialog(title);
 

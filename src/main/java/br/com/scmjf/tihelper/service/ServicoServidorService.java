@@ -12,5 +12,9 @@ public interface ServicoServidorService {
 
     ActionResult cadastrar(ServiceInfo service, User user);
 
+    ActionResult alterar(ServiceInfo originalService, ServiceInfo service, User user);
+
+    ActionResult excluir(ServiceInfo service, User user);
+
     ActionResult finalizarReinicio(ServiceInfo service, String reason, User user);
 }

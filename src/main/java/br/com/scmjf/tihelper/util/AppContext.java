@@ -1,5 +1,6 @@
 package br.com.scmjf.tihelper.util;
 
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.function.Consumer;
 
@@ -75,6 +76,28 @@ public final class AppContext {
         return HISTORICO_SERVICE;
     }
 
+    public static Path dataDirectory() {
+        return STORE.getDataDirectory();
+    }
+
+    public static void restoreDefaultMockData() {
+        STORE.restoreDefaults();
+        HISTORICO_SERVICE.registrar(getCurrentUser(), TipoAcao.RESTAURAR_DADOS, "-", "Dados mockados",
+                StatusExecucao.SUCESSO, "-", "Dados mockados padrao restaurados.");
+    }
+
+    public static void exportBackup(Path destination) throws java.io.IOException {
+        STORE.exportBackup(destination);
+        HISTORICO_SERVICE.registrar(getCurrentUser(), TipoAcao.EXPORTAR_BACKUP, "-", destination.toString(),
+                StatusExecucao.SUCESSO, "-", "Backup JSON exportado.");
+    }
+
+    public static void importBackup(Path source) throws java.io.IOException {
+        STORE.importBackup(source);
+        HISTORICO_SERVICE.registrar(getCurrentUser(), TipoAcao.IMPORTAR_BACKUP, "-", source.toString(),
+                StatusExecucao.SUCESSO, "-", "Backup JSON importado.");
+    }
+
     public static AppSession getSession() {
         return session;
     }
@@ -99,13 +122,14 @@ public final class AppContext {
 
     public static boolean denyAction(TipoAcao tipoAcao, String target, String message) {
         HISTORICO_SERVICE.registrar(getCurrentUser(), tipoAcao, "-", target, StatusExecucao.NEGADO, "-", message);
-        AlertUtil.warning("Permissão negada", message);
+        AlertUtil.warning("Permissao negada", message);
         return false;
     }
 
     public static void clearSession() {
         if (session != null) {
-            HISTORICO_SERVICE.registrar(session.getUser(), TipoAcao.LOGOUT, "-", "Sessão", StatusExecucao.SUCESSO, "-", "Logout efetuado.");
+            HISTORICO_SERVICE.registrar(session.getUser(), TipoAcao.LOGOUT, "-", "Sessao", StatusExecucao.SUCESSO, "-", "Logout efetuado.");
+            AppLogger.info("Logout efetuado: " + session.getUser().getUsername());
         }
         session = null;
         navigationHandler = null;

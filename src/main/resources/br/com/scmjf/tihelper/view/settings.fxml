@@ -5,6 +5,7 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -28,37 +29,34 @@
                 <Insets top="24" right="26" bottom="26" left="26"/>
             </padding>
             <children>
-                <Label text="Configurações" styleClass="page-title"/>
+                <Label text="Configuracoes" styleClass="page-title"/>
 
                 <VBox spacing="16" styleClass="form-panel">
                     <padding>
                         <Insets top="22" right="22" bottom="22" left="22"/>
                     </padding>
                     <children>
-                        <Label text="Informações do protótipo" styleClass="section-title"/>
+                        <Label text="Informacoes do prototipo" styleClass="section-title"/>
                         <FlowPane hgap="42" vgap="14">
                             <children>
                                 <VBox spacing="4">
                                     <children>
-                                        <Label text="Usuário logado" styleClass="field-label"/>
+                                        <Label text="Usuario logado" styleClass="field-label"/>
                                         <Label fx:id="loggedUserLabel" text="-" styleClass="value-label"/>
                                     </children>
                                 </VBox>
-
                                 <VBox spacing="4">
                                     <children>
                                         <Label text="Perfil" styleClass="field-label"/>
                                         <Label fx:id="profileLabel" text="-" styleClass="value-label"/>
                                     </children>
                                 </VBox>
-
                                 <VBox spacing="4">
                                     <children>
-                                        <Label text="Versão da aplicação" styleClass="field-label"/>
+                                        <Label text="Versao da aplicacao" styleClass="field-label"/>
                                         <Label fx:id="versionLabel" text="-" styleClass="value-label"/>
                                     </children>
                                 </VBox>
-
                                 <VBox spacing="4">
                                     <children>
                                         <Label text="Ambiente" styleClass="field-label"/>
@@ -67,11 +65,19 @@
                                 </VBox>
                             </children>
                         </FlowPane>
+                        <HBox spacing="10" alignment="CENTER_RIGHT">
+                            <children>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Button text="Restaurar mocks" onAction="#restoreDefaultData" styleClass="secondary-button"/>
+                                <Button text="Exportar backup" onAction="#exportBackup" styleClass="secondary-button"/>
+                                <Button text="Importar backup" onAction="#importBackup" styleClass="secondary-button"/>
+                            </children>
+                        </HBox>
                     </children>
                 </VBox>
 
                 <Label fx:id="adminAccessLabel"
-                       text="Cadastros administrativos disponíveis apenas para usuários com perfil ADMIN."
+                       text="Cadastros administrativos disponiveis apenas para usuarios com perfil ADMIN."
                        styleClass="hint-label"/>
 
                 <VBox fx:id="adminPanel" spacing="14">
@@ -100,15 +106,17 @@
                                                                 <TextField fx:id="serverStatusField" promptText="Status" prefWidth="140"/>
                                                             </children>
                                                         </FlowPane>
-                                                        <HBox alignment="CENTER_RIGHT">
+                                                        <HBox alignment="CENTER_RIGHT" spacing="8">
                                                             <children>
                                                                 <Region HBox.hgrow="ALWAYS"/>
+                                                                <Button text="Limpar" onAction="#clearServerFields" styleClass="secondary-button"/>
+                                                                <Button text="Editar" onAction="#editServer" styleClass="secondary-button"/>
+                                                                <Button text="Excluir" onAction="#deleteServer" styleClass="secondary-button"/>
                                                                 <Button text="Cadastrar servidor" onAction="#addServer" styleClass="primary-button"/>
                                                             </children>
                                                         </HBox>
                                                     </children>
                                                 </VBox>
-
                                                 <TableView fx:id="serversTable" prefHeight="240">
                                                     <columns>
                                                         <TableColumn fx:id="serverNameColumn" text="Nome"/>
@@ -123,7 +131,7 @@
                                     </content>
                                 </Tab>
 
-                                <Tab text="Serviços">
+                                <Tab text="Servicos">
                                     <content>
                                         <VBox spacing="14">
                                             <padding>
@@ -138,28 +146,30 @@
                                                         <FlowPane hgap="12" vgap="10">
                                                             <children>
                                                                 <TextField fx:id="serviceServerField" promptText="Servidor" prefWidth="170"/>
-                                                                <TextField fx:id="serviceNameField" promptText="Nome do serviço" prefWidth="210"/>
+                                                                <TextField fx:id="serviceNameField" promptText="Nome do servico" prefWidth="210"/>
                                                                 <TextField fx:id="serviceStatusField" promptText="Status" prefWidth="150"/>
                                                             </children>
                                                         </FlowPane>
                                                         <TextArea fx:id="serviceDescriptionArea"
-                                                                  promptText="Descrição"
+                                                                  promptText="Descricao"
                                                                   prefRowCount="3"
                                                                   wrapText="true"/>
-                                                        <HBox alignment="CENTER_RIGHT">
+                                                        <HBox alignment="CENTER_RIGHT" spacing="8">
                                                             <children>
                                                                 <Region HBox.hgrow="ALWAYS"/>
-                                                                <Button text="Cadastrar serviço" onAction="#addService" styleClass="primary-button"/>
+                                                                <Button text="Limpar" onAction="#clearServiceFields" styleClass="secondary-button"/>
+                                                                <Button text="Editar" onAction="#editService" styleClass="secondary-button"/>
+                                                                <Button text="Excluir" onAction="#deleteService" styleClass="secondary-button"/>
+                                                                <Button text="Cadastrar servico" onAction="#addService" styleClass="primary-button"/>
                                                             </children>
                                                         </HBox>
                                                     </children>
                                                 </VBox>
-
                                                 <TableView fx:id="servicesTable" prefHeight="240">
                                                     <columns>
                                                         <TableColumn fx:id="serviceServerColumn" text="Servidor"/>
                                                         <TableColumn fx:id="serviceNameColumn" text="Nome"/>
-                                                        <TableColumn fx:id="serviceDescriptionColumn" text="Descrição"/>
+                                                        <TableColumn fx:id="serviceDescriptionColumn" text="Descricao"/>
                                                         <TableColumn fx:id="serviceStatusColumn" text="Status"/>
                                                     </columns>
                                                 </TableView>
@@ -168,7 +178,7 @@
                                     </content>
                                 </Tab>
 
-                                <Tab text="Painéis">
+                                <Tab text="Paineis">
                                     <content>
                                         <VBox spacing="14">
                                             <padding>
@@ -183,24 +193,26 @@
                                                         <FlowPane hgap="12" vgap="10">
                                                             <children>
                                                                 <TextField fx:id="panelNameField" promptText="Nome do painel" prefWidth="210"/>
-                                                                <TextField fx:id="panelIpField" promptText="IP da máquina. Ex.: 172.18.x.x" prefWidth="230"/>
+                                                                <TextField fx:id="panelIpField" promptText="IP da maquina. Ex.: 172.18.x.x" prefWidth="230"/>
                                                                 <TextField fx:id="panelLocationField" promptText="Local" prefWidth="190"/>
                                                                 <ComboBox fx:id="panelStatusCombo" promptText="Status" prefWidth="150"/>
                                                             </children>
                                                         </FlowPane>
-                                                        <HBox alignment="CENTER_RIGHT">
+                                                        <HBox alignment="CENTER_RIGHT" spacing="8">
                                                             <children>
                                                                 <Region HBox.hgrow="ALWAYS"/>
+                                                                <Button text="Limpar" onAction="#clearPanelFields" styleClass="secondary-button"/>
+                                                                <Button text="Editar" onAction="#editPanel" styleClass="secondary-button"/>
+                                                                <Button text="Excluir" onAction="#deletePanel" styleClass="secondary-button"/>
                                                                 <Button text="Cadastrar painel" onAction="#addPanel" styleClass="primary-button"/>
                                                             </children>
                                                         </HBox>
                                                     </children>
                                                 </VBox>
-
                                                 <TableView fx:id="panelsTable" prefHeight="240">
                                                     <columns>
                                                         <TableColumn fx:id="panelNameColumn" text="Painel"/>
-                                                        <TableColumn fx:id="panelIpColumn" text="IP da máquina"/>
+                                                        <TableColumn fx:id="panelIpColumn" text="IP da maquina"/>
                                                         <TableColumn fx:id="panelLocationColumn" text="Local"/>
                                                         <TableColumn fx:id="panelStatusColumn" text="Status"/>
                                                     </columns>
@@ -229,24 +241,26 @@
                                                               prefHeight="190"
                                                               styleClass="sql-editor-host"/>
                                                         <CheckBox fx:id="queryHasParametersCheckBox"
-                                                                  text="Query com parâmetros"
+                                                                  text="Query com parametros"
                                                                   styleClass="query-parameters-check"/>
                                                         <VBox fx:id="queryParametersBox" spacing="8">
                                                             <children>
-                                                                <Label text="Parâmetros" styleClass="field-label"/>
+                                                                <Label text="Parametros" styleClass="field-label"/>
                                                                 <TextField fx:id="queryParametersField"
-                                                                           promptText="Parâmetros separados por vírgula. Ex.: CPF, Data inicial"/>
+                                                                           promptText="Parametros separados por virgula. Ex.: CPF, Data inicial"/>
                                                             </children>
                                                         </VBox>
-                                                        <HBox alignment="CENTER_RIGHT">
+                                                        <HBox alignment="CENTER_RIGHT" spacing="8">
                                                             <children>
                                                                 <Region HBox.hgrow="ALWAYS"/>
+                                                                <Button text="Limpar" onAction="#clearQueryFields" styleClass="secondary-button"/>
+                                                                <Button text="Editar" onAction="#editQuery" styleClass="secondary-button"/>
+                                                                <Button text="Excluir" onAction="#deleteQuery" styleClass="secondary-button"/>
                                                                 <Button text="Cadastrar query" onAction="#addQuery" styleClass="primary-button"/>
                                                             </children>
                                                         </HBox>
                                                     </children>
                                                 </VBox>
-
                                                 <TableView fx:id="queriesTable" prefHeight="240">
                                                     <columns>
                                                         <TableColumn fx:id="queryNameColumn" text="Nome"/>
@@ -281,7 +295,7 @@
                                                                             <children>
                                                                                 <Label text="Corpo do script" styleClass="field-label"/>
                                                                                 <TextArea fx:id="scriptBodyArea"
-                                                                                          promptText="Cole aqui o corpo do script aprovado (.bat, .cmd ou .ps1)"
+                                                                                          promptText="Cole aqui o corpo do script aprovado"
                                                                                           prefRowCount="7"
                                                                                           wrapText="false"/>
                                                                             </children>
@@ -298,7 +312,7 @@
                                                                                         <Button text="Selecionar arquivo"
                                                                                                 onAction="#chooseScriptFile"
                                                                                                 styleClass="secondary-button"/>
-                                                                                        <Button text="Limpar"
+                                                                                        <Button text="Limpar arquivo"
                                                                                                 onAction="#clearSelectedScriptFile"
                                                                                                 styleClass="secondary-button"/>
                                                                                         <Label fx:id="scriptFileLabel"
@@ -306,7 +320,7 @@
                                                                                                styleClass="script-file-label"/>
                                                                                     </children>
                                                                                 </HBox>
-                                                                                <Label text="O arquivo sera apenas lido e salvo no mock em memoria."
+                                                                                <Label text="O arquivo sera apenas lido e salvo no mock local."
                                                                                        styleClass="hint-label"/>
                                                                             </children>
                                                                         </VBox>
@@ -314,20 +328,65 @@
                                                                 </Tab>
                                                             </tabs>
                                                         </TabPane>
-                                                        <HBox alignment="CENTER_RIGHT">
+                                                        <HBox alignment="CENTER_RIGHT" spacing="8">
                                                             <children>
                                                                 <Region HBox.hgrow="ALWAYS"/>
+                                                                <Button text="Limpar" onAction="#clearScriptFields" styleClass="secondary-button"/>
+                                                                <Button text="Editar" onAction="#editScript" styleClass="secondary-button"/>
+                                                                <Button text="Excluir" onAction="#deleteScript" styleClass="secondary-button"/>
                                                                 <Button text="Cadastrar script" onAction="#addScript" styleClass="primary-button"/>
                                                             </children>
                                                         </HBox>
                                                     </children>
                                                 </VBox>
-
                                                 <TableView fx:id="scriptsTable" prefHeight="240">
                                                     <columns>
                                                         <TableColumn fx:id="scriptNameColumn" text="Nome"/>
                                                         <TableColumn fx:id="scriptSourceColumn" text="Origem"/>
                                                         <TableColumn fx:id="scriptSummaryColumn" text="Conteudo / arquivo"/>
+                                                    </columns>
+                                                </TableView>
+                                            </children>
+                                        </VBox>
+                                    </content>
+                                </Tab>
+
+                                <Tab text="Usuarios">
+                                    <content>
+                                        <VBox spacing="14">
+                                            <padding>
+                                                <Insets top="16" right="0" bottom="0" left="0"/>
+                                            </padding>
+                                            <children>
+                                                <VBox spacing="10" styleClass="form-panel">
+                                                    <padding>
+                                                        <Insets top="16" right="16" bottom="16" left="16"/>
+                                                    </padding>
+                                                    <children>
+                                                        <FlowPane hgap="12" vgap="10">
+                                                            <children>
+                                                                <TextField fx:id="userNameField" promptText="Login" prefWidth="220"/>
+                                                                <PasswordField fx:id="userPasswordField" promptText="Senha" prefWidth="220"/>
+                                                                <ComboBox fx:id="userProfileCombo" promptText="Perfil" prefWidth="180"/>
+                                                            </children>
+                                                        </FlowPane>
+                                                        <Label text="Ao editar, deixe a senha em branco para manter a senha atual."
+                                                               styleClass="hint-label"/>
+                                                        <HBox alignment="CENTER_RIGHT" spacing="8">
+                                                            <children>
+                                                                <Region HBox.hgrow="ALWAYS"/>
+                                                                <Button text="Limpar" onAction="#clearUserFields" styleClass="secondary-button"/>
+                                                                <Button text="Editar" onAction="#editUser" styleClass="secondary-button"/>
+                                                                <Button text="Excluir" onAction="#deleteUser" styleClass="secondary-button"/>
+                                                                <Button text="Cadastrar usuario" onAction="#addUser" styleClass="primary-button"/>
+                                                            </children>
+                                                        </HBox>
+                                                    </children>
+                                                </VBox>
+                                                <TableView fx:id="usersTable" prefHeight="240">
+                                                    <columns>
+                                                        <TableColumn fx:id="userNameColumn" text="Usuario"/>
+                                                        <TableColumn fx:id="userProfileColumn" text="Perfil"/>
                                                     </columns>
                                                 </TableView>
                                             </children>

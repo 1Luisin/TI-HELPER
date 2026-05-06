@@ -12,5 +12,9 @@ public interface ServidorService {
 
     ActionResult cadastrar(ServerInfo server, User user);
 
+    ActionResult alterar(String originalName, ServerInfo server, User user);
+
+    ActionResult excluir(ServerInfo server, User user);
+
     ActionResult testarConexao(ServerInfo server, User user);
 }

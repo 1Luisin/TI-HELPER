@@ -18,5 +18,9 @@ public interface QueryService {
 
     ActionResult cadastrar(QueryDefinition query, User user);
 
+    ActionResult alterar(String originalName, QueryDefinition query, User user);
+
+    ActionResult excluir(QueryDefinition query, User user);
+
     QueryExecutionResult executar(String queryName, Map<String, String> parameters, User user);
 }

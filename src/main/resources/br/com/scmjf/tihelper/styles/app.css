@@ -717,6 +717,13 @@
     -fx-font-weight: 700;
 }
 
+.path-label {
+    -fx-text-fill: #102027;
+    -fx-font-family: "Consolas";
+    -fx-font-size: 12px;
+    -fx-wrap-text: true;
+}
+
 .action-feedback {
     -fx-text-fill: #0f6f71;
     -fx-font-weight: 800;

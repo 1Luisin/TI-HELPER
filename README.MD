@@ -1,13 +1,29 @@
 # TI Helper - SCMJF
 
-Protótipo visual desktop em Java 21, Maven e JavaFX/FXML.
+Prototipo visual desktop em Java 21, Maven e JavaFX/FXML.
 
-## Escopo desta versão
+## Escopo desta versao
 
 - Login simulado com perfis `ADMIN`, `OPERADOR_TI` e `CONSULTA`.
-- Navegação visual por Dashboard, Servidores, Serviços, Queries, Scripts, Histórico e Configurações.
-- Dados mockados em memória, sem Oracle, PowerShell, BAT, servidores reais ou integrações externas.
-- Histórico compartilhado entre ações simuladas de serviços, queries e scripts.
+- Navegacao visual por Dashboard, Servidores, Paineis, Servicos, Queries, Scripts, Historico, Configuracoes e Diagnostico.
+- Dados mockados com persistencia local JSON.
+- Logs locais para inicializacao, login, logout, erros e fechamento.
+- Historico compartilhado entre acoes simuladas de servicos, queries, scripts e cadastros.
+- Sem Oracle, PowerShell, BAT, CMD, PS1, servidores reais ou integracoes externas.
+
+## Dados locais
+
+A versao `0.2.0-SNAPSHOT` salva dados mockados em:
+
+```text
+%LOCALAPPDATA%\TI Helper - SCMJF\data
+```
+
+Os logs ficam em:
+
+```text
+%LOCALAPPDATA%\TI Helper - SCMJF\logs\app.log
+```
 
 ## Credenciais mockadas
 
@@ -52,8 +68,9 @@ O instalador gerado leva o runtime Java junto, entao o computador de teste nao p
 ## Estrutura
 
 - `controller`: controllers JavaFX das telas.
-- `model`: objetos de domínio simples para tabelas e ações.
-- `service`: autenticação, dados e ações simuladas.
-- `util`: contexto de sessão, navegação e alertas.
+- `model`: objetos de dominio simples para tabelas e acoes.
+- `persistence`: persistencia local JSON e backup.
+- `service`: autenticacao, dados e acoes simuladas.
+- `util`: contexto de sessao, navegacao, paths, logs e alertas.
 - `resources/view`: telas FXML.
-- `resources/styles`: CSS da aplicação.
+- `resources/styles`: CSS da aplicacao.

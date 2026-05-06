@@ -44,6 +44,7 @@ public class HistoricoMockService implements HistoricoService {
                 status,
                 reason,
                 message));
+        store.persistHistory();
     }
 
     @Override

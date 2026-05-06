@@ -45,26 +45,64 @@ public class QueryMockService implements QueryService {
 
     @Override
     public ActionResult cadastrar(QueryDefinition query, User user) {
-        if (query == null || ValidationUtil.isBlank(query.getName())) {
-            return new ActionResult(false, "Informe o nome da query.");
-        }
-        if (ValidationUtil.isBlank(query.getQueryText())) {
-            return new ActionResult(false, "Informe o SQL da query.");
+        ActionResult validation = validate(query);
+        if (!validation.success()) {
+            return validation;
         }
 
         store.queries().add(query);
+        store.persistQueries();
         historicoService.registrar(user, TipoAcao.CADASTRAR_QUERY, "-", query.getName(),
-                StatusExecucao.SUCESSO, "-", "Query registrada no mock em memória.");
-        return new ActionResult(true, "Query registrada no mock em memória.");
+                StatusExecucao.SUCESSO, "-", "Query registrada no mock local.");
+        return new ActionResult(true, "Query registrada no mock local.");
+    }
+
+    @Override
+    public ActionResult alterar(String originalName, QueryDefinition query, User user) {
+        if (ValidationUtil.isBlank(originalName)) {
+            return new ActionResult(false, "Selecione uma query para editar.");
+        }
+        ActionResult validation = validate(query);
+        if (!validation.success()) {
+            return validation;
+        }
+
+        for (int index = 0; index < store.queries().size(); index++) {
+            if (store.queries().get(index).getName().equals(originalName)) {
+                store.queries().set(index, query);
+                store.persistQueries();
+                historicoService.registrar(user, TipoAcao.ALTERAR_QUERY, "-", query.getName(),
+                        StatusExecucao.SUCESSO, "-", "Query alterada no mock local.");
+                return new ActionResult(true, "Query alterada no mock local.");
+            }
+        }
+        return new ActionResult(false, "Query selecionada nao foi encontrada.");
+    }
+
+    @Override
+    public ActionResult excluir(QueryDefinition query, User user) {
+        if (query == null) {
+            return new ActionResult(false, "Selecione uma query para excluir.");
+        }
+
+        boolean removed = store.queries().removeIf(item -> item.getName().equals(query.getName()));
+        if (!removed) {
+            return new ActionResult(false, "Query selecionada nao foi encontrada.");
+        }
+
+        store.persistQueries();
+        historicoService.registrar(user, TipoAcao.EXCLUIR_QUERY, "-", query.getName(),
+                StatusExecucao.SUCESSO, "-", "Query excluida do mock local.");
+        return new ActionResult(true, "Query excluida do mock local.");
     }
 
     @Override
     public QueryExecutionResult executar(String queryName, Map<String, String> parameters, User user) {
         QueryExecutionResult result = switch (queryName) {
             case "Buscar paciente por CPF" -> patientByCpf(parameters);
-            case "Buscar atendimento por número" -> appointmentByNumber(parameters);
+            case "Buscar atendimento por numero", "Buscar atendimento por nÃºmero" -> appointmentByNumber(parameters);
             case "Consultar respostas de pesquisa" -> surveyAnswers(parameters);
-            case "Verificar integração pendente" -> pendingIntegration(parameters);
+            case "Verificar integracao pendente", "Verificar integraÃ§Ã£o pendente" -> pendingIntegration(parameters);
             default -> genericRegisteredQuery(queryName, parameters);
         };
 
@@ -73,61 +111,71 @@ public class QueryMockService implements QueryService {
         return result;
     }
 
+    private ActionResult validate(QueryDefinition query) {
+        if (query == null || ValidationUtil.isBlank(query.getName())) {
+            return new ActionResult(false, "Informe o nome da query.");
+        }
+        if (ValidationUtil.isBlank(query.getQueryText())) {
+            return new ActionResult(false, "Informe o SQL da query.");
+        }
+        return new ActionResult(true, "OK");
+    }
+
     private QueryExecutionResult patientByCpf(Map<String, String> parameters) {
         String cpf = parameters.getOrDefault("CPF", "000.000.000-00");
         return new QueryExecutionResult(
-                List.of("CPF", "Paciente", "Status", "Último atendimento"),
+                List.of("CPF", "Paciente", "Status", "Ultimo atendimento"),
                 List.of(row(
                         "CPF", cpf.isBlank() ? "123.456.789-00" : cpf,
                         "Paciente", "Maria de Lourdes Silva",
                         "Status", "Ativo",
-                        "Último atendimento", "02/05/2026")));
+                        "Ultimo atendimento", "02/05/2026")));
     }
 
     private QueryExecutionResult appointmentByNumber(Map<String, String> parameters) {
-        String number = parameters.getOrDefault("Número", "A-2026-0001");
+        String number = parameters.getOrDefault("Numero", parameters.getOrDefault("NÃºmero", "A-2026-0001"));
         return new QueryExecutionResult(
-                List.of("Atendimento", "Paciente", "Unidade", "Situação"),
+                List.of("Atendimento", "Paciente", "Unidade", "Situacao"),
                 List.of(row(
                         "Atendimento", number.isBlank() ? "A-2026-0001" : number,
-                        "Paciente", "João Carlos Pereira",
+                        "Paciente", "Joao Carlos Pereira",
                         "Unidade", "Central SCMJF",
-                        "Situação", "Em análise")));
+                        "Situacao", "Em analise")));
     }
 
     private QueryExecutionResult surveyAnswers(Map<String, String> parameters) {
         String initialDate = parameters.getOrDefault("Data inicial", "01/05/2026");
         String finalDate = parameters.getOrDefault("Data final", "04/05/2026");
         return new QueryExecutionResult(
-                List.of("Período", "Pesquisa", "Respostas", "Satisfação"),
+                List.of("Periodo", "Pesquisa", "Respostas", "Satisfacao"),
                 List.of(
-                        row("Período", initialDate + " a " + finalDate, "Pesquisa", "Atendimento presencial", "Respostas", "42", "Satisfação", "92%"),
-                        row("Período", initialDate + " a " + finalDate, "Pesquisa", "Totem tablet", "Respostas", "18", "Satisfação", "88%")));
+                        row("Periodo", initialDate + " a " + finalDate, "Pesquisa", "Atendimento presencial", "Respostas", "42", "Satisfacao", "92%"),
+                        row("Periodo", initialDate + " a " + finalDate, "Pesquisa", "Totem tablet", "Respostas", "18", "Satisfacao", "88%")));
     }
 
     private QueryExecutionResult pendingIntegration(Map<String, String> parameters) {
-        String integration = parameters.getOrDefault("Integração", "Pesquisa Tablet");
+        String integration = parameters.getOrDefault("Integracao", parameters.getOrDefault("IntegraÃ§Ã£o", "Pesquisa Tablet"));
         return new QueryExecutionResult(
-                List.of("Integração", "Fila", "Pendências", "Última tentativa"),
+                List.of("Integracao", "Fila", "Pendencias", "Ultima tentativa"),
                 List.of(
-                        row("Integração", integration.isBlank() ? "Pesquisa Tablet" : integration, "Fila", "respostas_pesquisa", "Pendências", "3", "Última tentativa", "04/05/2026 13:55"),
-                        row("Integração", "SCMJF Core", "Fila", "atendimentos", "Pendências", "0", "Última tentativa", "04/05/2026 14:02")));
+                        row("Integracao", integration.isBlank() ? "Pesquisa Tablet" : integration, "Fila", "respostas_pesquisa", "Pendencias", "3", "Ultima tentativa", "04/05/2026 13:55"),
+                        row("Integracao", "SCMJF Core", "Fila", "atendimentos", "Pendencias", "0", "Ultima tentativa", "04/05/2026 14:02")));
     }
 
     private QueryExecutionResult genericRegisteredQuery(String queryName, Map<String, String> parameters) {
         String parameterSummary = parameters.isEmpty()
-                ? "Sem parâmetros"
+                ? "Sem parametros"
                 : parameters.entrySet().stream()
                         .map(entry -> entry.getKey() + "=" + (entry.getValue().isBlank() ? "(vazio)" : entry.getValue()))
                         .reduce((left, right) -> left + "; " + right)
-                        .orElse("Sem parâmetros");
+                        .orElse("Sem parametros");
 
         return new QueryExecutionResult(
-                List.of("Query", "Parâmetros", "Resultado", "Status"),
+                List.of("Query", "Parametros", "Resultado", "Status"),
                 List.of(row(
                         "Query", queryName,
-                        "Parâmetros", parameterSummary,
-                        "Resultado", "Execução mockada",
+                        "Parametros", parameterSummary,
+                        "Resultado", "Execucao mockada",
                         "Status", "SIMULADO")));
     }
 

@@ -11,4 +11,8 @@ public interface PainelService {
     List<PanelInfo> listar();
 
     ActionResult cadastrar(PanelInfo panel, User user);
+
+    ActionResult alterar(String originalName, PanelInfo panel, User user);
+
+    ActionResult excluir(PanelInfo panel, User user);
 }

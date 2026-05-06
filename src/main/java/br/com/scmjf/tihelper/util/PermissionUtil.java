@@ -21,7 +21,8 @@ public final class PermissionUtil {
             return target == NavigationTarget.DASHBOARD
                     || target == NavigationTarget.SERVERS
                     || target == NavigationTarget.PANELS
-                    || target == NavigationTarget.HISTORY;
+                    || target == NavigationTarget.HISTORY
+                    || target == NavigationTarget.DIAGNOSTICS;
         }
         return false;
     }

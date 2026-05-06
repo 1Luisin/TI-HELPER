@@ -10,6 +10,7 @@ import br.com.scmjf.tihelper.model.UserProfile;
 import br.com.scmjf.tihelper.model.TipoAcao;
 import br.com.scmjf.tihelper.util.AlertUtil;
 import br.com.scmjf.tihelper.util.AppContext;
+import br.com.scmjf.tihelper.util.AppLogger;
 import br.com.scmjf.tihelper.util.NavigationTarget;
 import br.com.scmjf.tihelper.util.PermissionUtil;
 import br.com.scmjf.tihelper.util.SceneUtil;
@@ -100,6 +101,9 @@ public class MainController {
     private Button settingsButton;
 
     @FXML
+    private Button diagnosticsButton;
+
+    @FXML
     private Button logoutButton;
 
     @FXML
@@ -127,6 +131,7 @@ public class MainController {
         navigationButtons.put(NavigationTarget.SCRIPTS, scriptsButton);
         navigationButtons.put(NavigationTarget.HISTORY, historyButton);
         navigationButtons.put(NavigationTarget.SETTINGS, settingsButton);
+        navigationButtons.put(NavigationTarget.DIAGNOSTICS, diagnosticsButton);
 
         compactLabels.put(NavigationTarget.DASHBOARD, "Dash");
         compactLabels.put(NavigationTarget.SERVERS, "Serv.");
@@ -136,6 +141,7 @@ public class MainController {
         compactLabels.put(NavigationTarget.SCRIPTS, "Run");
         compactLabels.put(NavigationTarget.HISTORY, "Hist.");
         compactLabels.put(NavigationTarget.SETTINGS, "Cfg.");
+        compactLabels.put(NavigationTarget.DIAGNOSTICS, "Diag.");
 
         navigationButtons.forEach((target, button) -> button.setTooltip(new Tooltip(target.getTitle())));
         logoutButton.setTooltip(new Tooltip("Sair"));
@@ -199,6 +205,11 @@ public class MainController {
     }
 
     @FXML
+    private void showDiagnostics() {
+        showScreen(NavigationTarget.DIAGNOSTICS);
+    }
+
+    @FXML
     private void logout() throws IOException {
         if (profilePopup != null) {
             profilePopup.hide();
@@ -228,6 +239,7 @@ public class MainController {
             screenTitleLabel.setText(target.getTitle());
             markActive(target);
         } catch (IOException exception) {
+            AppLogger.error("Erro ao carregar FXML da tela: " + target.getFxml(), exception);
             AlertUtil.error("Erro de navegação", "Não foi possível carregar a tela " + target.getTitle() + ".");
         }
     }
@@ -489,6 +501,7 @@ public class MainController {
             case QUERIES -> TipoAcao.EXECUTAR_QUERY;
             case SCRIPTS -> TipoAcao.EXECUTAR_SCRIPT;
             case SETTINGS -> TipoAcao.ALTERAR_USUARIO;
+            case DIAGNOSTICS -> TipoAcao.LOGIN;
             default -> TipoAcao.LOGIN;
         };
     }

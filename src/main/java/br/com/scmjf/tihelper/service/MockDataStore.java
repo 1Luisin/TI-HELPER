@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.nio.file.Path;
 
 import br.com.scmjf.tihelper.model.ExecutionHistory;
 import br.com.scmjf.tihelper.model.PanelInfo;
@@ -16,9 +17,13 @@ import br.com.scmjf.tihelper.model.StatusExecucao;
 import br.com.scmjf.tihelper.model.TipoAcao;
 import br.com.scmjf.tihelper.model.UserAccount;
 import br.com.scmjf.tihelper.model.UserProfile;
+import br.com.scmjf.tihelper.persistence.LocalJsonDataService;
+import br.com.scmjf.tihelper.persistence.LocalJsonDataService.LoadedData;
+import br.com.scmjf.tihelper.util.AppLogger;
 
 public class MockDataStore {
 
+    private final LocalJsonDataService persistenceService = new LocalJsonDataService();
     private final Map<String, UserAccount> users = new LinkedHashMap<>();
     private final List<ServerInfo> servers = new ArrayList<>();
     private final List<ServiceInfo> services = new ArrayList<>();
@@ -29,6 +34,72 @@ public class MockDataStore {
     private long historySequence = 1L;
 
     public MockDataStore() {
+        loadInitialData();
+    }
+
+    public Path getDataDirectory() {
+        return persistenceService.getDataDirectory();
+    }
+
+    public void restoreDefaults() {
+        clear();
+        seedDefaults();
+        refreshHistorySequence();
+        persistAll();
+        AppLogger.info("Dados mockados padrao restaurados.");
+    }
+
+    public void exportBackup(Path destination) throws java.io.IOException {
+        persistenceService.exportBackup(destination, snapshot());
+        AppLogger.info("Backup JSON exportado para: " + destination);
+    }
+
+    public void importBackup(Path source) throws java.io.IOException {
+        applyLoadedData(persistenceService.importBackup(source));
+        persistAll();
+        AppLogger.info("Backup JSON importado de: " + source);
+    }
+
+    public void persistUsers() {
+        persistenceService.saveUsers(users);
+        persistenceService.saveConfig();
+    }
+
+    public void persistServers() {
+        persistenceService.saveServers(servers);
+        persistenceService.saveConfig();
+    }
+
+    public void persistServices() {
+        persistenceService.saveServices(services);
+        persistenceService.saveConfig();
+    }
+
+    public void persistPanels() {
+        persistenceService.savePanels(panels);
+        persistenceService.saveConfig();
+    }
+
+    public void persistQueries() {
+        persistenceService.saveQueries(queries);
+        persistenceService.saveConfig();
+    }
+
+    public void persistScripts() {
+        persistenceService.saveScripts(scripts);
+        persistenceService.saveConfig();
+    }
+
+    public void persistHistory() {
+        persistenceService.saveHistory(history);
+        persistenceService.saveConfig();
+    }
+
+    public void persistAll() {
+        persistenceService.saveAll(users, servers, services, panels, queries, scripts, history);
+    }
+
+    private void loadInitialData() {
         seedUsers();
         seedServers();
         seedServices();
@@ -36,6 +107,15 @@ public class MockDataStore {
         seedQueries();
         seedScripts();
         seedHistory();
+
+        persistenceService.load().ifPresentOrElse(data -> {
+            applyLoadedData(data);
+            AppLogger.info("Dados locais JSON carregados de: " + persistenceService.getDataDirectory());
+        }, () -> {
+            persistAll();
+            AppLogger.info("Dados mockados padrao carregados e salvos em: " + persistenceService.getDataDirectory());
+        });
+        refreshHistorySequence();
     }
 
     Map<String, UserAccount> users() {
@@ -68,6 +148,57 @@ public class MockDataStore {
 
     long nextHistoryId() {
         return historySequence++;
+    }
+
+    private void seedDefaults() {
+        seedUsers();
+        seedServers();
+        seedServices();
+        seedPanels();
+        seedQueries();
+        seedScripts();
+        seedHistory();
+    }
+
+    private void clear() {
+        users.clear();
+        servers.clear();
+        services.clear();
+        panels.clear();
+        queries.clear();
+        scripts.clear();
+        history.clear();
+        historySequence = 1L;
+    }
+
+    private void applyLoadedData(LoadedData data) {
+        clear();
+        users.putAll(data.users());
+        servers.addAll(data.servers());
+        services.addAll(data.services());
+        panels.addAll(data.panels());
+        queries.addAll(data.queries());
+        scripts.addAll(data.scripts());
+        history.addAll(data.history());
+        refreshHistorySequence();
+    }
+
+    private LoadedData snapshot() {
+        return new LoadedData(
+                new LinkedHashMap<>(users),
+                List.copyOf(servers),
+                List.copyOf(services),
+                List.copyOf(panels),
+                List.copyOf(queries),
+                List.copyOf(scripts),
+                List.copyOf(history));
+    }
+
+    private void refreshHistorySequence() {
+        historySequence = history.stream()
+                .mapToLong(ExecutionHistory::getId)
+                .max()
+                .orElse(0L) + 1L;
     }
 
     private void seedUsers() {
