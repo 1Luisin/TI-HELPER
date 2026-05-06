@@ -6,8 +6,8 @@ $ErrorActionPreference = "Stop"
 
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
 $appName = "TI Helper - SCMJF"
-$appVersion = "0.1.0"
-$artifactName = "ti-helper-scmjf-0.1.0-SNAPSHOT.jar"
+$appVersion = "0.1.1"
+$artifactName = "ti-helper-scmjf-0.1.1-SNAPSHOT.jar"
 $iconPath = Join-Path $repoRoot "src\main\resources\br\com\scmjf\tihelper\assets\TIHELPER.ico"
 $installerRoot = Join-Path $repoRoot "target\installer"
 $inputDir = Join-Path $installerRoot "input"

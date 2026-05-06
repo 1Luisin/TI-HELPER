@@ -40,7 +40,7 @@ import org.fxmisc.richtext.LineNumberFactory;
 
 public class SettingsController {
 
-    private static final String APP_VERSION = "0.1.0-SNAPSHOT";
+    private static final String APP_VERSION = "0.1.1-SNAPSHOT";
 
     @FXML
     private Label loggedUserLabel;
