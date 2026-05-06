@@ -45,7 +45,7 @@ try {
         --icon $iconPath `
         --input $inputDir `
         --main-jar $artifactName `
-        --main-class "br.com.scmjf.tihelper.MainApp"
+        --main-class "br.com.scmjf.tihelper.Launcher"
 
     $isccCommand = Get-Command iscc.exe -ErrorAction SilentlyContinue
     $isccPath = if ($isccCommand) { $isccCommand.Source } else { $null }
