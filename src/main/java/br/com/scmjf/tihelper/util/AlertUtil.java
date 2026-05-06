@@ -131,18 +131,18 @@ public final class AlertUtil {
     }
 
     public static Optional<CloseBehavior> askCloseBehavior() {
-        Stage dialog = createDialog("Fechar aplicacao");
+        Stage dialog = createDialog("Fechar TI Helper - SCMJF");
         AtomicReference<Optional<CloseBehavior>> result = new AtomicReference<>(Optional.empty());
 
         Label icon = createIcon(MessageType.INFO);
         Label titleLabel = new Label("Como deseja fechar o TI Helper?");
         titleLabel.getStyleClass().add("dialog-title");
 
-        Label messageLabel = new Label("Escolha se o programa deve continuar em segundo plano na bandeja ou se deve encerrar totalmente. A resposta sera salva localmente para o proximo fechamento.");
+        Label messageLabel = new Label("Escolha se o programa deve continuar em segundo plano na bandeja ou se deve encerrar totalmente. A resposta sera salva localmente como sua ultima escolha.");
         messageLabel.getStyleClass().add("dialog-message");
         messageLabel.setWrapText(true);
 
-        Button minimizeButton = new Button("Segundo plano");
+        Button minimizeButton = new Button("Ficar em segundo plano");
         minimizeButton.getStyleClass().add("dialog-primary-button");
         minimizeButton.setDefaultButton(true);
         minimizeButton.setOnAction(event -> {

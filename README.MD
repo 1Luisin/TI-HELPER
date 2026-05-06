@@ -14,7 +14,7 @@ Prototipo visual desktop em Java 21, Maven e JavaFX/FXML.
 
 ## Dados locais
 
-A versao `0.2.3-SNAPSHOT` salva dados mockados em:
+A versao `0.2.4-SNAPSHOT` salva dados mockados em:
 
 ```text
 %LOCALAPPDATA%\TI Helper - SCMJF\data

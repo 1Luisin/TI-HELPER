@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.4-SNAPSHOT
+
+- Faz o clique no X sempre abrir a pergunta de fechamento como dialogo central da aplicacao.
+- Simplifica o menu da bandeja para apenas Abrir janela, Sobre e Sair.
+- Remove o pop-up JavaFX customizado da bandeja e volta ao menu nativo do sistema.
+
 ## 0.2.3-SNAPSHOT
 
 - Adiciona preferencia local para decidir se o X deixa o app na bandeja ou encerra totalmente.
