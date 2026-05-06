@@ -7,6 +7,7 @@ import br.com.scmjf.tihelper.model.TipoAcao;
 import br.com.scmjf.tihelper.util.AlertUtil;
 import br.com.scmjf.tihelper.util.AppContext;
 import br.com.scmjf.tihelper.util.PermissionUtil;
+import br.com.scmjf.tihelper.util.UiUtil;
 import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -45,7 +46,8 @@ public class ScriptsController {
         scriptCombo.setItems(FXCollections.observableArrayList(allScripts));
         scriptCombo.getSelectionModel().selectFirst();
         searchField.textProperty().addListener((observable, oldValue, value) -> filterScripts(value));
-        executeButton.setDisable(!PermissionUtil.canRunAction(AppContext.getCurrentUser(), TipoAcao.EXECUTAR_SCRIPT));
+        UiUtil.setVisibleManaged(executeButton,
+                PermissionUtil.canRunAction(AppContext.getCurrentUser(), TipoAcao.EXECUTAR_SCRIPT));
     }
 
     @FXML

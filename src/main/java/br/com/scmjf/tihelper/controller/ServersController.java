@@ -8,6 +8,7 @@ import br.com.scmjf.tihelper.util.AppContext;
 import br.com.scmjf.tihelper.util.NavigationTarget;
 import br.com.scmjf.tihelper.util.PermissionUtil;
 import br.com.scmjf.tihelper.util.TableUtil;
+import br.com.scmjf.tihelper.util.UiUtil;
 import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
@@ -29,6 +30,9 @@ public class ServersController {
 
     @FXML
     private Button testConnectionButton;
+
+    @FXML
+    private Button viewServicesButton;
 
     @FXML
     private Label feedbackLabel;
@@ -67,7 +71,10 @@ public class ServersController {
         serversTable.setItems(filteredServers);
         searchField.textProperty().addListener((observable, oldValue, value) -> applyFilter(value));
 
-        testConnectionButton.setDisable(!PermissionUtil.canRunAction(AppContext.getCurrentUser(), TipoAcao.TESTAR_CONEXAO));
+        UiUtil.setVisibleManaged(testConnectionButton,
+                PermissionUtil.canRunAction(AppContext.getCurrentUser(), TipoAcao.TESTAR_CONEXAO));
+        UiUtil.setVisibleManaged(viewServicesButton,
+                PermissionUtil.canAccess(AppContext.getCurrentUser(), NavigationTarget.SERVICES));
     }
 
     @FXML
@@ -101,6 +108,10 @@ public class ServersController {
 
     @FXML
     private void viewServices() {
+        if (!PermissionUtil.canAccess(AppContext.getCurrentUser(), NavigationTarget.SERVICES)) {
+            AppContext.denyAction(TipoAcao.REINICIAR_SERVICO, "Servidores", "Seu perfil não pode acessar Serviços.");
+            return;
+        }
         AppContext.navigateTo(NavigationTarget.SERVICES);
     }
 

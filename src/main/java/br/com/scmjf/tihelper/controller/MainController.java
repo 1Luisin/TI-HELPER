@@ -14,6 +14,7 @@ import br.com.scmjf.tihelper.util.AppLogger;
 import br.com.scmjf.tihelper.util.NavigationTarget;
 import br.com.scmjf.tihelper.util.PermissionUtil;
 import br.com.scmjf.tihelper.util.SceneUtil;
+import br.com.scmjf.tihelper.util.UiUtil;
 import javafx.collections.FXCollections;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -328,7 +329,7 @@ public class MainController {
         Button settingsButton = new Button("Abrir configurações");
         settingsButton.getStyleClass().add("secondary-button");
         settingsButton.setMaxWidth(Double.MAX_VALUE);
-        settingsButton.setDisable(!PermissionUtil.canAccess(user, NavigationTarget.SETTINGS));
+        UiUtil.setVisibleManaged(settingsButton, PermissionUtil.canAccess(user, NavigationTarget.SETTINGS));
         settingsButton.setOnAction(event -> {
             if (profilePopup != null) {
                 profilePopup.hide();
@@ -492,7 +493,7 @@ public class MainController {
 
     private void configureMenuPermissions() {
         User user = AppContext.getCurrentUser();
-        navigationButtons.forEach((target, button) -> button.setDisable(!PermissionUtil.canAccess(user, target)));
+        navigationButtons.forEach((target, button) -> UiUtil.setVisibleManaged(button, PermissionUtil.canAccess(user, target)));
     }
 
     private TipoAcao deniedActionFor(NavigationTarget target) {

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.2-SNAPSHOT
+
+- Oculta menus e botoes indisponiveis para o perfil logado em vez de exibi-los desabilitados.
+- Remove do pop-up de perfil a opcao de abrir Configuracoes quando o usuario nao tem acesso.
+- Oculta atalhos de acao no Dashboard conforme permissao do perfil.
+
 ## 0.2.1-SNAPSHOT
 
 - Move informacoes do prototipo de Configuracoes para Sobre.

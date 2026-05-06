@@ -9,6 +9,7 @@ import br.com.scmjf.tihelper.model.TipoAcao;
 import br.com.scmjf.tihelper.util.AlertUtil;
 import br.com.scmjf.tihelper.util.AppContext;
 import br.com.scmjf.tihelper.util.PermissionUtil;
+import br.com.scmjf.tihelper.util.UiUtil;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -50,7 +51,8 @@ public class QueriesController {
         queryCombo.getSelectionModel().selectFirst();
         resultTable.setPlaceholder(new Label("Execute uma query para visualizar o resultado simulado."));
         searchField.textProperty().addListener((observable, oldValue, value) -> filterQueries(value));
-        executeButton.setDisable(!PermissionUtil.canRunAction(AppContext.getCurrentUser(), TipoAcao.EXECUTAR_QUERY));
+        UiUtil.setVisibleManaged(executeButton,
+                PermissionUtil.canRunAction(AppContext.getCurrentUser(), TipoAcao.EXECUTAR_QUERY));
         renderParameters();
     }
 

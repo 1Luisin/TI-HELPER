@@ -7,6 +7,7 @@ import br.com.scmjf.tihelper.util.AlertUtil;
 import br.com.scmjf.tihelper.util.AppContext;
 import br.com.scmjf.tihelper.util.PermissionUtil;
 import br.com.scmjf.tihelper.util.TableUtil;
+import br.com.scmjf.tihelper.util.UiUtil;
 import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
@@ -64,7 +65,8 @@ public class ServicesController {
         servicesTable.setItems(filteredServices);
         searchField.textProperty().addListener((observable, oldValue, value) -> applyFilter(value));
 
-        restartButton.setDisable(!PermissionUtil.canRunAction(AppContext.getCurrentUser(), TipoAcao.REINICIAR_SERVICO));
+        UiUtil.setVisibleManaged(restartButton,
+                PermissionUtil.canRunAction(AppContext.getCurrentUser(), TipoAcao.REINICIAR_SERVICO));
     }
 
     @FXML

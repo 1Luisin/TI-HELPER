@@ -8,6 +8,7 @@ import br.com.scmjf.tihelper.util.AppContext;
 import br.com.scmjf.tihelper.util.NavigationTarget;
 import br.com.scmjf.tihelper.util.PermissionUtil;
 import br.com.scmjf.tihelper.util.TableUtil;
+import br.com.scmjf.tihelper.util.UiUtil;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -161,9 +162,12 @@ public class DashboardController {
     }
 
     private void configureActionPermissions() {
-        quickRestartButton.setDisable(!PermissionUtil.canRunAction(AppContext.getCurrentUser(), TipoAcao.REINICIAR_SERVICO));
-        quickQueryButton.setDisable(!PermissionUtil.canRunAction(AppContext.getCurrentUser(), TipoAcao.EXECUTAR_QUERY));
-        quickScriptButton.setDisable(!PermissionUtil.canRunAction(AppContext.getCurrentUser(), TipoAcao.EXECUTAR_SCRIPT));
+        UiUtil.setVisibleManaged(quickRestartButton,
+                PermissionUtil.canRunAction(AppContext.getCurrentUser(), TipoAcao.REINICIAR_SERVICO));
+        UiUtil.setVisibleManaged(quickQueryButton,
+                PermissionUtil.canRunAction(AppContext.getCurrentUser(), TipoAcao.EXECUTAR_QUERY));
+        UiUtil.setVisibleManaged(quickScriptButton,
+                PermissionUtil.canRunAction(AppContext.getCurrentUser(), TipoAcao.EXECUTAR_SCRIPT));
     }
 
     private void layoutMetrics(List<VBox> cards, double width) {
