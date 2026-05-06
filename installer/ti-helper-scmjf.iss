@@ -1,5 +1,5 @@
 #define AppName "TI Helper - SCMJF"
-#define AppVersion "0.2.5"
+#define AppVersion "0.2.6"
 #define AppPublisher "SCMJF"
 #define AppExeName "TI Helper - SCMJF.exe"
 

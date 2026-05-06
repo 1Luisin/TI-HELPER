@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.6-SNAPSHOT
+
+- Aumenta a largura do dialogo de fechamento para evitar textos truncados.
+- Define largura minima para os botoes Cancelar, Fechar totalmente e Ficar em segundo plano.
+
 ## 0.2.5-SNAPSHOT
 
 - Corrige o botao X da barra customizada para abrir diretamente a pergunta de fechamento.

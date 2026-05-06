@@ -144,6 +144,7 @@ public final class AlertUtil {
 
         Button minimizeButton = new Button("Ficar em segundo plano");
         minimizeButton.getStyleClass().add("dialog-primary-button");
+        minimizeButton.setMinWidth(190);
         minimizeButton.setDefaultButton(true);
         minimizeButton.setOnAction(event -> {
             result.set(Optional.of(CloseBehavior.MINIMIZE_TO_TRAY));
@@ -152,6 +153,7 @@ public final class AlertUtil {
 
         Button exitButton = new Button("Fechar totalmente");
         exitButton.getStyleClass().add("dialog-danger-button");
+        exitButton.setMinWidth(165);
         exitButton.setOnAction(event -> {
             result.set(Optional.of(CloseBehavior.EXIT_APPLICATION));
             dialog.close();
@@ -159,6 +161,7 @@ public final class AlertUtil {
 
         Button cancelButton = new Button("Cancelar");
         cancelButton.getStyleClass().add("dialog-secondary-button");
+        cancelButton.setMinWidth(120);
         cancelButton.setCancelButton(true);
         cancelButton.setOnAction(event -> dialog.close());
 
@@ -169,7 +172,7 @@ public final class AlertUtil {
 
         HBox content = new HBox(16, icon, textContent);
         content.setAlignment(Pos.TOP_LEFT);
-        showDialog(dialog, content);
+        showDialog(dialog, content, 650);
         return result.get();
     }
 
@@ -217,10 +220,16 @@ public final class AlertUtil {
     }
 
     private static void showDialog(Stage dialog, HBox content) {
+        showDialog(dialog, content, 520);
+    }
+
+    private static void showDialog(Stage dialog, HBox content, double width) {
         VBox card = new VBox(content);
         card.getStyleClass().add("dialog-card");
         card.setPadding(new Insets(22));
-        card.setMaxWidth(520);
+        card.setMinWidth(width);
+        card.setPrefWidth(width);
+        card.setMaxWidth(width);
 
         Scene scene = new Scene(card);
         scene.setFill(Color.TRANSPARENT);
