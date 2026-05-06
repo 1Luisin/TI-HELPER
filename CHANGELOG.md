@@ -1,10 +1,15 @@
 # Changelog
 
+## 0.2.1-SNAPSHOT
+
+- Move informacoes do prototipo de Configuracoes para Sobre.
+- Renomeia o menu Diagnostico para Sobre.
+
 ## 0.2.0-SNAPSHOT
 
 - Adiciona persistencia local JSON em `AppData/Local/TI Helper - SCMJF/data`.
 - Adiciona logs locais em `AppData/Local/TI Helper - SCMJF/logs/app.log`.
-- Adiciona tela de diagnostico com caminhos locais, ambiente, versao, SO e Java.
+- Adiciona tela de Sobre com caminhos locais, ambiente, versao, SO e Java.
 - Amplia cadastros administrativos com editar, excluir, limpar campos, backup, importacao e restauracao dos mocks.
 - Amplia historico com filtros por tipo, status, usuario e periodo, detalhes do registro e exportacao CSV.
 - Mantem todas as acoes como simuladas, sem banco, backend ou execucao remota.

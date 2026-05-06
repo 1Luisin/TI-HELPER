@@ -20,19 +20,19 @@
                 <Insets top="24" right="26" bottom="26" left="26"/>
             </padding>
             <children>
-                <Label text="Diagnostico" styleClass="page-title"/>
+                <Label text="Sobre" styleClass="page-title"/>
 
                 <VBox spacing="16" styleClass="form-panel">
                     <padding>
                         <Insets top="22" right="22" bottom="22" left="22"/>
                     </padding>
                     <children>
-                        <Label text="Sobre a aplicacao" styleClass="section-title"/>
+                        <Label text="Informacoes do prototipo" styleClass="section-title"/>
                         <FlowPane hgap="42" vgap="18">
                             <children>
                                 <VBox spacing="4">
                                     <children>
-                                        <Label text="Aplicacao" styleClass="field-label"/>
+                                        <Label text="Nome da aplicacao" styleClass="field-label"/>
                                         <Label fx:id="appNameLabel" text="-" styleClass="value-label"/>
                                     </children>
                                 </VBox>

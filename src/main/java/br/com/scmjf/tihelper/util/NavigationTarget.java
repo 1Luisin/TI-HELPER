@@ -9,7 +9,7 @@ public enum NavigationTarget {
     SCRIPTS("Scripts", "scripts.fxml"),
     HISTORY("Historico", "history.fxml"),
     SETTINGS("Configuracoes", "settings.fxml"),
-    DIAGNOSTICS("Diagnostico", "diagnostics.fxml");
+    DIAGNOSTICS("Sobre", "diagnostics.fxml");
 
     private final String title;
     private final String fxml;

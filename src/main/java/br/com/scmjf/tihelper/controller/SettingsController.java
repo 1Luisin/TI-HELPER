@@ -21,7 +21,6 @@ import br.com.scmjf.tihelper.model.User;
 import br.com.scmjf.tihelper.model.UserProfile;
 import br.com.scmjf.tihelper.util.AlertUtil;
 import br.com.scmjf.tihelper.util.AppContext;
-import br.com.scmjf.tihelper.util.AppInfo;
 import br.com.scmjf.tihelper.util.AppLogger;
 import br.com.scmjf.tihelper.util.PermissionUtil;
 import br.com.scmjf.tihelper.util.SqlSyntaxHighlighter;
@@ -45,14 +44,6 @@ import javafx.stage.FileChooser;
 
 public class SettingsController {
 
-    @FXML
-    private Label loggedUserLabel;
-    @FXML
-    private Label profileLabel;
-    @FXML
-    private Label versionLabel;
-    @FXML
-    private Label environmentLabel;
     @FXML
     private VBox adminPanel;
     @FXML
@@ -180,11 +171,6 @@ public class SettingsController {
     @FXML
     private void initialize() {
         User user = AppContext.getCurrentUser();
-        loggedUserLabel.setText(user == null ? "-" : user.getUsername());
-        profileLabel.setText(user == null ? "-" : user.getProfileName());
-        versionLabel.setText(AppInfo.VERSION);
-        environmentLabel.setText(AppInfo.ENVIRONMENT);
-
         configurePanelStatusOptions();
         configureUserProfileOptions();
         configureSqlEditor();

@@ -141,7 +141,7 @@ public class MainController {
         compactLabels.put(NavigationTarget.SCRIPTS, "Run");
         compactLabels.put(NavigationTarget.HISTORY, "Hist.");
         compactLabels.put(NavigationTarget.SETTINGS, "Cfg.");
-        compactLabels.put(NavigationTarget.DIAGNOSTICS, "Diag.");
+        compactLabels.put(NavigationTarget.DIAGNOSTICS, "Sobre");
 
         navigationButtons.forEach((target, button) -> button.setTooltip(new Tooltip(target.getTitle())));
         logoutButton.setTooltip(new Tooltip("Sair"));

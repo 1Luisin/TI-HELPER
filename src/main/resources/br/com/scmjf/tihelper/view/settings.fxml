@@ -31,40 +31,12 @@
             <children>
                 <Label text="Configuracoes" styleClass="page-title"/>
 
-                <VBox spacing="16" styleClass="form-panel">
+                <VBox spacing="10" styleClass="form-panel">
                     <padding>
-                        <Insets top="22" right="22" bottom="22" left="22"/>
+                        <Insets top="16" right="16" bottom="16" left="16"/>
                     </padding>
                     <children>
-                        <Label text="Informacoes do prototipo" styleClass="section-title"/>
-                        <FlowPane hgap="42" vgap="14">
-                            <children>
-                                <VBox spacing="4">
-                                    <children>
-                                        <Label text="Usuario logado" styleClass="field-label"/>
-                                        <Label fx:id="loggedUserLabel" text="-" styleClass="value-label"/>
-                                    </children>
-                                </VBox>
-                                <VBox spacing="4">
-                                    <children>
-                                        <Label text="Perfil" styleClass="field-label"/>
-                                        <Label fx:id="profileLabel" text="-" styleClass="value-label"/>
-                                    </children>
-                                </VBox>
-                                <VBox spacing="4">
-                                    <children>
-                                        <Label text="Versao da aplicacao" styleClass="field-label"/>
-                                        <Label fx:id="versionLabel" text="-" styleClass="value-label"/>
-                                    </children>
-                                </VBox>
-                                <VBox spacing="4">
-                                    <children>
-                                        <Label text="Ambiente" styleClass="field-label"/>
-                                        <Label fx:id="environmentLabel" text="-" styleClass="value-label"/>
-                                    </children>
-                                </VBox>
-                            </children>
-                        </FlowPane>
+                        <Label text="Dados locais" styleClass="section-title"/>
                         <HBox spacing="10" alignment="CENTER_RIGHT">
                             <children>
                                 <Region HBox.hgrow="ALWAYS"/>

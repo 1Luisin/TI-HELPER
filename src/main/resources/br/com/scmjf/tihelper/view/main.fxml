@@ -60,7 +60,7 @@
                 <Button fx:id="scriptsButton" text="Scripts" maxWidth="Infinity" onAction="#showScripts" styleClass="nav-button"/>
                 <Button fx:id="historyButton" text="Histórico" maxWidth="Infinity" onAction="#showHistory" styleClass="nav-button"/>
                 <Button fx:id="settingsButton" text="Configurações" maxWidth="Infinity" onAction="#showSettings" styleClass="nav-button"/>
-                <Button fx:id="diagnosticsButton" text="Diagnostico" maxWidth="Infinity" onAction="#showDiagnostics" styleClass="nav-button"/>
+                <Button fx:id="diagnosticsButton" text="Sobre" maxWidth="Infinity" onAction="#showDiagnostics" styleClass="nav-button"/>
                 <Region VBox.vgrow="ALWAYS"/>
                 <Button fx:id="logoutButton" text="Sair" maxWidth="Infinity" onAction="#logout" styleClass="logout-button"/>
             </children>

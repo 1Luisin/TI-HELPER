@@ -5,7 +5,7 @@ Prototipo visual desktop em Java 21, Maven e JavaFX/FXML.
 ## Escopo desta versao
 
 - Login simulado com perfis `ADMIN`, `OPERADOR_TI` e `CONSULTA`.
-- Navegacao visual por Dashboard, Servidores, Paineis, Servicos, Queries, Scripts, Historico, Configuracoes e Diagnostico.
+- Navegacao visual por Dashboard, Servidores, Paineis, Servicos, Queries, Scripts, Historico, Configuracoes e Sobre.
 - Dados mockados com persistencia local JSON.
 - Logs locais para inicializacao, login, logout, erros e fechamento.
 - Historico compartilhado entre acoes simuladas de servicos, queries, scripts e cadastros.
@@ -13,7 +13,7 @@ Prototipo visual desktop em Java 21, Maven e JavaFX/FXML.
 
 ## Dados locais
 
-A versao `0.2.0-SNAPSHOT` salva dados mockados em:
+A versao `0.2.1-SNAPSHOT` salva dados mockados em:
 
 ```text
 %LOCALAPPDATA%\TI Helper - SCMJF\data
