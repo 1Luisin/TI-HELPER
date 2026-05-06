@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.7-SNAPSHOT
+
+- Corrige o fechamento pelo X para respeitar a preferencia salva localmente.
+- Mantem o pop-up de escolha apenas quando a configuracao estiver como "Perguntar ao fechar".
+
 ## 0.2.6-SNAPSHOT
 
 - Aumenta a largura do dialogo de fechamento para evitar textos truncados.

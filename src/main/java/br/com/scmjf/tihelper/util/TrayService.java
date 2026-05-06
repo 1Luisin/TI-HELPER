@@ -47,19 +47,15 @@ public final class TrayService {
     }
 
     public static void requestClose(Stage stage) {
+        CloseBehavior savedBehavior = AppContext.getCloseBehavior();
+        if (savedBehavior != CloseBehavior.ASK) {
+            applyCloseBehavior(stage, savedBehavior);
+            return;
+        }
+
         AlertUtil.askCloseBehavior().ifPresent(choice -> {
             AppContext.saveCloseBehavior(choice);
-            if (choice == CloseBehavior.MINIMIZE_TO_TRAY) {
-                if (trayIcon == null) {
-                    AlertUtil.warning("Bandeja do sistema", "A bandeja do sistema não está disponível. O aplicativo continuará aberto.");
-                    return;
-                }
-
-                hideToTray(stage);
-                return;
-            }
-
-            exitApplication();
+            applyCloseBehavior(stage, choice);
         });
     }
 
@@ -121,6 +117,20 @@ public final class TrayService {
         stage.show();
         stage.toFront();
         stage.requestFocus();
+    }
+
+    private static void applyCloseBehavior(Stage stage, CloseBehavior closeBehavior) {
+        if (closeBehavior == CloseBehavior.MINIMIZE_TO_TRAY) {
+            if (trayIcon == null) {
+                AlertUtil.warning("Bandeja do sistema", "A bandeja do sistema nao esta disponivel. O aplicativo continuara aberto.");
+                return;
+            }
+
+            hideToTray(stage);
+            return;
+        }
+
+        exitApplication();
     }
 
     private static void exitApplication() {
