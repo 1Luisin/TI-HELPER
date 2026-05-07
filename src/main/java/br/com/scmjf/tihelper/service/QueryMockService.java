@@ -97,7 +97,7 @@ public class QueryMockService implements QueryService {
     }
 
     @Override
-    public QueryExecutionResult executar(String queryName, Map<String, String> parameters, User user) {
+    public QueryExecutionResult executar(String queryName, Map<String, String> parameters, String reason, User user) {
         QueryExecutionResult result = switch (queryName) {
             case "Buscar paciente por CPF" -> patientByCpf(parameters);
             case "Buscar atendimento por numero", "Buscar atendimento por nÃºmero" -> appointmentByNumber(parameters);
@@ -106,7 +106,7 @@ public class QueryMockService implements QueryService {
             default -> genericRegisteredQuery(queryName, parameters);
         };
 
-        historicoService.registrar(user, TipoAcao.EXECUTAR_QUERY, "-", queryName, StatusExecucao.SIMULADO, "-",
+        historicoService.registrar(user, TipoAcao.EXECUTAR_QUERY, "-", queryName, StatusExecucao.SIMULADO, reason,
                 "Consulta simulada executada com " + result.rows().size() + " registro(s).");
         return result;
     }

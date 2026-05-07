@@ -30,6 +30,9 @@ public class QueriesController {
     private ComboBox<String> queryCombo;
 
     @FXML
+    private TextField reasonField;
+
+    @FXML
     private Button executeButton;
 
     @FXML
@@ -90,12 +93,17 @@ public class QueriesController {
             AlertUtil.warning("Executar query", "Selecione uma consulta.");
             return;
         }
+        String reason = reasonField.getText() == null ? "" : reasonField.getText().trim();
+        if (reason.isBlank()) {
+            AlertUtil.warning("Executar query", "Informe um motivo para executar a query.");
+            return;
+        }
 
         Map<String, String> parameters = new LinkedHashMap<>();
         parameterFields.forEach((name, field) -> parameters.put(name, field.getText().trim()));
 
         QueryExecutionResult result = AppContext.queryService()
-                .executar(selectedQuery, parameters, AppContext.getCurrentUser());
+                .executar(selectedQuery, parameters, reason, AppContext.getCurrentUser());
         renderResultTable(result);
         feedbackLabel.setText("Consulta simulada executada e registrada.");
         AlertUtil.info("Executar query", "Consulta simulada executada e registrada no histórico.");

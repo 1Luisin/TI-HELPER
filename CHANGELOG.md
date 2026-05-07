@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.1-SNAPSHOT
+
+- Adiciona ao cadastro de servicos a opcao de permitir ou bloquear reinicio simulado.
+- Exibe na tela de Servicos se o reinicio esta permitido ou bloqueado para cada servico.
+- Exige motivo para executar queries simuladas e registra esse motivo no historico.
+
 ## 0.3.0-SNAPSHOT
 
 - Amplia o cadastro de usuarios com nome, email, setor e modulos de acesso.

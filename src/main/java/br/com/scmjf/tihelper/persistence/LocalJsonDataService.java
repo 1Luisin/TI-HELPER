@@ -88,7 +88,8 @@ public class LocalJsonDataService {
 
             List<ServiceInfo> services = readList(SERVICES_FILE, new TypeReference<List<ServiceInfoDto>>() {
             }).stream()
-                    .map(dto -> new ServiceInfo(dto.server(), dto.name(), dto.description(), dto.status(), dto.lastVerification()))
+                    .map(dto -> new ServiceInfo(dto.server(), dto.name(), dto.description(), dto.status(), dto.lastVerification(),
+                            dto.restartAllowed() == null || dto.restartAllowed()))
                     .toList();
 
             List<PanelInfo> panels = readList(PANELS_FILE, new TypeReference<List<PanelInfoDto>>() {
@@ -173,7 +174,8 @@ public class LocalJsonDataService {
 
     public void saveServices(List<ServiceInfo> services) {
         write(SERVICES_FILE, services.stream()
-                .map(service -> new ServiceInfoDto(service.getServer(), service.getName(), service.getDescription(), service.getStatus(), service.getLastVerification()))
+                .map(service -> new ServiceInfoDto(service.getServer(), service.getName(), service.getDescription(),
+                        service.getStatus(), service.getLastVerification(), service.isRestartAllowed()))
                 .toList());
     }
 
@@ -235,7 +237,8 @@ public class LocalJsonDataService {
                         .map(server -> new ServerInfoDto(server.getName(), server.getHost(), server.getOperatingSystem(), server.getEnvironment(), server.getStatus()))
                         .toList(),
                 data.services().stream()
-                        .map(service -> new ServiceInfoDto(service.getServer(), service.getName(), service.getDescription(), service.getStatus(), service.getLastVerification()))
+                        .map(service -> new ServiceInfoDto(service.getServer(), service.getName(), service.getDescription(),
+                                service.getStatus(), service.getLastVerification(), service.isRestartAllowed()))
                         .toList(),
                 data.panels().stream()
                         .map(panel -> new PanelInfoDto(panel.getName(), panel.getIpAddress(), panel.getLocation(), panel.getStatus()))
@@ -276,7 +279,8 @@ public class LocalJsonDataService {
                         .map(dto -> new ServerInfo(dto.name(), dto.host(), dto.operatingSystem(), dto.environment(), dto.status()))
                         .toList(),
                 nullToEmpty(backup.services()).stream()
-                        .map(dto -> new ServiceInfo(dto.server(), dto.name(), dto.description(), dto.status(), dto.lastVerification()))
+                        .map(dto -> new ServiceInfo(dto.server(), dto.name(), dto.description(), dto.status(), dto.lastVerification(),
+                                dto.restartAllowed() == null || dto.restartAllowed()))
                         .toList(),
                 nullToEmpty(backup.panels()).stream()
                         .map(dto -> new PanelInfo(dto.name(), dto.ipAddress(), dto.location(), dto.status()))
@@ -397,7 +401,8 @@ public class LocalJsonDataService {
     private record ServerInfoDto(String name, String host, String operatingSystem, String environment, String status) {
     }
 
-    private record ServiceInfoDto(String server, String name, String description, String status, LocalDateTime lastVerification) {
+    private record ServiceInfoDto(String server, String name, String description, String status,
+            LocalDateTime lastVerification, Boolean restartAllowed) {
     }
 
     private record PanelInfoDto(String name, String ipAddress, String location, String status) {

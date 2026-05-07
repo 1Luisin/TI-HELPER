@@ -86,6 +86,8 @@ public class SettingsController {
     @FXML
     private TextField serviceStatusField;
     @FXML
+    private CheckBox serviceRestartAllowedCheckBox;
+    @FXML
     private TableView<ServiceInfo> servicesTable;
     @FXML
     private TableColumn<ServiceInfo, String> serviceServerColumn;
@@ -95,6 +97,8 @@ public class SettingsController {
     private TableColumn<ServiceInfo, String> serviceDescriptionColumn;
     @FXML
     private TableColumn<ServiceInfo, String> serviceStatusColumn;
+    @FXML
+    private TableColumn<ServiceInfo, String> serviceRestartAllowedColumn;
 
     @FXML
     private TextField panelNameField;
@@ -269,6 +273,7 @@ public class SettingsController {
         servicesTable.getSelectionModel().clearSelection();
         clear(serviceServerField, serviceNameField, serviceStatusField);
         serviceDescriptionArea.clear();
+        serviceRestartAllowedCheckBox.setSelected(true);
     }
 
     @FXML
@@ -524,8 +529,9 @@ public class SettingsController {
         serviceNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         serviceDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         serviceStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
-        TableUtil.bindColumnWidths(servicesTable, new double[]{1.1, 1.4, 2.4, 1},
-                serviceServerColumn, serviceNameColumn, serviceDescriptionColumn, serviceStatusColumn);
+        serviceRestartAllowedColumn.setCellValueFactory(new PropertyValueFactory<>("restartPermissionLabel"));
+        TableUtil.bindColumnWidths(servicesTable, new double[]{1.1, 1.4, 2.2, 1, 1},
+                serviceServerColumn, serviceNameColumn, serviceDescriptionColumn, serviceStatusColumn, serviceRestartAllowedColumn);
         servicesTable.setPlaceholder(new Label("Nenhum servico cadastrado."));
 
         panelNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -581,6 +587,7 @@ public class SettingsController {
             serviceNameField.setText(selected.getName());
             serviceDescriptionArea.setText(selected.getDescription());
             serviceStatusField.setText(selected.getStatus());
+            serviceRestartAllowedCheckBox.setSelected(selected.isRestartAllowed());
         });
 
         panelsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, selected) -> {
@@ -738,7 +745,8 @@ public class SettingsController {
                 serviceNameField.getText().trim(),
                 serviceDescriptionArea.getText().trim(),
                 serviceStatusField.getText().trim(),
-                LocalDateTime.now());
+                LocalDateTime.now(),
+                serviceRestartAllowedCheckBox.isSelected());
     }
 
     private PanelInfo buildPanelFromFields() {

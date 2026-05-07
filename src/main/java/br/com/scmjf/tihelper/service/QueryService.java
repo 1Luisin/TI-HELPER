@@ -22,5 +22,9 @@ public interface QueryService {
 
     ActionResult excluir(QueryDefinition query, User user);
 
-    QueryExecutionResult executar(String queryName, Map<String, String> parameters, User user);
+    default QueryExecutionResult executar(String queryName, Map<String, String> parameters, User user) {
+        return executar(queryName, parameters, "-", user);
+    }
+
+    QueryExecutionResult executar(String queryName, Map<String, String> parameters, String reason, User user);
 }

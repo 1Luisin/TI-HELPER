@@ -120,6 +120,10 @@
                                                                 <TextField fx:id="serviceServerField" promptText="Servidor" prefWidth="170"/>
                                                                 <TextField fx:id="serviceNameField" promptText="Nome do servico" prefWidth="210"/>
                                                                 <TextField fx:id="serviceStatusField" promptText="Status" prefWidth="150"/>
+                                                                <CheckBox fx:id="serviceRestartAllowedCheckBox"
+                                                                          text="Permitir reinicio"
+                                                                          selected="true"
+                                                                          styleClass="module-check"/>
                                                             </children>
                                                         </FlowPane>
                                                         <TextArea fx:id="serviceDescriptionArea"
@@ -143,6 +147,7 @@
                                                         <TableColumn fx:id="serviceNameColumn" text="Nome"/>
                                                         <TableColumn fx:id="serviceDescriptionColumn" text="Descricao"/>
                                                         <TableColumn fx:id="serviceStatusColumn" text="Status"/>
+                                                        <TableColumn fx:id="serviceRestartAllowedColumn" text="Reinicio"/>
                                                     </columns>
                                                 </TableView>
                                             </children>

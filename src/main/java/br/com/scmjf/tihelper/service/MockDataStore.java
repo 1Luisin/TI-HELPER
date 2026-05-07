@@ -230,11 +230,11 @@ public class MockDataStore {
     }
 
     private void seedServices() {
-        services.add(new ServiceInfo("SRV-APP-01", "SCMJF Web", "Aplicação principal do sistema.", "Em execução", LocalDateTime.now().minusMinutes(5)));
-        services.add(new ServiceInfo("SRV-APP-01", "Pesquisa Tablet", "Serviço de coleta de respostas da pesquisa.", "Em execução", LocalDateTime.now().minusMinutes(8)));
-        services.add(new ServiceInfo("SRV-BD-01", "Oracle Listener", "Canal de escuta para conexões Oracle.", "Em execução", LocalDateTime.now().minusMinutes(11)));
-        services.add(new ServiceInfo("SRV-INT-01", "IntegradorSCMJF", "Fila de integração entre sistemas internos.", "Atenção", LocalDateTime.now().minusMinutes(22)));
-        services.add(new ServiceInfo("SRV-HML-01", "SCMJF Homolog", "Ambiente de homologação para validações.", "Parado", LocalDateTime.now().minusHours(1)));
+        services.add(new ServiceInfo("SRV-APP-01", "SCMJF Web", "Aplicação principal do sistema.", "Em execução", LocalDateTime.now().minusMinutes(5), true));
+        services.add(new ServiceInfo("SRV-APP-01", "Pesquisa Tablet", "Serviço de coleta de respostas da pesquisa.", "Em execução", LocalDateTime.now().minusMinutes(8), true));
+        services.add(new ServiceInfo("SRV-BD-01", "Oracle Listener", "Canal de escuta para conexões Oracle.", "Em execução", LocalDateTime.now().minusMinutes(11), false));
+        services.add(new ServiceInfo("SRV-INT-01", "IntegradorSCMJF", "Fila de integração entre sistemas internos.", "Atenção", LocalDateTime.now().minusMinutes(22), true));
+        services.add(new ServiceInfo("SRV-HML-01", "SCMJF Homolog", "Ambiente de homologação para validações.", "Parado", LocalDateTime.now().minusHours(1), false));
     }
 
     private void seedPanels() {

@@ -87,6 +87,11 @@ public class ServicoServidorMockService implements ServicoServidorService {
         if (ValidationUtil.isBlank(reason)) {
             return new ActionResult(false, "Informe um motivo para reiniciar o servico.");
         }
+        if (!service.isRestartAllowed()) {
+            historicoService.registrar(user, TipoAcao.REINICIAR_SERVICO, service.getServer(), service.getName(),
+                    StatusExecucao.NEGADO, "-", "Servico configurado para nao permitir reinicio.");
+            return new ActionResult(false, "Este servico esta configurado para nao permitir reinicio.");
+        }
 
         service.setStatus("Em execucao");
         service.setLastVerification(LocalDateTime.now());
