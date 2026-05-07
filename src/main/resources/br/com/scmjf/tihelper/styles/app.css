@@ -644,6 +644,28 @@
     -fx-border-color: #0f8b8d;
 }
 
+.module-check {
+    -fx-text-fill: #344b52;
+    -fx-font-weight: 700;
+    -fx-padding: 5 10 5 0;
+}
+
+.module-check .box {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #c8d5d8;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+}
+
+.module-check:selected .box {
+    -fx-background-color: #0f8b8d;
+    -fx-border-color: #0f8b8d;
+}
+
+.module-check:disabled {
+    -fx-opacity: 0.45;
+}
+
 .metric-card,
 .warning-card {
     -fx-border-width: 1 1 1 5;

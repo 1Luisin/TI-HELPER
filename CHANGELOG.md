@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.0-SNAPSHOT
+
+- Amplia o cadastro de usuarios com nome, email, setor e modulos de acesso.
+- Aplica permissao por modulo em conjunto com o perfil do usuario.
+- Restringe Historico e dados de historico apenas a usuarios ADMIN.
+- Adiciona na tela Sobre o credito da equipe de TI Santa Casa com o ano atual.
+
 ## 0.2.7-SNAPSHOT
 
 - Corrige o fechamento pelo X para respeitar a preferencia salva localmente.

@@ -1,11 +1,13 @@
 package br.com.scmjf.tihelper.service;
 
 import java.util.List;
+import java.util.Set;
 
 import br.com.scmjf.tihelper.model.StatusExecucao;
 import br.com.scmjf.tihelper.model.TipoAcao;
 import br.com.scmjf.tihelper.model.User;
 import br.com.scmjf.tihelper.model.UserAccount;
+import br.com.scmjf.tihelper.model.UserModule;
 import br.com.scmjf.tihelper.model.UserProfile;
 import br.com.scmjf.tihelper.util.ValidationUtil;
 
@@ -20,7 +22,14 @@ public class UsuarioMockService implements UsuarioService {
     }
 
     @Override
-    public boolean registerUser(String username, String password, UserProfile profile) {
+    public boolean registerUser(
+            String username,
+            String password,
+            UserProfile profile,
+            String fullName,
+            String email,
+            String sector,
+            Set<UserModule> modules) {
         if (ValidationUtil.isBlank(username) || ValidationUtil.isBlank(password) || profile == null) {
             return false;
         }
@@ -30,7 +39,15 @@ public class UsuarioMockService implements UsuarioService {
             return false;
         }
 
-        store.users().put(normalizedUsername, new UserAccount(normalizedUsername, password, profile, null));
+        store.users().put(normalizedUsername, new UserAccount(
+                normalizedUsername,
+                password,
+                profile,
+                sanitize(fullName),
+                sanitize(email),
+                sanitize(sector),
+                null,
+                normalizeModules(profile, modules)));
         store.persistUsers();
         historicoService.registrar(normalizedUsername, profile, TipoAcao.CADASTRAR_USUARIO, "-", normalizedUsername,
                 StatusExecucao.SUCESSO, "-", "Usuario cadastrado no mock local.");
@@ -38,7 +55,15 @@ public class UsuarioMockService implements UsuarioService {
     }
 
     @Override
-    public boolean updateUser(String originalUsername, String username, String password, UserProfile profile) {
+    public boolean updateUser(
+            String originalUsername,
+            String username,
+            String password,
+            UserProfile profile,
+            String fullName,
+            String email,
+            String sector,
+            Set<UserModule> modules) {
         if (ValidationUtil.isBlank(originalUsername) || ValidationUtil.isBlank(username) || profile == null) {
             return false;
         }
@@ -51,7 +76,15 @@ public class UsuarioMockService implements UsuarioService {
         }
 
         String finalPassword = ValidationUtil.isBlank(password) ? existing.getPassword() : password;
-        UserAccount updated = new UserAccount(newKey, finalPassword, profile, existing.getProfilePhotoUri());
+        UserAccount updated = new UserAccount(
+                newKey,
+                finalPassword,
+                profile,
+                sanitize(fullName),
+                sanitize(email),
+                sanitize(sector),
+                existing.getProfilePhotoUri(),
+                normalizeModules(profile, modules));
         if (!originalKey.equals(newKey)) {
             store.users().remove(originalKey);
         }
@@ -100,5 +133,13 @@ public class UsuarioMockService implements UsuarioService {
             historicoService.registrar(account.toUser(), TipoAcao.ALTERAR_USUARIO, "-", account.getUsername(),
                     StatusExecucao.SUCESSO, "-", "Foto de perfil alterada.");
         }
+    }
+
+    private Set<UserModule> normalizeModules(UserProfile profile, Set<UserModule> modules) {
+        return modules == null ? UserModule.defaultsFor(profile) : Set.copyOf(modules);
+    }
+
+    private String sanitize(String value) {
+        return value == null ? "" : value.trim();
     }
 }

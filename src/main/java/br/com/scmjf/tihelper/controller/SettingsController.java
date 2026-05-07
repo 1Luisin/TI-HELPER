@@ -6,7 +6,10 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
@@ -18,6 +21,7 @@ import br.com.scmjf.tihelper.model.ScriptDefinition;
 import br.com.scmjf.tihelper.model.ServerInfo;
 import br.com.scmjf.tihelper.model.ServiceInfo;
 import br.com.scmjf.tihelper.model.User;
+import br.com.scmjf.tihelper.model.UserModule;
 import br.com.scmjf.tihelper.model.UserProfile;
 import br.com.scmjf.tihelper.util.AlertUtil;
 import br.com.scmjf.tihelper.util.AppContext;
@@ -39,6 +43,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
@@ -152,13 +157,29 @@ public class SettingsController {
     @FXML
     private PasswordField userPasswordField;
     @FXML
+    private TextField userFullNameField;
+    @FXML
+    private TextField userEmailField;
+    @FXML
+    private TextField userSectorField;
+    @FXML
     private ComboBox<UserProfile> userProfileCombo;
+    @FXML
+    private FlowPane userModulesPane;
     @FXML
     private TableView<User> usersTable;
     @FXML
     private TableColumn<User, String> userNameColumn;
     @FXML
+    private TableColumn<User, String> userDisplayNameColumn;
+    @FXML
+    private TableColumn<User, String> userEmailColumn;
+    @FXML
+    private TableColumn<User, String> userSectorColumn;
+    @FXML
     private TableColumn<User, String> userProfileColumn;
+    @FXML
+    private TableColumn<User, String> userModulesColumn;
 
     private File selectedScriptFile;
     private String selectedServerName;
@@ -167,12 +188,14 @@ public class SettingsController {
     private String selectedQueryName;
     private String selectedScriptName;
     private String selectedUsername;
+    private final Map<UserModule, CheckBox> userModuleChecks = new EnumMap<>(UserModule.class);
 
     @FXML
     private void initialize() {
         User user = AppContext.getCurrentUser();
         configurePanelStatusOptions();
         configureUserProfileOptions();
+        configureUserModuleOptions();
         configureSqlEditor();
         configureQueryParameterToggle();
         configureTables();
@@ -366,7 +389,11 @@ public class SettingsController {
         boolean result = AppContext.usuarioService().registerUser(
                 userNameField.getText(),
                 userPasswordField.getText(),
-                userProfileCombo.getSelectionModel().getSelectedItem());
+                userProfileCombo.getSelectionModel().getSelectedItem(),
+                userFullNameField.getText(),
+                userEmailField.getText(),
+                userSectorField.getText(),
+                selectedUserModules());
         finishUserAction("Cadastrar usuario", result, "Usuario cadastrado no mock local.");
     }
 
@@ -380,7 +407,11 @@ public class SettingsController {
                 selectedUsername,
                 userNameField.getText(),
                 userPasswordField.getText(),
-                userProfileCombo.getSelectionModel().getSelectedItem());
+                userProfileCombo.getSelectionModel().getSelectedItem(),
+                userFullNameField.getText(),
+                userEmailField.getText(),
+                userSectorField.getText(),
+                selectedUserModules());
         finishUserAction("Editar usuario", result, "Usuario alterado no mock local.");
     }
 
@@ -398,9 +429,10 @@ public class SettingsController {
     private void clearUserFields() {
         selectedUsername = null;
         usersTable.getSelectionModel().clearSelection();
-        clear(userNameField);
+        clear(userNameField, userFullNameField, userEmailField, userSectorField);
         userPasswordField.clear();
         userProfileCombo.getSelectionModel().select(UserProfile.OPERADOR_TI);
+        selectUserModules(UserModule.defaultsFor(UserProfile.OPERADOR_TI));
     }
 
     @FXML
@@ -517,8 +549,13 @@ public class SettingsController {
         scriptsTable.setPlaceholder(new Label("Nenhum script cadastrado."));
 
         userNameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
+        userDisplayNameColumn.setCellValueFactory(new PropertyValueFactory<>("fullName"));
+        userEmailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
+        userSectorColumn.setCellValueFactory(new PropertyValueFactory<>("sector"));
         userProfileColumn.setCellValueFactory(new PropertyValueFactory<>("profileName"));
-        TableUtil.bindColumnWidths(usersTable, new double[]{1.4, 1}, userNameColumn, userProfileColumn);
+        userModulesColumn.setCellValueFactory(new PropertyValueFactory<>("modulesDisplay"));
+        TableUtil.bindColumnWidths(usersTable, new double[]{1.1, 1.5, 1.7, 1.1, 1, 2.4},
+                userNameColumn, userDisplayNameColumn, userEmailColumn, userSectorColumn, userProfileColumn, userModulesColumn);
         usersTable.setPlaceholder(new Label("Nenhum usuario cadastrado."));
     }
 
@@ -587,7 +624,11 @@ public class SettingsController {
             selectedUsername = selected.getUsername();
             userNameField.setText(selected.getUsername());
             userPasswordField.clear();
+            userFullNameField.setText(selected.getFullName());
+            userEmailField.setText(selected.getEmail());
+            userSectorField.setText(selected.getSector());
             userProfileCombo.getSelectionModel().select(selected.getProfile());
+            selectUserModules(selected.getModules());
         });
     }
 
@@ -599,6 +640,25 @@ public class SettingsController {
     private void configureUserProfileOptions() {
         userProfileCombo.setItems(FXCollections.observableArrayList(UserProfile.values()));
         userProfileCombo.getSelectionModel().select(UserProfile.OPERADOR_TI);
+        userProfileCombo.valueProperty().addListener((observable, oldValue, profile) -> {
+            updateModuleAvailability(profile);
+            if (selectedUsername == null) {
+                selectUserModules(UserModule.defaultsFor(profile));
+            }
+        });
+    }
+
+    private void configureUserModuleOptions() {
+        userModulesPane.getChildren().clear();
+        userModuleChecks.clear();
+        Arrays.stream(UserModule.values()).forEach(module -> {
+            CheckBox checkBox = new CheckBox(module.getDisplayName());
+            checkBox.getStyleClass().add("module-check");
+            userModuleChecks.put(module, checkBox);
+            userModulesPane.getChildren().add(checkBox);
+        });
+        selectUserModules(UserModule.defaultsFor(userProfileCombo.getSelectionModel().getSelectedItem()));
+        updateModuleAvailability(userProfileCombo.getSelectionModel().getSelectedItem());
     }
 
     private void configureSqlEditor() {
@@ -720,6 +780,30 @@ public class SettingsController {
                 .filter(parameter -> !parameter.isBlank())
                 .distinct()
                 .toList();
+    }
+
+    private Set<UserModule> selectedUserModules() {
+        return userModuleChecks.entrySet().stream()
+                .filter(entry -> entry.getValue().isSelected())
+                .map(Map.Entry::getKey)
+                .collect(java.util.stream.Collectors.toSet());
+    }
+
+    private void selectUserModules(Set<UserModule> modules) {
+        Set<UserModule> selectedModules = modules == null ? Set.of() : modules;
+        userModuleChecks.forEach((module, checkBox) -> checkBox.setSelected(selectedModules.contains(module)));
+        updateModuleAvailability(userProfileCombo.getSelectionModel().getSelectedItem());
+    }
+
+    private void updateModuleAvailability(UserProfile profile) {
+        Set<UserModule> allowedModules = UserModule.defaultsFor(profile);
+        userModuleChecks.forEach((module, checkBox) -> {
+            boolean allowed = allowedModules.contains(module);
+            checkBox.setDisable(!allowed);
+            if (!allowed) {
+                checkBox.setSelected(false);
+            }
+        });
     }
 
     private String readSelectedScriptFile() {

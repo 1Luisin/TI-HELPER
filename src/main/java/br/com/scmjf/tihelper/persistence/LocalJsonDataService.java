@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,6 +25,7 @@ import br.com.scmjf.tihelper.model.ServiceInfo;
 import br.com.scmjf.tihelper.model.StatusExecucao;
 import br.com.scmjf.tihelper.model.TipoAcao;
 import br.com.scmjf.tihelper.model.UserAccount;
+import br.com.scmjf.tihelper.model.UserModule;
 import br.com.scmjf.tihelper.model.UserProfile;
 import br.com.scmjf.tihelper.util.AppInfo;
 import br.com.scmjf.tihelper.util.AppLogger;
@@ -68,7 +70,15 @@ public class LocalJsonDataService {
             Map<String, UserAccount> users = new LinkedHashMap<>();
             for (UserAccountDto user : readList(USERS_FILE, new TypeReference<List<UserAccountDto>>() {
             })) {
-                users.put(user.username(), new UserAccount(user.username(), user.password(), user.profile(), user.profilePhotoUri()));
+                users.put(user.username(), new UserAccount(
+                        user.username(),
+                        user.password(),
+                        user.profile(),
+                        nullToEmpty(user.fullName()),
+                        nullToEmpty(user.email()),
+                        nullToEmpty(user.sector()),
+                        user.profilePhotoUri(),
+                        normalizeModules(user.profile(), user.modules())));
             }
 
             List<ServerInfo> servers = readList(SERVERS_FILE, new TypeReference<List<ServerInfoDto>>() {
@@ -143,7 +153,15 @@ public class LocalJsonDataService {
 
     public void saveUsers(Map<String, UserAccount> users) {
         write(USERS_FILE, users.values().stream()
-                .map(user -> new UserAccountDto(user.getUsername(), user.getPassword(), user.getProfile(), user.getProfilePhotoUri()))
+                .map(user -> new UserAccountDto(
+                        user.getUsername(),
+                        user.getPassword(),
+                        user.getProfile(),
+                        user.getFullName(),
+                        user.getEmail(),
+                        user.getSector(),
+                        user.getProfilePhotoUri(),
+                        List.copyOf(user.getModules())))
                 .toList());
     }
 
@@ -203,7 +221,15 @@ public class LocalJsonDataService {
         BackupDto backup = new BackupDto(
                 defaultConfig(loadConfig().closeBehavior()),
                 data.users().values().stream()
-                        .map(user -> new UserAccountDto(user.getUsername(), user.getPassword(), user.getProfile(), user.getProfilePhotoUri()))
+                        .map(user -> new UserAccountDto(
+                                user.getUsername(),
+                                user.getPassword(),
+                                user.getProfile(),
+                                user.getFullName(),
+                                user.getEmail(),
+                                user.getSector(),
+                                user.getProfilePhotoUri(),
+                                List.copyOf(user.getModules())))
                         .toList(),
                 data.servers().stream()
                         .map(server -> new ServerInfoDto(server.getName(), server.getHost(), server.getOperatingSystem(), server.getEnvironment(), server.getStatus()))
@@ -233,7 +259,15 @@ public class LocalJsonDataService {
         saveConfig(normalizeConfig(backup.config()).closeBehavior());
         Map<String, UserAccount> users = new LinkedHashMap<>();
         for (UserAccountDto user : nullToEmpty(backup.users())) {
-            users.put(user.username(), new UserAccount(user.username(), user.password(), user.profile(), user.profilePhotoUri()));
+            users.put(user.username(), new UserAccount(
+                    user.username(),
+                    user.password(),
+                    user.profile(),
+                    nullToEmpty(user.fullName()),
+                    nullToEmpty(user.email()),
+                    nullToEmpty(user.sector()),
+                    user.profilePhotoUri(),
+                    normalizeModules(user.profile(), user.modules())));
         }
 
         return new LoadedData(
@@ -316,6 +350,14 @@ public class LocalJsonDataService {
         return values == null ? List.of() : values;
     }
 
+    private static String nullToEmpty(String value) {
+        return value == null ? "" : value;
+    }
+
+    private static Set<UserModule> normalizeModules(UserProfile profile, List<UserModule> modules) {
+        return modules == null ? UserModule.defaultsFor(profile) : Set.copyOf(modules);
+    }
+
     public record LoadedData(
             Map<String, UserAccount> users,
             List<ServerInfo> servers,
@@ -341,7 +383,15 @@ public class LocalJsonDataService {
             List<ExecutionHistoryDto> history) {
     }
 
-    private record UserAccountDto(String username, String password, UserProfile profile, String profilePhotoUri) {
+    private record UserAccountDto(
+            String username,
+            String password,
+            UserProfile profile,
+            String fullName,
+            String email,
+            String sector,
+            String profilePhotoUri,
+            List<UserModule> modules) {
     }
 
     private record ServerInfoDto(String name, String host, String operatingSystem, String environment, String status) {

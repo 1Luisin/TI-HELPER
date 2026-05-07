@@ -339,9 +339,18 @@
                                                             <children>
                                                                 <TextField fx:id="userNameField" promptText="Login" prefWidth="220"/>
                                                                 <PasswordField fx:id="userPasswordField" promptText="Senha" prefWidth="220"/>
+                                                                <TextField fx:id="userFullNameField" promptText="Nome" prefWidth="260"/>
+                                                                <TextField fx:id="userEmailField" promptText="Email" prefWidth="260"/>
+                                                                <TextField fx:id="userSectorField" promptText="Setor" prefWidth="220"/>
                                                                 <ComboBox fx:id="userProfileCombo" promptText="Perfil" prefWidth="180"/>
                                                             </children>
                                                         </FlowPane>
+                                                        <VBox spacing="8">
+                                                            <children>
+                                                                <Label text="Modulos liberados" styleClass="field-label"/>
+                                                                <FlowPane fx:id="userModulesPane" hgap="14" vgap="8"/>
+                                                            </children>
+                                                        </VBox>
                                                         <Label text="Ao editar, deixe a senha em branco para manter a senha atual."
                                                                styleClass="hint-label"/>
                                                         <HBox alignment="CENTER_RIGHT" spacing="8">
@@ -358,7 +367,11 @@
                                                 <TableView fx:id="usersTable" prefHeight="240">
                                                     <columns>
                                                         <TableColumn fx:id="userNameColumn" text="Usuario"/>
+                                                        <TableColumn fx:id="userDisplayNameColumn" text="Nome"/>
+                                                        <TableColumn fx:id="userEmailColumn" text="Email"/>
+                                                        <TableColumn fx:id="userSectorColumn" text="Setor"/>
                                                         <TableColumn fx:id="userProfileColumn" text="Perfil"/>
+                                                        <TableColumn fx:id="userModulesColumn" text="Modulos"/>
                                                     </columns>
                                                 </TableView>
                                             </children>

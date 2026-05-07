@@ -17,6 +17,7 @@ import br.com.scmjf.tihelper.model.ServiceInfo;
 import br.com.scmjf.tihelper.model.StatusExecucao;
 import br.com.scmjf.tihelper.model.TipoAcao;
 import br.com.scmjf.tihelper.model.UserAccount;
+import br.com.scmjf.tihelper.model.UserModule;
 import br.com.scmjf.tihelper.model.UserProfile;
 import br.com.scmjf.tihelper.persistence.LocalJsonDataService;
 import br.com.scmjf.tihelper.persistence.LocalJsonDataService.LoadedData;
@@ -212,9 +213,12 @@ public class MockDataStore {
     }
 
     private void seedUsers() {
-        users.put("admin", new UserAccount("admin", "admin", UserProfile.ADMIN, null));
-        users.put("ti", new UserAccount("ti", "ti", UserProfile.OPERADOR_TI, null));
-        users.put("consulta", new UserAccount("consulta", "consulta", UserProfile.CONSULTA, null));
+        users.put("admin", new UserAccount("admin", "admin", UserProfile.ADMIN,
+                "Administrador TI", "admin@scmjf.local", "TI", null, UserModule.defaultsFor(UserProfile.ADMIN)));
+        users.put("ti", new UserAccount("ti", "ti", UserProfile.OPERADOR_TI,
+                "Operador TI", "ti@scmjf.local", "TI", null, UserModule.defaultsFor(UserProfile.OPERADOR_TI)));
+        users.put("consulta", new UserAccount("consulta", "consulta", UserProfile.CONSULTA,
+                "Usuario Consulta", "consulta@scmjf.local", "Atendimento", null, UserModule.defaultsFor(UserProfile.CONSULTA)));
     }
 
     private void seedServers() {

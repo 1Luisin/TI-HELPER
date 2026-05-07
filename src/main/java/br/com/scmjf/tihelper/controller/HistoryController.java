@@ -14,6 +14,8 @@ import br.com.scmjf.tihelper.model.TipoAcao;
 import br.com.scmjf.tihelper.util.AlertUtil;
 import br.com.scmjf.tihelper.util.AppContext;
 import br.com.scmjf.tihelper.util.AppLogger;
+import br.com.scmjf.tihelper.util.NavigationTarget;
+import br.com.scmjf.tihelper.util.PermissionUtil;
 import br.com.scmjf.tihelper.util.TableUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
@@ -85,7 +87,8 @@ public class HistoryController {
                 idColumn, dateColumn, userColumn, profileColumn, typeColumn, serverColumn, targetColumn, statusColumn, reasonColumn, messageColumn);
         historyTable.setPlaceholder(new Label("Nenhum registro de historico."));
 
-        List<ExecutionHistory> records = AppContext.historicoService().listarTodos();
+        boolean canViewHistory = PermissionUtil.canAccess(AppContext.getCurrentUser(), NavigationTarget.HISTORY);
+        List<ExecutionHistory> records = canViewHistory ? AppContext.historicoService().listarTodos() : List.of();
         typeFilterCombo.setItems(FXCollections.observableArrayList(buildTypeOptions()));
         statusFilterCombo.setItems(FXCollections.observableArrayList(buildStatusOptions()));
         userFilterCombo.setItems(FXCollections.observableArrayList(buildUserOptions(records)));
@@ -102,7 +105,11 @@ public class HistoryController {
         filteredHistory = new FilteredList<>(FXCollections.observableArrayList(records), record -> true);
         historyTable.setItems(filteredHistory);
         historyTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, selected) -> showDetails(selected));
-        showDetails(null);
+        if (canViewHistory) {
+            showDetails(null);
+        } else {
+            detailsArea.setText("Historico restrito a usuarios ADMIN.");
+        }
     }
 
     @FXML

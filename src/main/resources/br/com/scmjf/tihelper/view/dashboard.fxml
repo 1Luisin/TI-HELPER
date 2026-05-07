@@ -81,11 +81,11 @@
                         <Button fx:id="quickRestartButton" text="Reiniciar serviço" onAction="#quickRestartService" styleClass="secondary-button"/>
                         <Button fx:id="quickQueryButton" text="Executar query" onAction="#quickExecuteQuery" styleClass="secondary-button"/>
                         <Button fx:id="quickScriptButton" text="Instalar VNC" onAction="#quickInstallVnc" styleClass="secondary-button"/>
-                        <Button text="Ver histórico" onAction="#quickViewHistory" styleClass="secondary-button"/>
+                        <Button fx:id="quickHistoryButton" text="Ver histórico" onAction="#quickViewHistory" styleClass="secondary-button"/>
                     </children>
                 </FlowPane>
 
-                <Label text="Últimas execuções simuladas" styleClass="section-title"/>
+                <Label fx:id="latestHistoryTitle" text="Últimas execuções simuladas" styleClass="section-title"/>
                 <TableView fx:id="latestTable" prefHeight="260">
                     <columns>
                         <TableColumn fx:id="dateColumn" text="Data/Hora" prefWidth="160"/>

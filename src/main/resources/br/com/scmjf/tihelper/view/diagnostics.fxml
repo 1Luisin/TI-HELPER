@@ -104,6 +104,17 @@
                         </HBox>
                     </children>
                 </VBox>
+
+                <VBox spacing="8" styleClass="form-panel">
+                    <padding>
+                        <Insets top="18" right="22" bottom="18" left="22"/>
+                    </padding>
+                    <children>
+                        <Label fx:id="copyrightLabel"
+                               text="-"
+                               styleClass="hint-label"/>
+                    </children>
+                </VBox>
             </children>
         </VBox>
     </content>

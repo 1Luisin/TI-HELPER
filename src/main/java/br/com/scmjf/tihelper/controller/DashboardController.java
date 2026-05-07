@@ -1,5 +1,6 @@
 package br.com.scmjf.tihelper.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.scmjf.tihelper.model.ExecutionHistory;
@@ -72,6 +73,12 @@ public class DashboardController {
     private Button quickScriptButton;
 
     @FXML
+    private Button quickHistoryButton;
+
+    @FXML
+    private Label latestHistoryTitle;
+
+    @FXML
     private TableView<ExecutionHistory> latestTable;
 
     @FXML
@@ -91,12 +98,13 @@ public class DashboardController {
 
     @FXML
     private void initialize() {
+        boolean canViewHistory = PermissionUtil.canAccess(AppContext.getCurrentUser(), NavigationTarget.HISTORY);
         serversCountLabel.setText(String.valueOf(AppContext.servidorService().listar().size()));
         servicesCountLabel.setText(String.valueOf(AppContext.servicoServidorService().listar().size()));
         queriesCountLabel.setText(String.valueOf(AppContext.queryService().listarNomes().size()));
         scriptsCountLabel.setText(String.valueOf(AppContext.scriptService().listarNomes().size()));
-        executionsTodayLabel.setText(String.valueOf(AppContext.historicoService().contarHoje()));
-        failuresTodayLabel.setText(String.valueOf(AppContext.historicoService().contarFalhasHoje()));
+        executionsTodayLabel.setText(canViewHistory ? String.valueOf(AppContext.historicoService().contarHoje()) : "0");
+        failuresTodayLabel.setText(canViewHistory ? String.valueOf(AppContext.historicoService().contarFalhasHoje()) : "0");
 
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("formattedDateTime"));
         userColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
@@ -105,8 +113,9 @@ public class DashboardController {
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         TableUtil.bindColumnWidths(latestTable, new double[]{1.5, 1, 1.4, 2, 1}, dateColumn, userColumn, typeColumn, targetColumn, statusColumn);
         latestTable.setPlaceholder(new Label("Nenhuma execução registrada."));
-        latestTable.setItems(FXCollections.observableArrayList(AppContext.historicoService().listarUltimos(8)));
+        latestTable.setItems(FXCollections.observableArrayList(canViewHistory ? AppContext.historicoService().listarUltimos(8) : List.of()));
         configureActionPermissions();
+        configureHistoryVisibility(canViewHistory);
         configureResponsiveMetrics();
     }
 
@@ -170,7 +179,18 @@ public class DashboardController {
                 PermissionUtil.canRunAction(AppContext.getCurrentUser(), TipoAcao.EXECUTAR_SCRIPT));
     }
 
+    private void configureHistoryVisibility(boolean canViewHistory) {
+        UiUtil.setVisibleManaged(executionsMetricCard, canViewHistory);
+        UiUtil.setVisibleManaged(failuresMetricCard, canViewHistory);
+        UiUtil.setVisibleManaged(quickHistoryButton, canViewHistory);
+        UiUtil.setVisibleManaged(latestHistoryTitle, canViewHistory);
+        UiUtil.setVisibleManaged(latestTable, canViewHistory);
+    }
+
     private void layoutMetrics(List<VBox> cards, double width) {
+        List<VBox> visibleCards = new ArrayList<>(cards.stream()
+                .filter(VBox::isManaged)
+                .toList());
         int columns = width >= 860 ? 3 : width >= 560 ? 2 : 1;
 
         metricsGrid.getChildren().clear();
@@ -182,8 +202,8 @@ public class DashboardController {
             metricsGrid.getColumnConstraints().add(constraints);
         }
 
-        for (int index = 0; index < cards.size(); index++) {
-            metricsGrid.add(cards.get(index), index % columns, index / columns);
+        for (int index = 0; index < visibleCards.size(); index++) {
+            metricsGrid.add(visibleCards.get(index), index % columns, index / columns);
         }
     }
 }

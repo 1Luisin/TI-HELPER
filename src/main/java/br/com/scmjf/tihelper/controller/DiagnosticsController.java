@@ -4,6 +4,7 @@ import java.awt.Desktop;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Year;
 
 import br.com.scmjf.tihelper.model.User;
 import br.com.scmjf.tihelper.util.AlertUtil;
@@ -34,6 +35,8 @@ public class DiagnosticsController {
     private Label osLabel;
     @FXML
     private Label javaLabel;
+    @FXML
+    private Label copyrightLabel;
 
     @FXML
     private void initialize() {
@@ -47,6 +50,8 @@ public class DiagnosticsController {
         logPathLabel.setText(AppPaths.logsDirectory().toString());
         osLabel.setText(System.getProperty("os.name") + " " + System.getProperty("os.version"));
         javaLabel.setText(System.getProperty("java.version"));
+        copyrightLabel.setText("Desenvolvido pela equipe de TI Santa Casa. Todos os direitos reservados - "
+                + Year.now().getValue() + ".");
     }
 
     @FXML
