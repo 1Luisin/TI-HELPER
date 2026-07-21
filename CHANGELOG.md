@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.3-SNAPSHOT
+
+- Moderniza os filtros de data do histórico com campo e botão de calendário integrados.
+- Padroniza as barras de rolagem da aplicação com um estilo mais discreto e estados de interação.
+- Refina a aparência do calendário aberto, incluindo seleção, data atual e efeitos de foco.
+
 ## 0.3.2-SNAPSHOT
 
 - Corrige acentuação e textos em português em telas, menus, tabelas, alertas, histórico, dados mockados e documentação.

@@ -3,8 +3,8 @@ package br.com.scmjf.tihelper.util;
 public final class AppInfo {
 
     public static final String NAME = "TI Helper - SCMJF";
-    public static final String VERSION = "0.3.2-SNAPSHOT";
-    public static final String INSTALLER_VERSION = "0.3.2";
+    public static final String VERSION = "0.3.3-SNAPSHOT";
+    public static final String INSTALLER_VERSION = "0.3.3";
     public static final String ENVIRONMENT = "Protótipo";
 
     private AppInfo() {

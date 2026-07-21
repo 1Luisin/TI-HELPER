@@ -38,8 +38,14 @@
                                 <ComboBox fx:id="typeFilterCombo" promptText="Tipo de ação" prefWidth="220"/>
                                 <ComboBox fx:id="statusFilterCombo" promptText="Status" prefWidth="180"/>
                                 <ComboBox fx:id="userFilterCombo" promptText="Usuário" prefWidth="180"/>
-                                <DatePicker fx:id="initialDatePicker" promptText="Data inicial" prefWidth="160"/>
-                                <DatePicker fx:id="finalDatePicker" promptText="Data final" prefWidth="160"/>
+                                <DatePicker fx:id="initialDatePicker"
+                                            promptText="Data inicial"
+                                            prefWidth="170"
+                                            styleClass="date-filter"/>
+                                <DatePicker fx:id="finalDatePicker"
+                                            promptText="Data final"
+                                            prefWidth="170"
+                                            styleClass="date-filter"/>
                             </children>
                         </FlowPane>
                         <HBox spacing="8" alignment="CENTER_RIGHT">
