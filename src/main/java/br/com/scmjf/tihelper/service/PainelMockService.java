@@ -57,7 +57,7 @@ public class PainelMockService implements PainelService {
                 return new ActionResult(true, "Painel alterado no mock local.");
             }
         }
-        return new ActionResult(false, "Painel selecionado nao foi encontrado.");
+        return new ActionResult(false, "Painel selecionado não foi encontrado.");
     }
 
     @Override
@@ -68,13 +68,13 @@ public class PainelMockService implements PainelService {
 
         boolean removed = store.panels().removeIf(item -> item.getName().equals(panel.getName()));
         if (!removed) {
-            return new ActionResult(false, "Painel selecionado nao foi encontrado.");
+            return new ActionResult(false, "Painel selecionado não foi encontrado.");
         }
 
         store.persistPanels();
         historicoService.registrar(user, TipoAcao.EXCLUIR_PAINEL, panel.getIpAddress(), panel.getName(),
-                StatusExecucao.SUCESSO, "-", "Painel excluido do mock local.");
-        return new ActionResult(true, "Painel excluido do mock local.");
+                StatusExecucao.SUCESSO, "-", "Painel excluído do mock local.");
+        return new ActionResult(true, "Painel excluído do mock local.");
     }
 
     private ActionResult validate(PanelInfo panel) {
@@ -85,7 +85,7 @@ public class PainelMockService implements PainelService {
             return new ActionResult(false, "Informe o IP do painel.");
         }
         if (!ValidationUtil.isValidIpv4(panel.getIpAddress())) {
-            return new ActionResult(false, "Informe um IPv4 valido para o painel.");
+            return new ActionResult(false, "Informe um IPv4 válido para o painel.");
         }
         if (ValidationUtil.isBlank(panel.getLocation())) {
             return new ActionResult(false, "Informe o local do painel.");

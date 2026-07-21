@@ -21,7 +21,7 @@ public class AuthMockService implements AuthService {
     @Override
     public Optional<User> login(String username, String password) {
         if (username == null || password == null) {
-            historicoService.registrar("desconhecido", null, TipoAcao.LOGIN, "-", "Login", StatusExecucao.ERRO, "-", "Credenciais nao informadas.");
+            historicoService.registrar("desconhecido", null, TipoAcao.LOGIN, "-", "Login", StatusExecucao.ERRO, "-", "Credenciais não informadas.");
             AppLogger.warning("Tentativa de login sem credenciais.");
             return Optional.empty();
         }
@@ -30,8 +30,8 @@ public class AuthMockService implements AuthService {
         UserAccount account = store.users().get(normalizedUsername);
         if (account == null || !account.getPassword().equals(password)) {
             String loggedUsername = normalizedUsername.isBlank() ? "desconhecido" : normalizedUsername;
-            historicoService.registrar(loggedUsername, null, TipoAcao.LOGIN, "-", "Login", StatusExecucao.ERRO, "-", "Usuario ou senha invalidos.");
-            AppLogger.warning("Tentativa de login invalida para usuario: " + loggedUsername);
+            historicoService.registrar(loggedUsername, null, TipoAcao.LOGIN, "-", "Login", StatusExecucao.ERRO, "-", "Usuário ou senha inválidos.");
+            AppLogger.warning("Tentativa de login inválida para usuário: " + loggedUsername);
             return Optional.empty();
         }
 

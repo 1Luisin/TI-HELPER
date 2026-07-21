@@ -44,7 +44,7 @@
                         <TableColumn fx:id="nameColumn" text="Nome do serviço" prefWidth="170"/>
                         <TableColumn fx:id="descriptionColumn" text="Descrição" prefWidth="280"/>
                         <TableColumn fx:id="statusColumn" text="Status" prefWidth="120"/>
-                        <TableColumn fx:id="restartAllowedColumn" text="Reinicio" prefWidth="120"/>
+                        <TableColumn fx:id="restartAllowedColumn" text="Reinício" prefWidth="120"/>
                         <TableColumn fx:id="lastCheckColumn" text="Última verificação" prefWidth="170"/>
                     </columns>
                 </TableView>

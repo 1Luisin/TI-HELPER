@@ -92,7 +92,7 @@ public final class AppContext {
     public static void restoreDefaultMockData() {
         STORE.restoreDefaults();
         HISTORICO_SERVICE.registrar(getCurrentUser(), TipoAcao.RESTAURAR_DADOS, "-", "Dados mockados",
-                StatusExecucao.SUCESSO, "-", "Dados mockados padrao restaurados.");
+                StatusExecucao.SUCESSO, "-", "Dados mockados padrão restaurados.");
     }
 
     public static void exportBackup(Path destination) throws java.io.IOException {
@@ -131,13 +131,13 @@ public final class AppContext {
 
     public static boolean denyAction(TipoAcao tipoAcao, String target, String message) {
         HISTORICO_SERVICE.registrar(getCurrentUser(), tipoAcao, "-", target, StatusExecucao.NEGADO, "-", message);
-        AlertUtil.warning("Permissao negada", message);
+        AlertUtil.warning("Permissão negada", message);
         return false;
     }
 
     public static void clearSession() {
         if (session != null) {
-            HISTORICO_SERVICE.registrar(session.getUser(), TipoAcao.LOGOUT, "-", "Sessao", StatusExecucao.SUCESSO, "-", "Logout efetuado.");
+            HISTORICO_SERVICE.registrar(session.getUser(), TipoAcao.LOGOUT, "-", "Sessão", StatusExecucao.SUCESSO, "-", "Logout efetuado.");
             AppLogger.info("Logout efetuado: " + session.getUser().getUsername());
         }
         session = null;

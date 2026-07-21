@@ -59,7 +59,7 @@ public class ServidorMockService implements ServidorService {
                 return new ActionResult(true, "Servidor alterado no mock local.");
             }
         }
-        return new ActionResult(false, "Servidor selecionado nao foi encontrado.");
+        return new ActionResult(false, "Servidor selecionado não foi encontrado.");
     }
 
     @Override
@@ -70,26 +70,26 @@ public class ServidorMockService implements ServidorService {
 
         boolean removed = store.servers().removeIf(item -> item.getName().equals(server.getName()));
         if (!removed) {
-            return new ActionResult(false, "Servidor selecionado nao foi encontrado.");
+            return new ActionResult(false, "Servidor selecionado não foi encontrado.");
         }
 
         store.persistServers();
         historicoService.registrar(user, TipoAcao.EXCLUIR_SERVIDOR, server.getName(), server.getName(),
-                StatusExecucao.SUCESSO, "-", "Servidor excluido do mock local.");
-        return new ActionResult(true, "Servidor excluido do mock local.");
+                StatusExecucao.SUCESSO, "-", "Servidor excluído do mock local.");
+        return new ActionResult(true, "Servidor excluído do mock local.");
     }
 
     @Override
     public ActionResult testarConexao(ServerInfo server, User user) {
         if (server == null) {
-            return new ActionResult(false, "Selecione um servidor para testar a conexao.");
+            return new ActionResult(false, "Selecione um servidor para testar a conexão.");
         }
 
         boolean success = "Online".equalsIgnoreCase(server.getStatus())
-                || ("Instavel".equalsIgnoreCase(server.getStatus()) && random.nextBoolean());
+                || ("Instável".equalsIgnoreCase(server.getStatus()) && random.nextBoolean());
         StatusExecucao status = success ? StatusExecucao.SIMULADO : StatusExecucao.ERRO;
         String message = success
-                ? "Conexao simulada com " + server.getName() + " concluida com sucesso."
+                ? "Conexão simulada com " + server.getName() + " concluída com sucesso."
                 : "Falha simulada ao conectar em " + server.getName() + ".";
         historicoService.registrar(user, TipoAcao.TESTAR_CONEXAO, server.getName(), server.getHost(), status, "-", message);
         return new ActionResult(success, message);
@@ -103,7 +103,7 @@ public class ServidorMockService implements ServidorService {
             return new ActionResult(false, "Informe o IP do servidor.");
         }
         if (!ValidationUtil.isValidIpv4(server.getHost())) {
-            return new ActionResult(false, "Informe um IPv4 valido para o servidor.");
+            return new ActionResult(false, "Informe um IPv4 válido para o servidor.");
         }
         return new ActionResult(true, "OK");
     }

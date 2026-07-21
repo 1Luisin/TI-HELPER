@@ -35,14 +35,14 @@ public class ServicoServidorMockService implements ServicoServidorService {
         store.services().add(service);
         store.persistServices();
         historicoService.registrar(user, TipoAcao.CADASTRAR_SERVICO, service.getServer(), service.getName(),
-                StatusExecucao.SUCESSO, "-", "Servico registrado no mock local.");
-        return new ActionResult(true, "Servico registrado no mock local.");
+                StatusExecucao.SUCESSO, "-", "Serviço registrado no mock local.");
+        return new ActionResult(true, "Serviço registrado no mock local.");
     }
 
     @Override
     public ActionResult alterar(ServiceInfo originalService, ServiceInfo service, User user) {
         if (originalService == null) {
-            return new ActionResult(false, "Selecione um servico para editar.");
+            return new ActionResult(false, "Selecione um serviço para editar.");
         }
         ActionResult validation = validate(service);
         if (!validation.success()) {
@@ -55,58 +55,58 @@ public class ServicoServidorMockService implements ServicoServidorService {
                 store.services().set(index, service);
                 store.persistServices();
                 historicoService.registrar(user, TipoAcao.ALTERAR_SERVICO, service.getServer(), service.getName(),
-                        StatusExecucao.SUCESSO, "-", "Servico alterado no mock local.");
-                return new ActionResult(true, "Servico alterado no mock local.");
+                        StatusExecucao.SUCESSO, "-", "Serviço alterado no mock local.");
+                return new ActionResult(true, "Serviço alterado no mock local.");
             }
         }
-        return new ActionResult(false, "Servico selecionado nao foi encontrado.");
+        return new ActionResult(false, "Serviço selecionado não foi encontrado.");
     }
 
     @Override
     public ActionResult excluir(ServiceInfo service, User user) {
         if (service == null) {
-            return new ActionResult(false, "Selecione um servico para excluir.");
+            return new ActionResult(false, "Selecione um serviço para excluir.");
         }
 
         boolean removed = store.services().removeIf(item -> sameService(item, service));
         if (!removed) {
-            return new ActionResult(false, "Servico selecionado nao foi encontrado.");
+            return new ActionResult(false, "Serviço selecionado não foi encontrado.");
         }
 
         store.persistServices();
         historicoService.registrar(user, TipoAcao.EXCLUIR_SERVICO, service.getServer(), service.getName(),
-                StatusExecucao.SUCESSO, "-", "Servico excluido do mock local.");
-        return new ActionResult(true, "Servico excluido do mock local.");
+                StatusExecucao.SUCESSO, "-", "Serviço excluído do mock local.");
+        return new ActionResult(true, "Serviço excluído do mock local.");
     }
 
     @Override
     public ActionResult finalizarReinicio(ServiceInfo service, String reason, User user) {
         if (service == null) {
-            return new ActionResult(false, "Selecione um servico para reiniciar.");
+            return new ActionResult(false, "Selecione um serviço para reiniciar.");
         }
         if (ValidationUtil.isBlank(reason)) {
-            return new ActionResult(false, "Informe um motivo para reiniciar o servico.");
+            return new ActionResult(false, "Informe um motivo para reiniciar o serviço.");
         }
         if (!service.isRestartAllowed()) {
             historicoService.registrar(user, TipoAcao.REINICIAR_SERVICO, service.getServer(), service.getName(),
-                    StatusExecucao.NEGADO, "-", "Servico configurado para nao permitir reinicio.");
-            return new ActionResult(false, "Este servico esta configurado para nao permitir reinicio.");
+                    StatusExecucao.NEGADO, "-", "Serviço configurado para não permitir reinício.");
+            return new ActionResult(false, "Este serviço está configurado para não permitir reinício.");
         }
 
-        service.setStatus("Em execucao");
+        service.setStatus("Em execução");
         service.setLastVerification(LocalDateTime.now());
         store.persistServices();
         historicoService.registrar(user, TipoAcao.REINICIAR_SERVICO, service.getServer(), service.getName(),
-                StatusExecucao.SIMULADO, reason, "Reinicio de servico simulado.");
-        return new ActionResult(true, "Servico " + service.getName() + " reiniciado com sucesso na simulacao.");
+                StatusExecucao.SIMULADO, reason, "Reinício de serviço simulado.");
+        return new ActionResult(true, "Serviço " + service.getName() + " reiniciado com sucesso na simulação.");
     }
 
     private ActionResult validate(ServiceInfo service) {
         if (service == null || ValidationUtil.isBlank(service.getServer())) {
-            return new ActionResult(false, "Informe o servidor do servico.");
+            return new ActionResult(false, "Informe o servidor do serviço.");
         }
         if (ValidationUtil.isBlank(service.getName())) {
-            return new ActionResult(false, "Informe o nome do servico.");
+            return new ActionResult(false, "Informe o nome do serviço.");
         }
         return new ActionResult(true, "OK");
     }

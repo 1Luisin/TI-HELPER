@@ -28,7 +28,7 @@
                         <Region HBox.hgrow="ALWAYS"/>
                         <Button fx:id="testConnectionButton" text="Testar conexão" onAction="#testConnection" styleClass="primary-button"/>
                         <Button fx:id="viewServicesButton" text="Ver serviços" onAction="#viewServices" styleClass="secondary-button"/>
-                        <Button text="Ver busy's produção" onAction="#openProductionBusy" styleClass="secondary-button"/>
+                        <Button text="Ver busy de produção" onAction="#openProductionBusy" styleClass="secondary-button"/>
                     </children>
                 </HBox>
 

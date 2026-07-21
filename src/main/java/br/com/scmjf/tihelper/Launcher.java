@@ -12,12 +12,12 @@ public final class Launcher {
     public static void main(String[] args) {
         AppLogger.configure();
         Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
-            AppLogger.error("Erro nao tratado na thread " + thread.getName(), throwable);
+            AppLogger.error("Erro não tratado na thread " + thread.getName(), throwable);
             try {
                 Platform.runLater(() -> AlertUtil.error("Erro inesperado",
                         "Ocorreu um erro inesperado. Consulte o log local para detalhes."));
             } catch (IllegalStateException ignored) {
-                // JavaFX ainda pode nao estar inicializado.
+                // JavaFX ainda pode não estar inicializado.
             }
         });
         MainApp.main(args);

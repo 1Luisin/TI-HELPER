@@ -6,12 +6,12 @@ import java.util.Set;
 public enum UserModule {
     DASHBOARD("Dashboard"),
     SERVERS("Servidores"),
-    PANELS("Paineis"),
-    SERVICES("Servicos"),
+    PANELS("Painéis"),
+    SERVICES("Serviços"),
     QUERIES("Queries"),
     SCRIPTS("Scripts"),
-    HISTORY("Historico"),
-    SETTINGS("Configuracoes"),
+    HISTORY("Histórico"),
+    SETTINGS("Configurações"),
     ABOUT("Sobre");
 
     private final String displayName;

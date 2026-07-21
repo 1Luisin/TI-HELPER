@@ -65,7 +65,7 @@ public class ServicesController {
         lastCheckColumn.setCellValueFactory(new PropertyValueFactory<>("formattedLastVerification"));
         TableUtil.bindColumnWidths(servicesTable, new double[]{1.1, 1.5, 2.3, 1, 1, 1.4},
                 serverColumn, nameColumn, descriptionColumn, statusColumn, restartAllowedColumn, lastCheckColumn);
-        servicesTable.setPlaceholder(new Label("Nenhum servico cadastrado."));
+        servicesTable.setPlaceholder(new Label("Nenhum serviço cadastrado."));
 
         filteredServices = new FilteredList<>(FXCollections.observableArrayList(AppContext.servicoServidorService().listar()), service -> true);
         servicesTable.setItems(filteredServices);
@@ -81,48 +81,48 @@ public class ServicesController {
     private void viewStatus() {
         ServiceInfo selected = servicesTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            AlertUtil.warning("Status do servico", "Selecione um servico para consultar.");
+            AlertUtil.warning("Status do serviço", "Selecione um serviço para consultar.");
             return;
         }
 
         AlertUtil.info(
-                "Status do servico",
+                "Status do serviço",
                 selected.getName() + " em " + selected.getServer() + ": " + selected.getStatus()
-                        + "\nUltima verificacao: " + selected.getFormattedLastVerification()
-                        + "\nReinicio: " + selected.getRestartPermissionLabel());
+                        + "\nÚltima verificação: " + selected.getFormattedLastVerification()
+                        + "\nReinício: " + selected.getRestartPermissionLabel());
     }
 
     @FXML
     private void restartService() {
         if (!PermissionUtil.canRunAction(AppContext.getCurrentUser(), TipoAcao.REINICIAR_SERVICO)) {
-            AppContext.denyAction(TipoAcao.REINICIAR_SERVICO, "Servicos", "Seu perfil nao pode reiniciar servicos.");
+            AppContext.denyAction(TipoAcao.REINICIAR_SERVICO, "Serviços", "Seu perfil não pode reiniciar serviços.");
             return;
         }
 
         ServiceInfo selected = servicesTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            AlertUtil.warning("Reiniciar servico", "Selecione um servico para reiniciar.");
+            AlertUtil.warning("Reiniciar serviço", "Selecione um serviço para reiniciar.");
             return;
         }
         if (!selected.isRestartAllowed()) {
             AppContext.historicoService().registrar(AppContext.getCurrentUser(), TipoAcao.REINICIAR_SERVICO,
                     selected.getServer(), selected.getName(), StatusExecucao.NEGADO, "-",
-                    "Servico configurado para nao permitir reinicio.");
-            AlertUtil.warning("Reiniciar servico", "Este servico esta configurado para nao permitir reinicio.");
+                    "Serviço configurado para não permitir reinício.");
+            AlertUtil.warning("Reiniciar serviço", "Este serviço está configurado para não permitir reinício.");
             return;
         }
 
-        AlertUtil.askReason("Reiniciar servico", "Confirme o reinicio de " + selected.getName())
+        AlertUtil.askReason("Reiniciar serviço", "Confirme o reinício de " + selected.getName())
                 .ifPresentOrElse(reason -> startRestartSimulation(selected, reason),
                         () -> AppContext.historicoService().registrar(AppContext.getCurrentUser(), TipoAcao.REINICIAR_SERVICO,
                                 selected.getServer(), selected.getName(), StatusExecucao.CANCELADO, "-",
-                                "Reinicio cancelado pelo usuario."));
+                                "Reinício cancelado pelo usuário."));
     }
 
     private void startRestartSimulation(ServiceInfo selected, String reason) {
         selected.setStatus("Reiniciando");
         servicesTable.refresh();
-        feedbackLabel.setText("Reiniciando servico de forma simulada...");
+        feedbackLabel.setText("Reiniciando serviço de forma simulada...");
         restartButton.setDisable(true);
 
         PauseTransition delay = new PauseTransition(Duration.millis(1200));
@@ -130,9 +130,9 @@ public class ServicesController {
             ActionResult result = AppContext.servicoServidorService()
                     .finalizarReinicio(selected, reason, AppContext.getCurrentUser());
             servicesTable.refresh();
-            feedbackLabel.setText("Servico simulado em execucao.");
+            feedbackLabel.setText("Serviço simulado em execução.");
             updateRestartButtonState(servicesTable.getSelectionModel().getSelectedItem());
-            AlertUtil.info("Reiniciar servico", result.message());
+            AlertUtil.info("Reiniciar serviço", result.message());
         });
         delay.play();
     }

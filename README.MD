@@ -1,20 +1,20 @@
 # TI Helper - SCMJF
 
-Prototipo visual desktop em Java 21, Maven e JavaFX/FXML.
+Protótipo visual desktop em Java 21, Maven e JavaFX/FXML.
 
-## Escopo desta versao
+## Escopo desta versão
 
 - Login simulado com perfis `ADMIN`, `OPERADOR_TI` e `CONSULTA`.
-- Navegacao visual por Dashboard, Servidores, Paineis, Servicos, Queries, Scripts, Historico, Configuracoes e Sobre.
-- Dados mockados com persistencia local JSON.
-- Logs locais para inicializacao, login, logout, erros e fechamento.
-- Preferencia local para fechar na bandeja ou encerrar totalmente.
-- Historico compartilhado entre acoes simuladas de servicos, queries, scripts e cadastros.
-- Sem Oracle, PowerShell, BAT, CMD, PS1, servidores reais ou integracoes externas.
+- Navegação visual por Dashboard, Servidores, Painéis, Serviços, Queries, Scripts, Histórico, Configurações e Sobre.
+- Dados mockados com persistência local JSON.
+- Logs locais para inicialização, login, logout, erros e fechamento.
+- Preferência local para fechar na bandeja ou encerrar totalmente.
+- Histórico compartilhado entre ações simuladas de serviços, queries, scripts e cadastros.
+- Sem Oracle, PowerShell, BAT, CMD, PS1, servidores reais ou integrações externas.
 
 ## Dados locais
 
-A versao `0.3.1-SNAPSHOT` salva dados mockados em:
+A versão `0.3.2-SNAPSHOT` salva dados mockados em:
 
 ```text
 %LOCALAPPDATA%\TI Helper - SCMJF\data
@@ -40,7 +40,7 @@ mvn clean javafx:run
 
 ## Gerar instalador Windows
 
-Prerequisitos na maquina que gera o instalador:
+Pré-requisitos na máquina que gera o instalador:
 
 - JDK 21 com `jpackage`.
 - Maven.
@@ -58,20 +58,20 @@ Gerar o instalador:
 .\scripts\build-windows-installer.ps1
 ```
 
-Saida esperada:
+Saída esperada:
 
 ```text
 target\installer\TI Helper - SCMJF Setup.exe
 ```
 
-O instalador gerado leva o runtime Java junto, entao o computador de teste nao precisa ter Java ou Maven instalados.
+O instalador gerado leva o runtime Java junto, então o computador de teste não precisa ter Java ou Maven instalados.
 
 ## Estrutura
 
 - `controller`: controllers JavaFX das telas.
-- `model`: objetos de dominio simples para tabelas e acoes.
-- `persistence`: persistencia local JSON e backup.
-- `service`: autenticacao, dados e acoes simuladas.
-- `util`: contexto de sessao, navegacao, paths, logs e alertas.
+- `model`: objetos de domínio simples para tabelas e ações.
+- `persistence`: persistência local JSON e backup.
+- `service`: autenticação, dados e ações simuladas.
+- `util`: contexto de sessão, navegação, paths, logs e alertas.
 - `resources/view`: telas FXML.
-- `resources/styles`: CSS da aplicacao.
+- `resources/styles`: CSS da aplicação.

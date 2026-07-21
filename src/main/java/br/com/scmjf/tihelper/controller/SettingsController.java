@@ -244,27 +244,27 @@ public class SettingsController {
     @FXML
     private void addService() {
         ActionResult result = AppContext.servicoServidorService().cadastrar(buildServiceFromFields(), AppContext.getCurrentUser());
-        finishAction("Cadastrar servico", result, this::clearServiceFields);
+        finishAction("Cadastrar serviço", result, this::clearServiceFields);
     }
 
     @FXML
     private void editService() {
         if (selectedService == null) {
-            AlertUtil.warning("Editar servico", "Selecione um servico.");
+            AlertUtil.warning("Editar serviço", "Selecione um serviço.");
             return;
         }
         ActionResult result = AppContext.servicoServidorService().alterar(selectedService, buildServiceFromFields(), AppContext.getCurrentUser());
-        finishAction("Editar servico", result, this::clearServiceFields);
+        finishAction("Editar serviço", result, this::clearServiceFields);
     }
 
     @FXML
     private void deleteService() {
         ServiceInfo selected = servicesTable.getSelectionModel().getSelectedItem();
-        if (selected == null || !AlertUtil.confirm("Excluir servico", "Deseja excluir o servico selecionado?")) {
+        if (selected == null || !AlertUtil.confirm("Excluir serviço", "Deseja excluir o serviço selecionado?")) {
             return;
         }
         ActionResult result = AppContext.servicoServidorService().excluir(selected, AppContext.getCurrentUser());
-        finishAction("Excluir servico", result, this::clearServiceFields);
+        finishAction("Excluir serviço", result, this::clearServiceFields);
     }
 
     @FXML
@@ -399,13 +399,13 @@ public class SettingsController {
                 userEmailField.getText(),
                 userSectorField.getText(),
                 selectedUserModules());
-        finishUserAction("Cadastrar usuario", result, "Usuario cadastrado no mock local.");
+        finishUserAction("Cadastrar usuário", result, "Usuário cadastrado no mock local.");
     }
 
     @FXML
     private void editUser() {
         if (selectedUsername == null) {
-            AlertUtil.warning("Editar usuario", "Selecione um usuario.");
+            AlertUtil.warning("Editar usuário", "Selecione um usuário.");
             return;
         }
         boolean result = AppContext.usuarioService().updateUser(
@@ -417,17 +417,17 @@ public class SettingsController {
                 userEmailField.getText(),
                 userSectorField.getText(),
                 selectedUserModules());
-        finishUserAction("Editar usuario", result, "Usuario alterado no mock local.");
+        finishUserAction("Editar usuário", result, "Usuário alterado no mock local.");
     }
 
     @FXML
     private void deleteUser() {
         User selected = usersTable.getSelectionModel().getSelectedItem();
-        if (selected == null || !AlertUtil.confirm("Excluir usuario", "Deseja excluir o usuario selecionado?")) {
+        if (selected == null || !AlertUtil.confirm("Excluir usuário", "Deseja excluir o usuário selecionado?")) {
             return;
         }
         boolean result = AppContext.usuarioService().deleteUser(selected.getUsername());
-        finishUserAction("Excluir usuario", result, "Usuario excluido do mock local.");
+        finishUserAction("Excluir usuário", result, "Usuário excluído do mock local.");
     }
 
     @FXML
@@ -465,13 +465,13 @@ public class SettingsController {
 
     @FXML
     private void restoreDefaultData() {
-        if (!AlertUtil.confirm("Restaurar dados", "Deseja restaurar os dados mockados padrao?")) {
+        if (!AlertUtil.confirm("Restaurar dados", "Deseja restaurar os dados mockados padrão?")) {
             return;
         }
         AppContext.restoreDefaultMockData();
         refreshAdministrativeTables();
         clearAllForms();
-        AlertUtil.info("Restaurar dados", "Dados mockados padrao restaurados.");
+        AlertUtil.info("Restaurar dados", "Dados mockados padrão restaurados.");
     }
 
     @FXML
@@ -490,7 +490,7 @@ public class SettingsController {
             AlertUtil.info("Exportar backup", "Backup JSON exportado.");
         } catch (IOException exception) {
             AppLogger.error("Erro ao exportar backup JSON.", exception);
-            AlertUtil.error("Exportar backup", "Nao foi possivel exportar o backup.");
+            AlertUtil.error("Exportar backup", "Não foi possível exportar o backup.");
         }
     }
 
@@ -500,7 +500,7 @@ public class SettingsController {
         chooser.setTitle("Importar backup JSON");
         chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON", "*.json"));
         File file = chooser.showOpenDialog(adminPanel.getScene().getWindow());
-        if (file == null || !AlertUtil.confirm("Importar backup", "A importacao substituirá os dados locais. Continuar?")) {
+        if (file == null || !AlertUtil.confirm("Importar backup", "A importação substituirá os dados locais. Continuar?")) {
             return;
         }
 
@@ -511,7 +511,7 @@ public class SettingsController {
             AlertUtil.info("Importar backup", "Backup JSON importado.");
         } catch (IOException exception) {
             AppLogger.error("Erro ao importar backup JSON.", exception);
-            AlertUtil.error("Importar backup", "Nao foi possivel importar o backup.");
+            AlertUtil.error("Importar backup", "Não foi possível importar o backup.");
         }
     }
 
@@ -532,7 +532,7 @@ public class SettingsController {
         serviceRestartAllowedColumn.setCellValueFactory(new PropertyValueFactory<>("restartPermissionLabel"));
         TableUtil.bindColumnWidths(servicesTable, new double[]{1.1, 1.4, 2.2, 1, 1},
                 serviceServerColumn, serviceNameColumn, serviceDescriptionColumn, serviceStatusColumn, serviceRestartAllowedColumn);
-        servicesTable.setPlaceholder(new Label("Nenhum servico cadastrado."));
+        servicesTable.setPlaceholder(new Label("Nenhum serviço cadastrado."));
 
         panelNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         panelIpColumn.setCellValueFactory(new PropertyValueFactory<>("ipAddress"));
@@ -562,7 +562,7 @@ public class SettingsController {
         userModulesColumn.setCellValueFactory(new PropertyValueFactory<>("modulesDisplay"));
         TableUtil.bindColumnWidths(usersTable, new double[]{1.1, 1.5, 1.7, 1.1, 1, 2.4},
                 userNameColumn, userDisplayNameColumn, userEmailColumn, userSectorColumn, userProfileColumn, userModulesColumn);
-        usersTable.setPlaceholder(new Label("Nenhum usuario cadastrado."));
+        usersTable.setPlaceholder(new Label("Nenhum usuário cadastrado."));
     }
 
     private void configureSelections() {
@@ -722,7 +722,7 @@ public class SettingsController {
 
     private void finishUserAction(String title, boolean success, String successMessage) {
         if (!success) {
-            AlertUtil.warning(title, "Informe dados validos. O login deve ser unico e o perfil obrigatorio.");
+            AlertUtil.warning(title, "Informe dados válidos. O login deve ser único e o perfil é obrigatório.");
             return;
         }
         clearUserFields();
@@ -823,7 +823,7 @@ public class SettingsController {
             return Files.readString(selectedScriptFile.toPath(), Charset.defaultCharset()).trim();
         } catch (IOException exception) {
             AppLogger.error("Erro ao ler arquivo de script selecionado.", exception);
-            AlertUtil.error("Script", "Nao foi possivel ler o arquivo selecionado.");
+            AlertUtil.error("Script", "Não foi possível ler o arquivo selecionado.");
             return null;
         }
     }

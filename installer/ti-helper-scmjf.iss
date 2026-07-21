@@ -1,5 +1,5 @@
 #define AppName "TI Helper - SCMJF"
-#define AppVersion "0.3.1"
+#define AppVersion "0.3.2"
 #define AppPublisher "SCMJF"
 #define AppExeName "TI Helper - SCMJF.exe"
 
@@ -24,7 +24,7 @@ PrivilegesRequired=lowest
 Name: "brazilianportuguese"; MessagesFile: "compiler:Languages\BrazilianPortuguese.isl"
 
 [Tasks]
-Name: "desktopicon"; Description: "Criar atalho na area de trabalho"; GroupDescription: "Atalhos:"; Flags: checkedonce
+Name: "desktopicon"; Description: "Criar atalho na área de trabalho"; GroupDescription: "Atalhos:"; Flags: checkedonce
 
 [Files]
 Source: "..\target\installer\app-image\TI Helper - SCMJF\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs

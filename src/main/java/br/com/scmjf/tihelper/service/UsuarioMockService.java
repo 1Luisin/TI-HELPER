@@ -50,7 +50,7 @@ public class UsuarioMockService implements UsuarioService {
                 normalizeModules(profile, modules)));
         store.persistUsers();
         historicoService.registrar(normalizedUsername, profile, TipoAcao.CADASTRAR_USUARIO, "-", normalizedUsername,
-                StatusExecucao.SUCESSO, "-", "Usuario cadastrado no mock local.");
+                StatusExecucao.SUCESSO, "-", "Usuário cadastrado no mock local.");
         return true;
     }
 
@@ -91,7 +91,7 @@ public class UsuarioMockService implements UsuarioService {
         store.users().put(newKey, updated);
         store.persistUsers();
         historicoService.registrar(newKey, profile, TipoAcao.ALTERAR_USUARIO, "-", newKey,
-                StatusExecucao.SUCESSO, "-", "Usuario alterado no mock local.");
+                StatusExecucao.SUCESSO, "-", "Usuário alterado no mock local.");
         return true;
     }
 
@@ -109,7 +109,7 @@ public class UsuarioMockService implements UsuarioService {
 
         store.persistUsers();
         historicoService.registrar(key, removed.getProfile(), TipoAcao.EXCLUIR_USUARIO, "-", key,
-                StatusExecucao.SUCESSO, "-", "Usuario excluido do mock local.");
+                StatusExecucao.SUCESSO, "-", "Usuário excluído do mock local.");
         return true;
     }
 

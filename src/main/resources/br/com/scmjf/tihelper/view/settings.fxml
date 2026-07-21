@@ -29,7 +29,7 @@
                 <Insets top="24" right="26" bottom="26" left="26"/>
             </padding>
             <children>
-                <Label text="Configuracoes" styleClass="page-title"/>
+                <Label text="Configurações" styleClass="page-title"/>
 
                 <VBox spacing="10" styleClass="form-panel">
                     <padding>
@@ -49,7 +49,7 @@
                 </VBox>
 
                 <Label fx:id="adminAccessLabel"
-                       text="Cadastros administrativos disponiveis apenas para usuarios com perfil ADMIN."
+                       text="Cadastros administrativos disponíveis apenas para usuários com perfil ADMIN."
                        styleClass="hint-label"/>
 
                 <VBox fx:id="adminPanel" spacing="14">
@@ -103,7 +103,7 @@
                                     </content>
                                 </Tab>
 
-                                <Tab text="Servicos">
+                                <Tab text="Serviços">
                                     <content>
                                         <VBox spacing="14">
                                             <padding>
@@ -118,16 +118,16 @@
                                                         <FlowPane hgap="12" vgap="10">
                                                             <children>
                                                                 <TextField fx:id="serviceServerField" promptText="Servidor" prefWidth="170"/>
-                                                                <TextField fx:id="serviceNameField" promptText="Nome do servico" prefWidth="210"/>
+                                                                <TextField fx:id="serviceNameField" promptText="Nome do serviço" prefWidth="210"/>
                                                                 <TextField fx:id="serviceStatusField" promptText="Status" prefWidth="150"/>
                                                                 <CheckBox fx:id="serviceRestartAllowedCheckBox"
-                                                                          text="Permitir reinicio"
+                                                                          text="Permitir reinício"
                                                                           selected="true"
                                                                           styleClass="module-check"/>
                                                             </children>
                                                         </FlowPane>
                                                         <TextArea fx:id="serviceDescriptionArea"
-                                                                  promptText="Descricao"
+                                                                  promptText="Descrição"
                                                                   prefRowCount="3"
                                                                   wrapText="true"/>
                                                         <HBox alignment="CENTER_RIGHT" spacing="8">
@@ -136,7 +136,7 @@
                                                                 <Button text="Limpar" onAction="#clearServiceFields" styleClass="secondary-button"/>
                                                                 <Button text="Editar" onAction="#editService" styleClass="secondary-button"/>
                                                                 <Button text="Excluir" onAction="#deleteService" styleClass="secondary-button"/>
-                                                                <Button text="Cadastrar servico" onAction="#addService" styleClass="primary-button"/>
+                                                                <Button text="Cadastrar serviço" onAction="#addService" styleClass="primary-button"/>
                                                             </children>
                                                         </HBox>
                                                     </children>
@@ -145,9 +145,9 @@
                                                     <columns>
                                                         <TableColumn fx:id="serviceServerColumn" text="Servidor"/>
                                                         <TableColumn fx:id="serviceNameColumn" text="Nome"/>
-                                                        <TableColumn fx:id="serviceDescriptionColumn" text="Descricao"/>
+                                                        <TableColumn fx:id="serviceDescriptionColumn" text="Descrição"/>
                                                         <TableColumn fx:id="serviceStatusColumn" text="Status"/>
-                                                        <TableColumn fx:id="serviceRestartAllowedColumn" text="Reinicio"/>
+                                                        <TableColumn fx:id="serviceRestartAllowedColumn" text="Reinício"/>
                                                     </columns>
                                                 </TableView>
                                             </children>
@@ -155,7 +155,7 @@
                                     </content>
                                 </Tab>
 
-                                <Tab text="Paineis">
+                                <Tab text="Painéis">
                                     <content>
                                         <VBox spacing="14">
                                             <padding>
@@ -170,7 +170,7 @@
                                                         <FlowPane hgap="12" vgap="10">
                                                             <children>
                                                                 <TextField fx:id="panelNameField" promptText="Nome do painel" prefWidth="210"/>
-                                                                <TextField fx:id="panelIpField" promptText="IP da maquina. Ex.: 172.18.x.x" prefWidth="230"/>
+                                                                <TextField fx:id="panelIpField" promptText="IP da máquina. Ex.: 172.18.x.x" prefWidth="230"/>
                                                                 <TextField fx:id="panelLocationField" promptText="Local" prefWidth="190"/>
                                                                 <ComboBox fx:id="panelStatusCombo" promptText="Status" prefWidth="150"/>
                                                             </children>
@@ -189,7 +189,7 @@
                                                 <TableView fx:id="panelsTable" prefHeight="240">
                                                     <columns>
                                                         <TableColumn fx:id="panelNameColumn" text="Painel"/>
-                                                        <TableColumn fx:id="panelIpColumn" text="IP da maquina"/>
+                                                        <TableColumn fx:id="panelIpColumn" text="IP da máquina"/>
                                                         <TableColumn fx:id="panelLocationColumn" text="Local"/>
                                                         <TableColumn fx:id="panelStatusColumn" text="Status"/>
                                                     </columns>
@@ -218,13 +218,13 @@
                                                               prefHeight="190"
                                                               styleClass="sql-editor-host"/>
                                                         <CheckBox fx:id="queryHasParametersCheckBox"
-                                                                  text="Query com parametros"
+                                                                  text="Query com parâmetros"
                                                                   styleClass="query-parameters-check"/>
                                                         <VBox fx:id="queryParametersBox" spacing="8">
                                                             <children>
-                                                                <Label text="Parametros" styleClass="field-label"/>
+                                                                <Label text="Parâmetros" styleClass="field-label"/>
                                                                 <TextField fx:id="queryParametersField"
-                                                                           promptText="Parametros separados por virgula. Ex.: CPF, Data inicial"/>
+                                                                           promptText="Parâmetros separados por vírgula. Ex.: CPF, Data inicial"/>
                                                             </children>
                                                         </VBox>
                                                         <HBox alignment="CENTER_RIGHT" spacing="8">
@@ -297,7 +297,7 @@
                                                                                                styleClass="script-file-label"/>
                                                                                     </children>
                                                                                 </HBox>
-                                                                                <Label text="O arquivo sera apenas lido e salvo no mock local."
+                                                                                <Label text="O arquivo será apenas lido e salvo no mock local."
                                                                                        styleClass="hint-label"/>
                                                                             </children>
                                                                         </VBox>
@@ -320,7 +320,7 @@
                                                     <columns>
                                                         <TableColumn fx:id="scriptNameColumn" text="Nome"/>
                                                         <TableColumn fx:id="scriptSourceColumn" text="Origem"/>
-                                                        <TableColumn fx:id="scriptSummaryColumn" text="Conteudo / arquivo"/>
+                                                        <TableColumn fx:id="scriptSummaryColumn" text="Conteúdo / arquivo"/>
                                                     </columns>
                                                 </TableView>
                                             </children>
@@ -328,7 +328,7 @@
                                     </content>
                                 </Tab>
 
-                                <Tab text="Usuarios">
+                                <Tab text="Usuários">
                                     <content>
                                         <VBox spacing="14">
                                             <padding>
@@ -345,14 +345,14 @@
                                                                 <TextField fx:id="userNameField" promptText="Login" prefWidth="220"/>
                                                                 <PasswordField fx:id="userPasswordField" promptText="Senha" prefWidth="220"/>
                                                                 <TextField fx:id="userFullNameField" promptText="Nome" prefWidth="260"/>
-                                                                <TextField fx:id="userEmailField" promptText="Email" prefWidth="260"/>
+                                                                <TextField fx:id="userEmailField" promptText="E-mail" prefWidth="260"/>
                                                                 <TextField fx:id="userSectorField" promptText="Setor" prefWidth="220"/>
                                                                 <ComboBox fx:id="userProfileCombo" promptText="Perfil" prefWidth="180"/>
                                                             </children>
                                                         </FlowPane>
                                                         <VBox spacing="8">
                                                             <children>
-                                                                <Label text="Modulos liberados" styleClass="field-label"/>
+                                                                <Label text="Módulos liberados" styleClass="field-label"/>
                                                                 <FlowPane fx:id="userModulesPane" hgap="14" vgap="8"/>
                                                             </children>
                                                         </VBox>
@@ -364,19 +364,19 @@
                                                                 <Button text="Limpar" onAction="#clearUserFields" styleClass="secondary-button"/>
                                                                 <Button text="Editar" onAction="#editUser" styleClass="secondary-button"/>
                                                                 <Button text="Excluir" onAction="#deleteUser" styleClass="secondary-button"/>
-                                                                <Button text="Cadastrar usuario" onAction="#addUser" styleClass="primary-button"/>
+                                                                <Button text="Cadastrar usuário" onAction="#addUser" styleClass="primary-button"/>
                                                             </children>
                                                         </HBox>
                                                     </children>
                                                 </VBox>
                                                 <TableView fx:id="usersTable" prefHeight="240">
                                                     <columns>
-                                                        <TableColumn fx:id="userNameColumn" text="Usuario"/>
+                                                        <TableColumn fx:id="userNameColumn" text="Usuário"/>
                                                         <TableColumn fx:id="userDisplayNameColumn" text="Nome"/>
-                                                        <TableColumn fx:id="userEmailColumn" text="Email"/>
+                                                        <TableColumn fx:id="userEmailColumn" text="E-mail"/>
                                                         <TableColumn fx:id="userSectorColumn" text="Setor"/>
                                                         <TableColumn fx:id="userProfileColumn" text="Perfil"/>
-                                                        <TableColumn fx:id="userModulesColumn" text="Modulos"/>
+                                                        <TableColumn fx:id="userModulesColumn" text="Módulos"/>
                                                     </columns>
                                                 </TableView>
                                             </children>

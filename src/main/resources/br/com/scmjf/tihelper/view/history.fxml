@@ -26,7 +26,7 @@
                 <Insets top="24" right="26" bottom="26" left="26"/>
             </padding>
             <children>
-                <Label text="Historico" styleClass="page-title"/>
+                <Label text="Histórico" styleClass="page-title"/>
 
                 <VBox spacing="10" styleClass="form-panel">
                     <padding>
@@ -35,9 +35,9 @@
                     <children>
                         <FlowPane hgap="10" vgap="10">
                             <children>
-                                <ComboBox fx:id="typeFilterCombo" promptText="Tipo de acao" prefWidth="220"/>
+                                <ComboBox fx:id="typeFilterCombo" promptText="Tipo de ação" prefWidth="220"/>
                                 <ComboBox fx:id="statusFilterCombo" promptText="Status" prefWidth="180"/>
-                                <ComboBox fx:id="userFilterCombo" promptText="Usuario" prefWidth="180"/>
+                                <ComboBox fx:id="userFilterCombo" promptText="Usuário" prefWidth="180"/>
                                 <DatePicker fx:id="initialDatePicker" promptText="Data inicial" prefWidth="160"/>
                                 <DatePicker fx:id="finalDatePicker" promptText="Data final" prefWidth="160"/>
                             </children>
@@ -56,9 +56,9 @@
                     <columns>
                         <TableColumn fx:id="idColumn" text="ID" prefWidth="70"/>
                         <TableColumn fx:id="dateColumn" text="Data/Hora" prefWidth="160"/>
-                        <TableColumn fx:id="userColumn" text="Usuario" prefWidth="100"/>
+                        <TableColumn fx:id="userColumn" text="Usuário" prefWidth="100"/>
                         <TableColumn fx:id="profileColumn" text="Perfil" prefWidth="110"/>
-                        <TableColumn fx:id="typeColumn" text="Tipo da acao" prefWidth="150"/>
+                        <TableColumn fx:id="typeColumn" text="Tipo da ação" prefWidth="150"/>
                         <TableColumn fx:id="serverColumn" text="Servidor" prefWidth="130"/>
                         <TableColumn fx:id="targetColumn" text="Alvo" prefWidth="190"/>
                         <TableColumn fx:id="statusColumn" text="Status" prefWidth="100"/>
@@ -72,7 +72,7 @@
                         <Insets top="14" right="14" bottom="14" left="14"/>
                     </padding>
                     <children>
-                        <Label text="Detalhes da execucao" styleClass="section-title"/>
+                        <Label text="Detalhes da execução" styleClass="section-title"/>
                         <TextArea fx:id="detailsArea"
                                   editable="false"
                                   wrapText="true"

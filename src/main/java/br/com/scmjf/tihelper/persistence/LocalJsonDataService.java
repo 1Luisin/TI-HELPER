@@ -129,7 +129,7 @@ public class LocalJsonDataService {
         try {
             return normalizeConfig(mapper.readValue(file.toFile(), AppConfigDto.class));
         } catch (IOException | RuntimeException exception) {
-            AppLogger.error("Erro ao carregar configuracao JSON local.", exception);
+            AppLogger.error("Erro ao carregar configuração JSON local.", exception);
             return defaultConfig(CloseBehavior.ASK);
         }
     }

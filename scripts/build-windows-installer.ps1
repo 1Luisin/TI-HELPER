@@ -6,8 +6,8 @@ $ErrorActionPreference = "Stop"
 
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
 $appName = "TI Helper - SCMJF"
-$appVersion = "0.3.1"
-$artifactName = "ti-helper-scmjf-0.3.1-SNAPSHOT.jar"
+$appVersion = "0.3.2"
+$artifactName = "ti-helper-scmjf-0.3.2-SNAPSHOT.jar"
 $iconPath = Join-Path $repoRoot "src\main\resources\br\com\scmjf\tihelper\assets\TIHELPER.ico"
 $installerRoot = Join-Path $repoRoot "target\installer"
 $inputDir = Join-Path $installerRoot "input"
@@ -15,7 +15,7 @@ $appImageRoot = Join-Path $installerRoot "app-image"
 $issPath = Join-Path $repoRoot "installer\ti-helper-scmjf.iss"
 
 if (-not (Test-Path (Join-Path $JavaHome "bin\jpackage.exe"))) {
-    throw "JDK 21 com jpackage nao encontrado em: $JavaHome"
+    throw "JDK 21 com jpackage não encontrado em: $JavaHome"
 }
 
 $env:JAVA_HOME = $JavaHome
@@ -23,7 +23,7 @@ $env:Path = "$env:JAVA_HOME\bin;$env:Path"
 
 Push-Location $repoRoot
 try {
-    Write-Host "Compilando projeto e copiando dependencias..."
+    Write-Host "Compilando projeto e copiando dependências..."
     mvn -q -DskipTests package dependency:copy-dependencies
 
     if (Test-Path $installerRoot) {
@@ -57,7 +57,7 @@ try {
         } elseif (Test-Path $programFilesInno) {
             $isccPath = $programFilesInno
         } else {
-            throw "Inno Setup 6 nao encontrado. Instale com: winget install --id JRSoftware.InnoSetup"
+            throw "Inno Setup 6 não encontrado. Instale com: winget install --id JRSoftware.InnoSetup"
         }
     }
 

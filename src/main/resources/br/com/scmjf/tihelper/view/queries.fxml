@@ -42,7 +42,7 @@
                             </columnConstraints>
                         </GridPane>
 
-                        <Label text="Motivo da execucao" styleClass="field-label"/>
+                        <Label text="Motivo da execução" styleClass="field-label"/>
                         <TextField fx:id="reasonField"
                                    promptText="Informe o motivo para executar a query simulada"/>
 

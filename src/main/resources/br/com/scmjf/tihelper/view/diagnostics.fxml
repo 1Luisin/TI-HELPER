@@ -27,18 +27,18 @@
                         <Insets top="22" right="22" bottom="22" left="22"/>
                     </padding>
                     <children>
-                        <Label text="Informacoes do prototipo" styleClass="section-title"/>
+                        <Label text="Informações do protótipo" styleClass="section-title"/>
                         <FlowPane hgap="42" vgap="18">
                             <children>
                                 <VBox spacing="4">
                                     <children>
-                                        <Label text="Nome da aplicacao" styleClass="field-label"/>
+                                        <Label text="Nome da aplicação" styleClass="field-label"/>
                                         <Label fx:id="appNameLabel" text="-" styleClass="value-label"/>
                                     </children>
                                 </VBox>
                                 <VBox spacing="4">
                                     <children>
-                                        <Label text="Versao" styleClass="field-label"/>
+                                        <Label text="Versão" styleClass="field-label"/>
                                         <Label fx:id="versionLabel" text="-" styleClass="value-label"/>
                                     </children>
                                 </VBox>
@@ -50,7 +50,7 @@
                                 </VBox>
                                 <VBox spacing="4">
                                     <children>
-                                        <Label text="Usuario logado" styleClass="field-label"/>
+                                        <Label text="Usuário logado" styleClass="field-label"/>
                                         <Label fx:id="userLabel" text="-" styleClass="value-label"/>
                                     </children>
                                 </VBox>

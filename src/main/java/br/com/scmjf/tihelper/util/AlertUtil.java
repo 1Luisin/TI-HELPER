@@ -138,7 +138,7 @@ public final class AlertUtil {
         Label titleLabel = new Label("Como deseja fechar o TI Helper?");
         titleLabel.getStyleClass().add("dialog-title");
 
-        Label messageLabel = new Label("Escolha se o programa deve continuar em segundo plano na bandeja ou se deve encerrar totalmente. A resposta sera salva localmente como sua ultima escolha.");
+        Label messageLabel = new Label("Escolha se o programa deve continuar em segundo plano na bandeja ou se deve encerrar totalmente. A resposta será salva localmente como sua última escolha.");
         messageLabel.getStyleClass().add("dialog-message");
         messageLabel.setWrapText(true);
 

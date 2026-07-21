@@ -40,7 +40,7 @@ public final class TrayService {
             SystemTray.getSystemTray().add(trayIcon);
             return true;
         } catch (AWTException | IOException exception) {
-            AppLogger.error("Nao foi possivel instalar icone na bandeja.", exception);
+            AppLogger.error("Não foi possível instalar ícone na bandeja.", exception);
             trayIcon = null;
             return false;
         }
@@ -122,7 +122,7 @@ public final class TrayService {
     private static void applyCloseBehavior(Stage stage, CloseBehavior closeBehavior) {
         if (closeBehavior == CloseBehavior.MINIMIZE_TO_TRAY) {
             if (trayIcon == null) {
-                AlertUtil.warning("Bandeja do sistema", "A bandeja do sistema nao esta disponivel. O aplicativo continuara aberto.");
+                AlertUtil.warning("Bandeja do sistema", "A bandeja do sistema não está disponível. O aplicativo continuará aberto.");
                 return;
             }
 

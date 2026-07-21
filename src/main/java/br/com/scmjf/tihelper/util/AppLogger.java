@@ -31,7 +31,7 @@ public final class AppLogger {
             LOGGER.setLevel(Level.INFO);
             configured = true;
         } catch (IOException exception) {
-            LOGGER.log(Level.SEVERE, "Nao foi possivel configurar o log local.", exception);
+            LOGGER.log(Level.SEVERE, "Não foi possível configurar o log local.", exception);
         }
     }
 

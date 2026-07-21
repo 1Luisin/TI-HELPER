@@ -64,7 +64,7 @@ public class ScriptMockService implements ScriptService {
                 return new ActionResult(true, "Script alterado no mock local.");
             }
         }
-        return new ActionResult(false, "Script selecionado nao foi encontrado.");
+        return new ActionResult(false, "Script selecionado não foi encontrado.");
     }
 
     @Override
@@ -75,24 +75,24 @@ public class ScriptMockService implements ScriptService {
 
         boolean removed = store.scripts().removeIf(item -> item.getName().equals(script.getName()));
         if (!removed) {
-            return new ActionResult(false, "Script selecionado nao foi encontrado.");
+            return new ActionResult(false, "Script selecionado não foi encontrado.");
         }
 
         store.persistScripts();
         historicoService.registrar(user, TipoAcao.EXCLUIR_SCRIPT, "-", script.getName(),
-                StatusExecucao.SUCESSO, "-", "Script excluido do mock local.");
-        return new ActionResult(true, "Script excluido do mock local.");
+                StatusExecucao.SUCESSO, "-", "Script excluído do mock local.");
+        return new ActionResult(true, "Script excluído do mock local.");
     }
 
     @Override
     public ActionResult executar(String scriptName, String server, String reason, User user) {
         if (ValidationUtil.isBlank(reason)) {
-            return new ActionResult(false, "Informe o motivo da execucao.");
+            return new ActionResult(false, "Informe o motivo da execução.");
         }
 
         historicoService.registrar(user, TipoAcao.EXECUTAR_SCRIPT, server, scriptName, StatusExecucao.SIMULADO, reason,
                 "Script simulado executado.");
-        return new ActionResult(true, "Script " + scriptName + " executado com sucesso na simulacao.");
+        return new ActionResult(true, "Script " + scriptName + " executado com sucesso na simulação.");
     }
 
     private ActionResult validate(ScriptDefinition script) {

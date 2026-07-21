@@ -23,19 +23,19 @@ public class MainApp extends Application {
     public void init() {
         AppLogger.configure();
         Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
-            AppLogger.error("Erro nao tratado na thread " + thread.getName(), throwable);
+            AppLogger.error("Erro não tratado na thread " + thread.getName(), throwable);
             try {
                 Platform.runLater(() -> AlertUtil.error("Erro inesperado",
                         "Ocorreu um erro inesperado. Consulte o log local para detalhes."));
             } catch (IllegalStateException ignored) {
-                // JavaFX ainda pode nao estar inicializado.
+                // JavaFX ainda pode não estar inicializado.
             }
         });
     }
 
     @Override
     public void start(Stage stage) throws IOException {
-        AppLogger.info("Inicio da aplicacao " + AppInfo.VERSION + ".");
+        AppLogger.info("Início da aplicação " + AppInfo.VERSION + ".");
         AppContext.dataDirectory();
         Parent root = loadView("login.fxml");
         stage.initStyle(StageStyle.UNDECORATED);
@@ -56,7 +56,7 @@ public class MainApp extends Application {
 
     @Override
     public void stop() {
-        AppLogger.info("Fechamento da aplicacao.");
+        AppLogger.info("Fechamento da aplicação.");
         TrayService.shutdown();
     }
 

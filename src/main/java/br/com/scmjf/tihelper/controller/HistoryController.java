@@ -85,7 +85,7 @@ public class HistoryController {
         messageColumn.setCellValueFactory(new PropertyValueFactory<>("message"));
         TableUtil.bindColumnWidths(historyTable, new double[]{0.6, 1.4, 0.9, 1, 1.25, 1.1, 1.6, 0.9, 1.5, 2.4},
                 idColumn, dateColumn, userColumn, profileColumn, typeColumn, serverColumn, targetColumn, statusColumn, reasonColumn, messageColumn);
-        historyTable.setPlaceholder(new Label("Nenhum registro de historico."));
+        historyTable.setPlaceholder(new Label("Nenhum registro de histórico."));
 
         boolean canViewHistory = PermissionUtil.canAccess(AppContext.getCurrentUser(), NavigationTarget.HISTORY);
         List<ExecutionHistory> records = canViewHistory ? AppContext.historicoService().listarTodos() : List.of();
@@ -108,7 +108,7 @@ public class HistoryController {
         if (canViewHistory) {
             showDetails(null);
         } else {
-            detailsArea.setText("Historico restrito a usuarios ADMIN.");
+            detailsArea.setText("Histórico restrito a usuários ADMIN.");
         }
     }
 
@@ -125,7 +125,7 @@ public class HistoryController {
     @FXML
     private void exportCsv() {
         FileChooser chooser = new FileChooser();
-        chooser.setTitle("Exportar historico CSV");
+        chooser.setTitle("Exportar histórico CSV");
         chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV", "*.csv"));
         chooser.setInitialFileName("historico-ti-helper.csv");
         File file = chooser.showSaveDialog(historyTable.getScene().getWindow());
@@ -135,10 +135,10 @@ public class HistoryController {
 
         try {
             java.nio.file.Files.writeString(file.toPath(), buildCsv(), StandardCharsets.UTF_8);
-            AlertUtil.info("Exportar CSV", "Historico exportado em CSV.");
+            AlertUtil.info("Exportar CSV", "Histórico exportado em CSV.");
         } catch (IOException exception) {
-            AppLogger.error("Erro ao exportar historico CSV.", exception);
-            AlertUtil.error("Exportar CSV", "Nao foi possivel exportar o historico.");
+            AppLogger.error("Erro ao exportar histórico CSV.", exception);
+            AlertUtil.error("Exportar CSV", "Não foi possível exportar o histórico.");
         }
     }
 
@@ -177,9 +177,9 @@ public class HistoryController {
         detailsArea.setText("""
                 ID: %s
                 Data/Hora: %s
-                Usuario: %s
+                Usuário: %s
                 Perfil: %s
-                Tipo da acao: %s
+                Tipo da ação: %s
                 Servidor: %s
                 Alvo: %s
                 Status: %s

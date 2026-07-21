@@ -57,7 +57,7 @@ public class MockDataStore {
         seedDefaults();
         refreshHistorySequence();
         persistAll();
-        AppLogger.info("Dados mockados padrao restaurados.");
+        AppLogger.info("Dados mockados padrão restaurados.");
     }
 
     public void exportBackup(Path destination) throws java.io.IOException {
@@ -124,7 +124,7 @@ public class MockDataStore {
             AppLogger.info("Dados locais JSON carregados de: " + persistenceService.getDataDirectory());
         }, () -> {
             persistAll();
-            AppLogger.info("Dados mockados padrao carregados e salvos em: " + persistenceService.getDataDirectory());
+            AppLogger.info("Dados mockados padrão carregados e salvos em: " + persistenceService.getDataDirectory());
         });
         refreshHistorySequence();
     }
@@ -218,7 +218,7 @@ public class MockDataStore {
         users.put("ti", new UserAccount("ti", "ti", UserProfile.OPERADOR_TI,
                 "Operador TI", "ti@scmjf.local", "TI", null, UserModule.defaultsFor(UserProfile.OPERADOR_TI)));
         users.put("consulta", new UserAccount("consulta", "consulta", UserProfile.CONSULTA,
-                "Usuario Consulta", "consulta@scmjf.local", "Atendimento", null, UserModule.defaultsFor(UserProfile.CONSULTA)));
+                "Usuário Consulta", "consulta@scmjf.local", "Atendimento", null, UserModule.defaultsFor(UserProfile.CONSULTA)));
     }
 
     private void seedServers() {

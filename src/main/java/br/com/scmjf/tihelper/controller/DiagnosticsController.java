@@ -70,7 +70,7 @@ public class DiagnosticsController {
             Desktop.getDesktop().open(folder.toFile());
         } catch (IOException | UnsupportedOperationException exception) {
             AppLogger.error("Erro ao abrir pasta: " + folder, exception);
-            AlertUtil.error(title, "Nao foi possivel abrir a pasta.");
+            AlertUtil.error(title, "Não foi possível abrir a pasta.");
         }
     }
 }
