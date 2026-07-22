@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.4-SNAPSHOT
+
+- Atualiza o endereço do busy de produção para `http://172.18.3.109:4005`.
+- Abre o busy de produção diretamente no navegador padrão ao clicar no botão da tela de servidores.
+- Exibe uma mensagem amigável e registra o erro localmente se o endereço não puder ser aberto.
+
 ## 0.3.3-SNAPSHOT
 
 - Moderniza os filtros de data do histórico com campo e botão de calendário integrados.

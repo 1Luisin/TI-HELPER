@@ -1,10 +1,15 @@
 package br.com.scmjf.tihelper.controller;
 
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+
 import br.com.scmjf.tihelper.model.ActionResult;
 import br.com.scmjf.tihelper.model.ServerInfo;
 import br.com.scmjf.tihelper.model.TipoAcao;
 import br.com.scmjf.tihelper.util.AlertUtil;
 import br.com.scmjf.tihelper.util.AppContext;
+import br.com.scmjf.tihelper.util.AppLogger;
 import br.com.scmjf.tihelper.util.NavigationTarget;
 import br.com.scmjf.tihelper.util.PermissionUtil;
 import br.com.scmjf.tihelper.util.TableUtil;
@@ -23,7 +28,7 @@ import javafx.util.Duration;
 
 public class ServersController {
 
-    private static final String PRODUCTION_BUSY_URL = "http://172.18.2.6:5000";
+    private static final String PRODUCTION_BUSY_URL = "http://172.18.3.109:4005";
 
     @FXML
     private TextField searchField;
@@ -117,7 +122,15 @@ public class ServersController {
 
     @FXML
     private void openProductionBusy() {
-        AlertUtil.info("Busy produção", "Link cadastrado: " + PRODUCTION_BUSY_URL + "\nA abertura externa está desabilitada neste protótipo.");
+        try {
+            if (!Desktop.isDesktopSupported() || !Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                throw new UnsupportedOperationException("Abertura de links não suportada pelo sistema.");
+            }
+            Desktop.getDesktop().browse(URI.create(PRODUCTION_BUSY_URL));
+        } catch (IOException | UnsupportedOperationException | SecurityException exception) {
+            AppLogger.error("Erro ao abrir o busy de produção: " + PRODUCTION_BUSY_URL, exception);
+            AlertUtil.error("Busy de produção", "Não foi possível abrir o endereço no navegador padrão.");
+        }
     }
 
     private void applyFilter(String text) {
